@@ -195,8 +195,8 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
       <div class="btns"><button class="btn" data-copy="112">📋 112</button></div>
     </div>
     <div class="card">
-      <h3 style="margin:0 0 6px">🎄 Se for dezembro</h3>
-      <div class="small">Luzes de Natal de 21/11 a 06/01, das 18h à meia-noite. Mercado de Natal da Plaza Mayor de 27/11 a 31/12, das 10h às 21h. No domingo 06/12 (feriado) o centro fica lotado. O pôr do sol é por volta de 17h50.</div>
+      <h3 style="margin:0 0 6px">🎄 Natal e pôr do sol</h3>
+      <div class="small">Luzes de Natal de 21/11 a 06/01, das 18h à meia-noite. Mercado de Natal da Plaza Mayor de 27/11 a 31/12, das 10h às 21h. No domingo 06/12 (feriado) o centro fica lotado. Em meados de novembro as luzes e o mercado ainda não começaram. O pôr do sol é por volta de 18h em novembro e 17h50 em dezembro.</div>
     </div>
   </div>
 </section>
@@ -226,17 +226,17 @@ const STEPS = [
  {t:"14:15", n:"Puerta del Sol", a:"Puerta del Sol, 28013 Madrid", ll:[40.41690,-3.70350], city:true,
   d:"Km 0 (na calçada em frente à Real Casa de Correos) e a estátua do Oso y el Madroño.", w:"4 min"},
  {t:"14:20", n:"Plaza Mayor · almoço", a:"Plaza Mayor, 28012 Madrid", ll:[40.41553,-3.70742], city:true,
-  d:"Bocadillo de calamares nos bares das ruas em volta. Mercado de Natal em dezembro.", tip:"Sugestão: Bar La Campana (Calle Botoneras, 6), saindo pelo Arco de Cuchilleros/Botoneras.", w:"2 min"},
+  d:"Bocadillo de calamares nos bares das ruas em volta. Mercado de Natal só a partir de 27/11.", tip:"Sugestão: Bar La Campana (Calle Botoneras, 6), saindo pelo Arco de Cuchilleros/Botoneras.", w:"2 min"},
  {t:"15:25", n:"Mercado de San Miguel", a:"Plaza de San Miguel, s/n, 28005 Madrid", ll:[40.41540,-3.70895], city:true,
   d:"Tapas, croquetas, ostras e vermute. Aberto das 10h à meia-noite.", w:"8 min"},
  {t:"15:55", n:"Palacio Real (por fora)", a:"Palacio Real de Madrid, Calle de Bailén, s/n, 28071 Madrid", ll:[40.41797,-3.71430], city:true,
   d:"Fachada, Plaza de Oriente e Catedral de la Almudena em frente. Saiam pelos Jardines de Sabatini.", tip:"Querem entrar? A última entrada é às 15h no domingo (€18 por pessoa). Só dá se inverterem a ordem e chegarem antes de 14h30.", w:"10–12 min"},
  {t:"16:45", n:"Templo de Debod · pôr do sol", a:"Templo de Debod, Calle de Ferraz, 1, 28008 Madrid", ll:[40.42404,-3.71780], city:true,
-  d:"Interior grátis. Depois, o mirante do Parque del Oeste para o pôr do sol (~17h50 em dezembro).", w:"7 min"},
+  d:"Interior grátis. Depois, o mirante do Parque del Oeste para o pôr do sol (~18h em novembro, ~17h50 em dezembro).", w:"7 min"},
  {t:"18:05", n:"Plaza de España", a:"Plaza de España, 28008 Madrid", ll:[40.42340,-3.71220], city:true,
   d:"Monumento a Cervantes, com Dom Quixote e Sancho. A partir daqui, desçam a Gran Vía.", w:"15 min pela Gran Vía"},
  {t:"18:25", n:"Plaza del Callao · Gran Vía", a:"Plaza del Callao, 28013 Madrid", ll:[40.42003,-3.70583], city:true,
-  d:"Telões e luzes de Natal a partir das 18h. Edifício Carrión (Schweppes).", w:"7 min"},
+  d:"Telões da Gran Vía; luzes de Natal só a partir de 21/11. Edifício Carrión (Schweppes).", w:"7 min"},
  {t:"18:45", n:"Chocolatería San Ginés", a:"Chocolatería San Ginés, Pasadizo de San Ginés, 5, 28013 Madrid", ll:[40.41695,-3.70668], city:true,
   d:"Chocolate con churros. Aberta 24h no fim de semana. Costuma ter fila, mas ela anda rápido.", w:"15 min de volta a Cibeles"},
 
@@ -278,11 +278,15 @@ async function copy(txt){
   catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
     try{document.execCommand("copy");toast("Copiado ✓")}catch(_){toast("Não deu para copiar")}ta.remove()}
 }
+// Dia da escala em Madrid (AAAA-MM-DD). Para mudar a data, altere só esta linha.
+const TRIP_DATE="2026-11-15";
 function madridNow(){
-  const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
-  const h=+p.find(x=>x.type==="hour").value, m=+p.find(x=>x.type==="minute").value;
-  return {h,m,min:h*60+m,str:String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")};
+  const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const g=t=>p.find(x=>x.type===t).value;
+  const h=+g("hour")%24, m=+g("minute");
+  return {h,m,min:h*60+m,date:`${g("year")}-${g("month")}-${g("day")}`,str:String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")};
 }
+function daysToTrip(n){return Math.round((Date.parse(TRIP_DATE)-Date.parse(n.date))/864e5)}
 const toMin=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
 
 // ---------- passos ----------
@@ -320,7 +324,7 @@ function renderNext(){
   if(ni<0){$("#nextCard").innerHTML=`<div class="lbl">Tudo feito</div><div class="ttl">Boa viagem para Dublin! ✈️</div>`;return}
   const s=STEPS[ni], diff=now.min-toMin(s.t);
   let pace="";
-  if(now.min>=toMin("10:00")&&now.min<=toMin("23:30")){
+  if(now.date===TRIP_DATE&&now.min>=toMin("10:00")&&now.min<=toMin("23:30")){
     pace = diff>20?`<span class="tag red">${diff} min atrasados</span>`:diff<-20?`<span class="tag green">adiantados</span>`:`<span class="tag green">no horário</span>`;
   }
   $("#nextCard").innerHTML=`<div class="lbl">Próxima parada · planejado ${s.t} ${pace}</div>
@@ -334,8 +338,10 @@ $("#nextCard").addEventListener("click",e=>{const b=e.target.closest("[data-done
 // ---------- relógio / contagem ----------
 function tick(){
   const n=madridNow(); $("#clk").textContent=n.str;
-  const left=toMin("19:30")-n.min, c=$("#cnt");
-  if(n.min<toMin("09:00")){c.className="count ok";c.textContent="Ônibus de volta: 19h30";}
+  const left=toMin("19:30")-n.min, c=$("#cnt"), dd=daysToTrip(n);
+  if(dd>0){c.className="count ok";c.textContent=dd===1?"Escala é amanhã · horários de Madrid":`Escala em ${dd} dias · horários de Madrid`;}
+  else if(dd<0){c.className="count ok";c.textContent="Escala concluída · bom Dublin! ☘️";}
+  else if(n.min<toMin("09:00")){c.className="count ok";c.textContent="Ônibus de volta: 19h30";}
   else if(left>60){c.className="count ok";c.textContent=`${Math.floor(left/60)}h${String(left%60).padStart(2,"0")} até o 203 (19h30)`;}
   else if(left>0){c.className="count warn";c.textContent=`${left} min até o 203 de volta`;}
   else if(n.min<toMin("20:00")){c.className="count bad";c.textContent="Hora de ir! Táxi até 20h";}
