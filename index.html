@@ -129,7 +129,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 
 <section id="roteiro">
   <h2>Roteiro passo a passo</h2>
-  <p class="small">Toquem no círculo para marcar como feito. O marcado fica salvo neste celular. <button class="btn" id="reset" style="padding:4px 9px;font-size:12px">Limpar marcações</button></p>
+  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula as próximas: o horário riscado é o planejado, o colorido é o novo (vermelho atrasou, verde adiantou). Tocar de novo desmarca. Tudo fica salvo neste celular. <button class="btn" id="reset" style="padding:4px 9px;font-size:12px">Limpar marcações</button></p>
   <div id="steps"></div>
 </section>
 
@@ -256,7 +256,7 @@ const STEPS = [
  {t:"18:40", n:"Chocolatería San Ginés", a:"Chocolatería San Ginés, Pasadizo de San Ginés, 5, 28013 Madrid", ll:[40.41695,-3.70668], city:true,
   d:"Chocolate con churros. Aberta 24h no fim de semana. Costuma ter fila, mas ela anda rápido.", w:"Táxi ou Uber: saiam daqui · ônibus: 15 min a pé até Cibeles"},
 
- {ph:"Volta ao aeroporto", t:"19:30", n:"Volta ao T1: ônibus, táxi ou Uber", a:"Plaza de Cibeles, 28014 Madrid", ll:[40.41930,-3.69310], city:true,
+ {ph:"Volta ao aeroporto", t:"19:30", n:"Volta ao T1: ônibus, táxi ou Uber", go:35, a:"Plaza de Cibeles, 28014 Madrid", ll:[40.41930,-3.69310], city:true,
   d:"203 em Cibeles (parada 71): ideal 19h30, máximo 19h45. Táxi: ideal 19h45, máximo 20h00. Uber/Cabify: pedir até 19h40, máximo 19h55. Detalhes na seção Ônibus.", tip:"Passou do horário do ônibus? Não esperem: peguem táxi no ponto mais próximo (Sol, Ópera ou Gran Vía).", copy:"Parada 71 Cibeles, línea 203 Exprés Aeropuerto"},
  {t:"20:00", n:"T1-Salidas · buscar malas", q:"Consigna Terminal 1 Aeropuerto Madrid-Barajas", ll:[40.4683,-3.5706],
   d:"Desçam na parada 3539 (planta 1), vão à consigna na planta 0 e depois subam de volta à planta 1.", air:true},
@@ -305,17 +305,52 @@ function madridNow(){
 function daysToTrip(n){return Math.round((Date.parse(TRIP_DATE)-Date.parse(n.date))/864e5)}
 const toMin=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
 
-// ---------- passos ----------
+// ---------- passos (horários dinâmicos) ----------
+// Ao marcar uma parada do centro como feita, guardamos a hora (Madrid).
+// As próximas paradas são recalculadas: hora em que terminou + caminhada,
+// mantendo a duração planejada das etapas seguintes.
+const fmt=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+const RET=STEPS.findIndex(s=>s.n.startsWith("Volta ao T1"));
+function travelMin(s){
+  if(typeof s.go==="number") return s.go;
+  const m=(s.w||"").match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*min/);
+  return m?+(m[2]||m[1]):0;
+}
+function projections(){
+  const out=[]; let delta=0;
+  STEPS.forEach((s,i)=>{
+    out[i]=toMin(s.t)+delta;
+    if(typeof done[i]==="number" && (s.city||typeof s.go==="number") && STEPS[i+1]){
+      delta=(done[i]+travelMin(s))-toMin(STEPS[i+1].t);
+    }
+  });
+  return out;
+}
 function nextIndex(){return STEPS.findIndex((s,i)=>!done[i])}
+function timeCell(i,P){
+  const pl=toMin(STEPS[i].t), pr=P[i];
+  if(typeof done[i]==="number") return `<span class="time" style="color:var(--green)">✓ ${fmt(done[i])}</span>`;
+  if(done[i]) return `<span class="time" style="color:var(--green)">✓</span>`;
+  if(Math.abs(pr-pl)<3) return `<span class="time">${STEPS[i].t}</span>`;
+  return `<span class="time" style="color:var(--muted);text-decoration:line-through;font-weight:600">${STEPS[i].t}</span><span class="time" style="color:${pr>pl?"var(--red)":"var(--green)"}">${fmt(pr)}</span>`;
+}
+function returnInfo(P){
+  if(RET<0||done[RET]) return "";
+  const r=P[RET], bus=toMin("19:45"), ideal=toMin("19:30"), taxi=toMin("20:00");
+  if(r<=ideal) return `<span class="tag green">volta prevista ${fmt(r)} · folga de ${ideal-r} min</span>`;
+  if(r<=bus) return `<span class="tag gold">volta prevista ${fmt(r)} · ônibus ainda dá (máx. 19h45)</span>`;
+  if(r<=taxi) return `<span class="tag red">volta prevista ${fmt(r)} · só de táxi/Uber</span>`;
+  return `<span class="tag red">volta prevista ${fmt(r)} · passou do limite! Cortem paradas</span>`;
+}
 function renderSteps(){
-  const ni=nextIndex(); let html="";
+  const ni=nextIndex(), P=projections(); let html="";
   STEPS.forEach((s,i)=>{
     if(s.ph) html+=`<div class="phase">${esc(s.ph)}</div>`;
     const cp=s.copy||s.a||s.q;
     html+=`<div class="step ${done[i]?"done":""} ${i===ni?"isnext":""}" id="st${i}">
       <button class="chk" data-i="${i}" aria-label="marcar">${done[i]?"✓":""}</button>
       <div>
-        <div class="top"><span class="time">${s.t}</span><span class="name">${esc(s.n)}</span>${i===ni?'<span class="tag blue">próxima</span>':""}</div>
+        <div class="top">${timeCell(i,P)}<span class="name">${esc(s.n)}</span>${i===ni?'<span class="tag blue">próxima</span>':""}</div>
         <div class="desc">${esc(s.d)}</div>
         ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
         <div class="btns">
@@ -327,29 +362,40 @@ function renderSteps(){
     if(s.w) html+=`<div class="walk">↓ ${esc(s.w)} a pé</div>`;
   });
   $("#steps").innerHTML=html;
+  const ri=$("#retInfo"); if(ri) ri.innerHTML=returnInfo(P);
   renderNext(); updatePins();
+}
+function markDone(i){
+  const s=STEPS[i], n=madridNow();
+  done[i]=(s.city||typeof s.go==="number")&&n.date===TRIP_DATE ? n.min : true;
+  // marcar uma parada marca também as anteriores, sem horário
+  for(let k=0;k<i;k++) if(!done[k]) done[k]=true;
+  save(); renderSteps();
+  if(typeof done[i]==="number") toast(`Feito às ${fmt(done[i])} · horários atualizados`);
 }
 $("#steps").addEventListener("click",e=>{
   const b=e.target.closest(".chk"); if(!b) return;
-  const i=+b.dataset.i; done[i]=!done[i]; if(!done[i]) delete done[i]; save(); renderSteps();
+  const i=+b.dataset.i;
+  if(done[i]){delete done[i];save();renderSteps();} else markDone(i);
 });
 $("#reset").onclick=()=>{done={};save();renderSteps();toast("Marcações limpas")};
 
 function renderNext(){
-  const ni=nextIndex(), now=madridNow();
+  const ni=nextIndex(), now=madridNow(), P=projections();
   if(ni<0){$("#nextCard").innerHTML=`<div class="lbl">Tudo feito</div><div class="ttl">Boa viagem para Dublin! ✈️</div>`;return}
-  const s=STEPS[ni], diff=now.min-toMin(s.t);
+  const s=STEPS[ni], diff=now.min-P[ni];
   let pace="";
   if(now.date===TRIP_DATE&&now.min>=toMin("10:00")&&now.min<=toMin("23:30")){
-    pace = diff>20?`<span class="tag red">${diff} min atrasados</span>`:diff<-20?`<span class="tag green">adiantados</span>`:`<span class="tag green">no horário</span>`;
+    pace = diff>15?`<span class="tag red">${diff} min atrás do previsto</span>`:diff<-15?`<span class="tag green">adiantados</span>`:`<span class="tag green">no horário</span>`;
   }
-  $("#nextCard").innerHTML=`<div class="lbl">Próxima parada · planejado ${s.t} ${pace}</div>
+  $("#nextCard").innerHTML=`<div class="lbl">Próxima parada · previsto ${fmt(P[ni])} ${pace}</div>
     <div class="ttl">${esc(s.n)}</div><div class="small">${esc(s.d)}</div>
+    <div style="margin-top:6px">${returnInfo(P)}</div>
     <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${go(s,s.city?"walking":"transit")}">${s.city?"🚶 Ir a pé":"🚌 Como chegar"}</a>
     <a class="btn" href="#st${ni}">↓ Ver no roteiro</a>
-    <button class="btn" data-done="${ni}">✓ Marcar feito</button></div>`;
+    <button class="btn" data-done="${ni}">✓ Terminei aqui</button></div>`;
 }
-$("#nextCard").addEventListener("click",e=>{const b=e.target.closest("[data-done]");if(!b)return;done[+b.dataset.done]=true;save();renderSteps()});
+$("#nextCard").addEventListener("click",e=>{const b=e.target.closest("[data-done]");if(!b)return;markDone(+b.dataset.done)});
 
 // ---------- relógio / contagem ----------
 function tick(){
