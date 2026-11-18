@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b8322a">
+<title>Paris · Roteiro de quinta (19/11)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf6ef;--card:#fff;--ink:#1f1a17;--muted:#6f655c;--line:#e8dfd2;
+  --red:#b8322a;--red-soft:#f6e3e0;--gold:#c98f10;--gold-soft:#fbf1d8;
+  --green:#2f7d57;--green-soft:#e2f1e8;--blue:#2c5d8f;--blue-soft:#e3ecf6;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#16130f;--card:#211c17;--ink:#f3ece3;--muted:#b0a596;--line:#3a3229;
+  --red:#e2665c;--red-soft:#3b211d;--gold:#e8b94a;--gold-soft:#372c15;
+  --green:#5fb98a;--green-soft:#1c3327;--blue:#7aa8d6;--blue-soft:#1b2a3a;}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 80px}
+a{color:inherit}
+header{padding:calc(22px + env(safe-area-inset-top)) 0 14px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+h1{font-family:Fraunces,serif;font-weight:800;font-size:clamp(28px,7vw,40px);line-height:1.05;margin:6px 0 6px}
+h2{font-family:Fraunces,serif;font-weight:700;font-size:22px;margin:30px 0 10px}
+.sub{color:var(--muted);margin:0}
+/* sticky status */
+.status{position:sticky;top:0;z-index:1000;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0;margin:0 -14px;padding-left:14px;padding-right:14px}
+.status-in{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.clock{font-variant-numeric:tabular-nums;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:5px 10px;font-size:14px}
+.clock small{color:var(--muted);font-weight:600;margin-right:4px}
+.count{font-weight:700;font-size:14px;border-radius:10px;padding:5px 10px}
+.count.ok{background:var(--green-soft);color:var(--green)}
+.count.warn{background:var(--gold-soft);color:var(--gold)}
+.count.bad{background:var(--red-soft);color:var(--red)}
+.navs{display:flex;gap:6px;overflow-x:auto;margin-top:8px;scrollbar-width:none}
+.navs a{flex:none;text-decoration:none;font-size:13px;font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.alert{background:var(--red-soft);border:0;border-left:4px solid var(--red)}
+.next{background:var(--blue-soft);border:0;border-left:4px solid var(--blue)}
+.next .lbl{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.next .ttl{font-family:Fraunces,serif;font-size:20px;font-weight:700;margin:2px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.btn{display:inline-flex;align-items:center;gap:5px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 11px;font:600 13px Inter,sans-serif;text-decoration:none;line-height:1.2}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn:active{transform:scale(.97)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:6px;vertical-align:1px}
+.tag.red{background:var(--red-soft);color:var(--red)}.tag.green{background:var(--green-soft);color:var(--green)}
+.tag.gold{background:var(--gold-soft);color:var(--gold)}.tag.blue{background:var(--blue-soft);color:var(--blue)}
+/* map */
+#map{height:340px;border-radius:14px;border:1px solid var(--line);overflow:hidden;z-index:1}
+.leaflet-popup-content{font:13px/1.4 Inter,sans-serif}
+.pin{width:26px;height:26px;border-radius:50%;background:#b8322a;color:#fff;font:700 12px Inter,sans-serif;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.pin.done{background:#2f7d57}
+.pin.next{background:#2c5d8f;transform:scale(1.15)}
+/* steps */
+.phase{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+.step{display:grid;grid-template-columns:34px 1fr;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;transition:opacity .2s}
+.step.done{opacity:.55}
+.step.isnext{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-soft)}
+.chk{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;font-weight:800;color:#fff;padding:0}
+.step.done .chk{background:var(--green);border-color:var(--green)}
+.step .top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.step .time{font-weight:700;font-variant-numeric:tabular-nums;color:var(--red)}
+.step .name{font-weight:700;font-size:15.5px}
+.step .desc{color:var(--muted);font-size:13.5px;margin-top:2px}
+.step .tip{font-size:13px;margin-top:6px;background:var(--gold-soft);border-radius:8px;padding:6px 9px}
+.walk{font-size:12px;font-weight:600;color:var(--blue);margin:-2px 0 8px 44px}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:8px 6px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+th{border-top:0;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.mono{font-variant-numeric:tabular-nums;font-weight:700}
+/* phrases */
+.phr{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.phr:first-child{border-top:0}
+.phr .es{font-weight:600}
+.phr .pt{font-size:12.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;transition:transform .25s;z-index:2000}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.small{font-size:12.5px;color:var(--muted)}
+footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+</style>
+<style>
+.startbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:14px}
+.startbox input{font:600 15px Inter,sans-serif;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.walk.metro{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Paris · quinta-feira, 19/11</div>
+  <h1>Paris clássica, de norte a oeste</h1>
+  <p class="sub">Montmartre → Galeries Lafayette → Notre-Dame → Luxemburgo → Louvre → Tulherias → Concórdia → Champs-Élysées → Arco → Trocadéro → Torre Eiffel → Campo de Marte.</p>
+</header>
+
+<div class="status">
+  <div class="status-in">
+    <span class="clock"><small>Paris</small><span id="clk">--:--</span></span>
+    <span class="count ok" id="cnt">…</span>
+  </div>
+  <nav class="navs">
+    <a href="#agora">Agora</a><a href="#mapa">Mapa</a><a href="#roteiro">Roteiro</a>
+    <a href="#metro">Metrô</a><a href="#frases">Frases</a><a href="#info">Infos</a>
+  </nav>
+</div>
+
+<section id="agora" style="margin-top:14px">
+  <div class="card next" id="nextCard"></div>
+  <div class="card" style="margin-top:10px;font-size:14px">
+    <b>Horário sugerido:</b> despertador às <b>8h15</b>, café sem pressa, saída do hotel às <b>9h30</b>. O passeio termina no Campo de Marte por volta de <b>19h50</b>, com jantar por perto e hotel lá pelas 21h30.
+    <div class="startbox">Vão sair em outro horário? <label>Saída do hotel: <input type="time" id="startAt" value="09:30"></label> <span class="small">O site recalcula o dia inteiro.</span></div>
+  </div>
+  <div class="card alert" style="margin-top:10px;font-size:14px">
+    <b style="color:var(--red)">Horários que mandam no dia:</b> Jardim de Luxemburgo fecha às <b>16h45</b> · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (o roteiro mira o das <b>19h</b> no Trocadéro).
+  </div>
+</section>
+
+<section id="mapa">
+  <h2>Mapa</h2>
+  <div id="map"></div>
+  <div class="btns">
+    <a class="btn primary" target="_blank" rel="noopener" id="routeAM">🗺️ Manhã a pé (Montmartre → Lafayette)</a>
+    <a class="btn primary" target="_blank" rel="noopener" id="routePM">🗺️ Tarde a pé (Notre-Dame → Campo de Marte)</a>
+  </div>
+  <p class="small">Toquem num pino para abrir o lugar. Vermelho: falta · azul: próxima parada · verde: feito.</p>
+</section>
+
+<section id="roteiro">
+  <h2>Roteiro passo a passo</h2>
+  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula as próximas: o horário riscado é o planejado, o colorido é o novo (vermelho atrasou, verde adiantou). Tocar de novo desmarca. Tudo fica salvo neste celular. <button class="btn" id="reset" style="padding:4px 9px;font-size:12px">Limpar marcações</button></p>
+  <div id="steps"></div>
+</section>
+
+<section id="metro">
+  <h2>Metrô</h2>
+  <div class="grid2">
+    <div class="card">
+      <span class="tag blue">manhã</span>
+      <h3 style="margin:6px 0 4px">Hotel → Anvers (linha 2)</h3>
+      <div class="small">A estação <b>Anvers</b> é a da escadaria do Sacré-Cœur. O <b>funicular</b> até a basílica aceita o mesmo bilhete do metrô e poupa ~200 degraus.</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=Anvers+metro+station%2C+Paris&travelmode=transit">🚇 Como chegar em Anvers</a></div>
+    </div>
+    <div class="card">
+      <span class="tag gold">único trecho longo</span>
+      <h3 style="margin:6px 0 4px">Lafayette → Notre-Dame (linha 7)</h3>
+      <div class="small">Embarquem em <b>Chaussée d'Antin – La Fayette</b>, sentido <b>Villejuif / Mairie d'Ivry</b>, e desçam em <b>Châtelet</b> (4 paradas). Dali são ~10 min a pé, atravessando a Pont Notre-Dame.</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Galeries+Lafayette+Haussmann%2C+Paris&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚇 Rota no Maps</a></div>
+    </div>
+    <div class="card">
+      <span class="tag green">volta</span>
+      <h3 style="margin:6px 0 4px">Campo de Marte → hotel</h3>
+      <div class="small">Estações mais perto: <b>École Militaire</b> (linha 8), <b>Bir-Hakeim</b> (linha 6) ou <b>Champ de Mars – Tour Eiffel</b> (RER C).</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=%C3%89cole+Militaire+metro+Paris">📍 École Militaire</a></div>
+    </div>
+    <div class="card">
+      <span class="tag red">bilhetes</span>
+      <h3 style="margin:6px 0 4px">Como pagar</h3>
+      <div class="small">Comprem bilhetes nas máquinas das estações ou no app oficial da RATP (Bonjour RATP). O dia tem só uns 3 a 4 trechos de metrô (ida, Lafayette → Châtelet, volta), então bilhete avulso costuma compensar mais que passe diário. Confiram o preço na máquina.</div>
+    </div>
+  </div>
+</section>
+
+<section id="frases">
+  <h2>Frases úteis</h2>
+  <div class="card" id="phrases"></div>
+</section>
+
+<section id="info">
+  <h2>Informações úteis</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin:0 0 6px">⛪ Notre-Dame</h3>
+      <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). Em novembro a fila sem reserva costuma ser curta. Às quintas fica aberta até as <b>22h</b>, então dá para trocar de lugar no roteiro se precisarem.</div>
+      <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://resa.notredamedeparis.fr">🎟️ Reserva grátis</a></div>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px">❤️ Muro do Eu Te Amo</h3>
+      <div class="small">Desde março de 2026 o muro está <b>cercado para obras</b> de conservação. Dá para ver e fotografar por trás das barreiras, mas não encostar. Como fica no caminho entre o Sacré-Cœur e o Moulin Rouge, vale a parada rápida.</div>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px">🎄 Natal</h3>
+      <div class="small">A árvore gigante da <b>cúpula da Galeries Lafayette</b> e as vitrines já estão montadas (desde 12/11). As luzes da <b>Champs-Élysées</b> só acendem em <b>22/11</b>, então amanhã a avenida ainda estará sem a decoração acesa.</div>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px">🚨 Golpes e emergência</h3>
+      <div class="small">No Sacré-Cœur, recusem quem tenta amarrar <b>pulseira</b> no pulso. No Trocadéro e na Torre, ignorem quem pede <b>assinatura em abaixo-assinado</b>. Celular e carteira no bolso da frente no metrô. Emergência: <b>112</b>.</div>
+      <div class="btns"><button class="btn" data-copy="112">📋 112</button></div>
+    </div>
+  </div>
+</section>
+
+<footer>Horários levantados em 18/11/2026 (paris.fr, Senado/Jardim de Luxemburgo, Notre-Dame, Galeries Lafayette). Confiram no Google Maps no dia. Bonne journée! 🇫🇷</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ---------- dados ----------
+// t = horário planejado (HH:MM, Paris). w = deslocamento até a próxima parada.
+const STEPS = [
+ {ph:"Manhã · Montmartre", t:"09:30", n:"Saída do hotel → metrô até Anvers", q:"Anvers metro station, Paris", ll:[48.88292,2.34414], go:30, hotel:true,
+  d:"Linha 2 até Anvers. Da saída do metrô, subam a Rue de Steinkerque até a escadaria.", w:"metrô ~30 min"},
+ {t:"10:00", n:"Basílica do Sagrado Coração", a:"Basilique du Sacré-Cœur de Montmartre, Paris", ll:[48.88671,2.34310], city:true,
+  d:"Subam de funicular (bilhete de metrô) ou pela escadaria. Entrada grátis. Vista de Paris inteira do adro. Na saída, deem a volta pela Place du Tertre, a praça dos pintores.", tip:"Recusem quem oferecer pulseira na escadaria.", w:"12 min descendo até a Place des Abbesses"},
+ {t:"11:00", n:"Muro do Eu Te Amo", a:"Le Mur des je t'aime, Square Jehan Rictus, Paris", ll:[48.88483,2.33831], city:true,
+  d:"Square Jehan Rictus, na Place des Abbesses. Do lado fica a entrada art nouveau do metrô Abbesses, outra boa foto.", tip:"O muro está cercado para obras desde março de 2026: dá para ver e fotografar por trás das barreiras.", w:"10 min pela Rue des Abbesses e Rue Lepic"},
+ {t:"11:25", n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], city:true,
+  d:"Fotos do moinho vermelho no Boulevard de Clichy. A Rue Lepic, que vocês acabaram de descer, é a do Café des 2 Moulins (o café da Amélie Poulain).", w:"25 min, quase tudo descida (Rue Blanche → Trinité → Chaussée d'Antin)"},
+ {ph:"Almoço · Opéra", t:"12:05", n:"Galeries Lafayette + almoço", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], city:true,
+  d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Almoço no Lafayette Gourmet, no prédio ao lado, que tem opções vegetarianas.", tip:"A pista de patinação do terraço só abre em 24/11. Se o terraço estiver fechado para a montagem, a Glasswalk da cúpula compensa.", go:25, w:"metrô linha 7 até Châtelet + 10 min a pé", metro:true},
+ {ph:"Tarde · margem esquerda e Louvre", t:"13:45", n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], city:true,
+  d:"Entrada grátis, visita de 45 min a 1h. Reserva de horário opcional (e grátis) em resa.notredamedeparis.fr. O audioguia do app oficial também é grátis.", tip:"Na quinta ela fica aberta até 22h: se a fila estiver grande, sigam e voltem à noite.", copy:"resa.notredamedeparis.fr", w:"17 min pelo Quartier Latin (Saint-Michel → Rue Soufflot)"},
+ {t:"15:05", n:"Jardim de Luxemburgo", a:"Jardin du Luxembourg, Paris", ll:[48.84622,2.33715], city:true, lux:true,
+  d:"Fonte Médicis, o palácio do Senado e o grande lago central. Entrada grátis.", tip:"Fecha às 16h45 nesta época, com apito dos guardas uns 15 min antes.", w:"25 min por Saint-Germain e pela Pont des Arts"},
+ {t:"16:05", n:"Louvre (pirâmide por fora)", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], city:true,
+  d:"Fotos da pirâmide e do pátio Napoléon. Em seguida, passem pelo Arc du Carrousel em direção às Tulherias.", w:"5 min"},
+ {t:"16:30", n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], city:true,
+  d:"Atravessem o jardim inteiro no eixo central, do Louvre até a Concórdia (~1 km), passando pelos dois lagos redondos.", w:"20 min atravessando o jardim"},
+ {ph:"Entardecer · eixo histórico", t:"16:55", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
+  d:"Obelisco e fontes, com a Torre Eiffel ao fundo. É a hora do pôr do sol (~17h05).", w:"começo da avenida"},
+ {t:"17:05", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
+  d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point. Bom momento para um café quente no caminho.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~45 min com pausa"},
+ {t:"17:50", n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
+  d:"Fotos do arco já iluminado. Para chegar embaixo dele, usem a passagem subterrânea no começo da Champs-Élysées. Não atravessem a rotatória.", tip:"Opcional: se estiverem cansados, fotografem do canteiro central da avenida e sigam.", w:"15 min pela Avenue Kléber"},
+ {ph:"Noite · Torre Eiffel", t:"18:20", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
+  d:"A vista clássica da Torre, da esplanada do Palais de Chaillot. Esperem o brilho das 19h aqui.", tip:"Até as 19h dá para se esquentar num café da própria praça e voltar à esplanada às 18h55.", w:"10 min pelos jardins e pela Pont d'Iéna"},
+ {t:"19:10", n:"Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
+  d:"Embaixo da Torre, entre os pilares. Subir não está no plano.", w:"5 min"},
+ {t:"19:30", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
+  d:"A Torre iluminada vista do gramado. Fim do passeio.", w:"5–10 min até a École Militaire"},
+ {t:"19:50", n:"Jantar e volta ao hotel", q:"École Militaire, Paris", ll:[48.85490,2.30635], city:true, end:true,
+  d:"Jantar perto da École Militaire ou da Rue Cler (cafés e crêperies; crepe de queijo ou de cogumelos serve à Natália). Depois, metrô linha 8 (École Militaire) ou 6 (Bir-Hakeim).", tip:"Preferem jantar perto do hotel? Peguem o metrô direto daqui."}
+];
+const PHRASES=[
+ ["Bonjour ! / Merci beaucoup !","Bom dia! / Muito obrigado!"],
+ ["Une table pour deux, s'il vous plaît.","Mesa para dois"],
+ ["Avez-vous un plat végétarien ?","Tem prato vegetariano?"],
+ ["Sans viande ni poisson, s'il vous plaît.","Sem carne nem peixe"],
+ ["L'addition, s'il vous plaît. Je peux payer par carte ?","A conta. Aceita cartão?"],
+ ["Deux chocolats chauds, s'il vous plaît.","Dois chocolates quentes"],
+ ["Où sont les toilettes ?","Onde fica o banheiro?"],
+ ["Deux tickets de métro, s'il vous plaît.","Dois bilhetes de metrô"],
+ ["Non, merci.","Não, obrigado (golpe da pulseira/abaixo-assinado)"],
+ ["On m'a volé mon portefeuille.","Roubaram minha carteira"]
+];
+const ROUTE_AM="https://www.google.com/maps/dir/?api=1&origin=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris&destination=Galeries+Lafayette+Haussmann%2C+Paris&waypoints=Place+du+Tertre%2C+Paris%7CLe+Mur+des+je+t%27aime%2C+Paris%7CMoulin+Rouge%2C+Paris&travelmode=walking";
+const ROUTE_PM="https://www.google.com/maps/dir/?api=1&origin=Cath%C3%A9drale+Notre-Dame+de+Paris&destination=Champ+de+Mars%2C+Paris&waypoints=Jardin+du+Luxembourg%2C+Paris%7CPyramide+du+Louvre%2C+Paris%7CJardin+des+Tuileries%2C+Paris%7CPlace+de+la+Concorde%2C+Paris%7CArc+de+Triomphe%2C+Paris%7CPlace+du+Trocad%C3%A9ro%2C+Paris%7CTour+Eiffel%2C+Paris&travelmode=walking";
+
+// ---------- util ----------
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const enc=encodeURIComponent;
+const place=s=>"https://www.google.com/maps/search/?api=1&query="+enc(s.a||s.q);
+const go=(s,mode)=>"https://www.google.com/maps/dir/?api=1&destination="+enc(s.a||s.q)+"&travelmode="+mode;
+const KEY="paris-1911-done", SKEY="paris-1911-start";
+let done={}; try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+let startAt="09:30"; try{startAt=localStorage.getItem(SKEY)||"09:30"}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done));localStorage.setItem(SKEY,startAt)}catch(e){}};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1700)}
+async function copy(txt){
+  try{await navigator.clipboard.writeText(txt);toast("Copiado ✓")}
+  catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");toast("Copiado ✓")}catch(_){toast("Não deu para copiar")}ta.remove()}
+}
+// Dia do passeio (AAAA-MM-DD). Para mudar a data, altere só esta linha.
+const TRIP_DATE="2026-11-19";
+function parisNow(){
+  const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const g=t=>p.find(x=>x.type===t).value;
+  const h=+g("hour")%24, m=+g("minute");
+  return {h,m,min:h*60+m,date:`${g("year")}-${g("month")}-${g("day")}`,str:String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")};
+}
+function daysToTrip(n){return Math.round((Date.parse(TRIP_DATE)-Date.parse(n.date))/864e5)}
+const toMin=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
+const fmt=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+
+// ---------- horários dinâmicos ----------
+// Ao marcar uma parada como feita, guardamos a hora (Paris). As próximas
+// paradas são recalculadas: hora em que terminou + deslocamento, mantendo
+// a duração planejada das etapas seguintes. A hora de saída do hotel
+// desloca o dia inteiro enquanto nada foi marcado com horário.
+const LUX=STEPS.findIndex(s=>s.lux);
+function travelMin(s){
+  if(typeof s.go==="number") return s.go;
+  const m=(s.w||"").match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*min/);
+  return m?+(m[2]||m[1]):0;
+}
+function projections(){
+  const out=[]; let delta=toMin(startAt)-toMin(STEPS[0].t);
+  STEPS.forEach((s,i)=>{
+    out[i]=toMin(s.t)+delta;
+    if(typeof done[i]==="number" && STEPS[i+1]) delta=(done[i]+travelMin(s))-toMin(STEPS[i+1].t);
+  });
+  return out;
+}
+function nextIndex(){return STEPS.findIndex((s,i)=>!done[i])}
+function timeCell(i,P){
+  const pl=toMin(STEPS[i].t), pr=P[i];
+  if(typeof done[i]==="number") return `<span class="time" style="color:var(--green)">✓ ${fmt(done[i])}</span>`;
+  if(done[i]) return `<span class="time" style="color:var(--green)">✓</span>`;
+  if(Math.abs(pr-pl)<3) return `<span class="time">${STEPS[i].t}</span>`;
+  return `<span class="time" style="color:var(--muted);text-decoration:line-through;font-weight:600">${STEPS[i].t}</span><span class="time" style="color:${pr>pl?"var(--red)":"var(--green)"}">${fmt(pr)}</span>`;
+}
+function luxInfo(P){
+  if(LUX<0||done[LUX]) return "";
+  const r=P[LUX];
+  if(r<=toMin("16:00")) return `<span class="tag green">Luxemburgo às ${fmt(r)} · fecha 16h45</span>`;
+  if(r<=toMin("16:20")) return `<span class="tag gold">Luxemburgo às ${fmt(r)} · visita curta, fecha 16h45</span>`;
+  return `<span class="tag red">Luxemburgo às ${fmt(r)} · já vai estar fechando: pulem ou só passem pelo portão</span>`;
+}
+function endInfo(P){
+  const e=STEPS.length-1; if(done[e]) return "";
+  return `<span class="tag blue">fim previsto ${fmt(P[e])}</span>`;
+}
+function renderSteps(){
+  const ni=nextIndex(), P=projections(); let html="";
+  STEPS.forEach((s,i)=>{
+    if(s.ph) html+=`<div class="phase">${esc(s.ph)}</div>`;
+    const cp=s.copy||s.a||s.q;
+    html+=`<div class="step ${done[i]?"done":""} ${i===ni?"isnext":""}" id="st${i}">
+      <button class="chk" data-i="${i}" aria-label="marcar">${done[i]?"✓":""}</button>
+      <div>
+        <div class="top">${timeCell(i,P)}<span class="name">${esc(s.n)}</span>${s.opt?'<span class="tag gold">opcional</span>':""}${i===ni?'<span class="tag blue">próxima</span>':""}</div>
+        <div class="desc">${esc(s.d)}</div>
+        ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
+        ${s.lux?`<div style="margin-top:6px">${luxInfo(P)}</div>`:""}
+        <div class="btns">
+          <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
+          ${s.hotel?`<a class="btn blue" target="_blank" rel="noopener" href="${go(s,"transit")}">🚇 Como chegar</a>`:`<a class="btn blue" target="_blank" rel="noopener" href="${go(s,"walking")}">🚶 Ir a pé daqui</a>`}
+          <button class="btn" data-copy="${esc(cp)}">📋 Copiar</button>
+        </div>
+      </div></div>`;
+    if(s.w&&STEPS[i+1]) html+=`<div class="walk ${s.metro||s.hotel?"metro":""}">↓ ${esc(s.w)}${s.metro||s.hotel?"":" a pé"}</div>`;
+  });
+  $("#steps").innerHTML=html;
+  renderNext(); updatePins();
+}
+function markDone(i){
+  const n=parisNow();
+  done[i]=n.date===TRIP_DATE ? n.min : true;
+  for(let k=0;k<i;k++) if(!done[k]) done[k]=true; // marca as anteriores, sem horário
+  save(); renderSteps();
+  if(typeof done[i]==="number") toast(`Feito às ${fmt(done[i])} · horários atualizados`);
+}
+$("#steps").addEventListener("click",e=>{
+  const b=e.target.closest(".chk"); if(!b) return;
+  const i=+b.dataset.i;
+  if(done[i]){delete done[i];save();renderSteps();} else markDone(i);
+});
+$("#reset").onclick=()=>{done={};save();renderSteps();toast("Marcações limpas")};
+$("#startAt").value=startAt;
+$("#startAt").addEventListener("change",e=>{if(!e.target.value)return;startAt=e.target.value;save();renderSteps();toast(`Saída às ${startAt} · dia recalculado`)});
+
+function renderNext(){
+  const ni=nextIndex(), now=parisNow(), P=projections();
+  if(ni<0){$("#nextCard").innerHTML=`<div class="lbl">Tudo feito</div><div class="ttl">Bonne nuit! 🌙</div>`;return}
+  const s=STEPS[ni], diff=now.min-P[ni];
+  let pace="";
+  if(now.date===TRIP_DATE&&now.min>=toMin("08:00")&&now.min<=toMin("23:00")){
+    pace = diff>15?`<span class="tag red">${diff} min atrás do previsto</span>`:diff<-15?`<span class="tag green">adiantados</span>`:`<span class="tag green">no horário</span>`;
+  }
+  $("#nextCard").innerHTML=`<div class="lbl">Próxima parada · previsto ${fmt(P[ni])} ${pace}</div>
+    <div class="ttl">${esc(s.n)}</div><div class="small">${esc(s.d)}</div>
+    <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${luxInfo(P)}${endInfo(P)}</div>
+    <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${go(s,s.hotel?"transit":"walking")}">${s.hotel?"🚇 Como chegar":"🚶 Ir a pé"}</a>
+    <a class="btn" href="#st${ni}">↓ Ver no roteiro</a>
+    <button class="btn" data-done="${ni}">✓ Terminei aqui</button></div>`;
+}
+$("#nextCard").addEventListener("click",e=>{const b=e.target.closest("[data-done]");if(!b)return;markDone(+b.dataset.done)});
+
+// ---------- relógio / status ----------
+function tick(){
+  const n=parisNow(); $("#clk").textContent=n.str;
+  const c=$("#cnt"), dd=daysToTrip(n);
+  if(dd>0){c.className="count ok";c.textContent=dd===1?`Roteiro é amanhã · saída ${startAt}`:`Roteiro em ${dd} dias`;}
+  else if(dd<0){c.className="count ok";c.textContent="Dia concluído · à bientôt! 🇫🇷";}
+  else {
+    const lux=toMin("16:45")-n.min, sun=toMin("17:05")-n.min;
+    if(LUX>=0&&!done[LUX]&&lux>0){c.className=lux>45?"count ok":"count warn";c.textContent=`Luxemburgo fecha em ${Math.floor(lux/60)}h${String(lux%60).padStart(2,"0")}`;}
+    else if(sun>0&&sun<=90){c.className="count warn";c.textContent=`Pôr do sol em ${sun} min`;}
+    else if(n.min>=toMin("17:30")&&n.min<toMin("23:59")){const nx=(n.h+1)%24, m=60-n.m;c.className="count ok";c.textContent=n.m<5?"✨ A Torre está piscando agora!":`Próximo brilho da Torre: ${nx}h (em ${m} min)`;}
+    else {c.className="count ok";c.textContent="Bom passeio!";}
+  }
+  renderNext();
+}
+
+// ---------- mapa ----------
+let map, markers=[];
+function initMap(){
+  if(!$("#map")) return;
+  if(!window.L){$("#map").innerHTML='<div style="padding:20px" class="small">Mapa indisponível sem internet. Usem os botões do Google Maps.</div>';return}
+  map=L.map("map",{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
+  const pts=STEPS.filter(s=>s.city&&!s.end).map(s=>s.ll);
+  L.polyline(pts,{color:"#b8322a",weight:3,opacity:.7,dashArray:"6 6"}).addTo(map);
+  let k=0;
+  STEPS.forEach((s,i)=>{
+    if(!s.city||s.end) return;
+    const m=L.marker(s.ll,{icon:L.divIcon({className:"",html:`<div class="pin" data-pin="${i}">${++k}</div>`,iconSize:[26,26],iconAnchor:[13,13]})}).addTo(map);
+    m.bindPopup(`<b>${esc(s.t)} · ${esc(s.n)}</b><br>${esc(s.d)}<br><a target="_blank" rel="noopener" href="${place(s)}">📍 Abrir no Google Maps</a> · <a target="_blank" rel="noopener" href="${go(s,"walking")}">Ir</a>`);
+    markers.push({m,i});
+  });
+  map.fitBounds(pts,{padding:[20,20]}); updatePins();
+}
+function updatePins(){
+  const ni=nextIndex();
+  markers.forEach(({m,i})=>{const el=m.getElement()&&m.getElement().querySelector(".pin"); if(!el) return;
+    el.classList.toggle("done",!!done[i]); el.classList.toggle("next",i===ni);});
+}
+$("#routeAM").href=ROUTE_AM; $("#routePM").href=ROUTE_PM;
+
+// ---------- frases ----------
+$("#phrases").innerHTML=PHRASES.map(p=>`<div class="phr"><div><div class="es">${esc(p[0])}</div><div class="pt">${esc(p[1])}</div></div><button class="btn" data-copy="${esc(p[0])}">📋</button></div>`).join("");
+
+// ---------- copiar (delegado) ----------
+document.addEventListener("click",e=>{const b=e.target.closest("[data-copy]"); if(b) copy(b.dataset.copy)});
+
+renderSteps(); initMap(); tick(); setInterval(tick,30000);
+</script>
+</body>
+</html>
