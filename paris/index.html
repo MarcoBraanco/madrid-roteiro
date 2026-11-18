@@ -89,9 +89,22 @@ th{border-top:0;font-size:12px;color:var(--muted);text-transform:uppercase;lette
 footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
 </style>
 <style>
-.startbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:14px}
-.startbox input{font:600 15px Inter,sans-serif;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
-.walk.metro{color:var(--gold)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+input.tin,input.nin{font:600 14px Inter,sans-serif;padding:5px 7px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+input.nin{width:64px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px}
+.btn.sm{padding:5px 9px;font-size:12.5px}
+.btn.ghost{background:transparent}
+.step.cut{opacity:.6;grid-template-columns:1fr;padding:9px 12px}
+.step.cut .name{text-decoration:line-through;font-weight:600}
+.trav{display:flex;gap:8px;align-items:center;font-size:12.5px;font-weight:600;color:var(--blue);margin:-2px 0 8px 44px}
+.trav a{color:inherit}
+.trav.tr{color:var(--gold)}
+.span{color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.warns .tag{margin:2px 4px 2px 0}
+.home{display:grid;grid-template-columns:34px 1fr;gap:10px;background:var(--blue-soft);border-radius:14px;padding:12px;margin-bottom:8px}
+.home .ico{font-size:22px;line-height:30px;text-align:center}
+.big{font-family:Fraunces,serif;font-size:22px;font-weight:700}
 </style>
 </head>
 <body>
@@ -99,8 +112,8 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 
 <header>
   <div class="kicker">Paris · quinta-feira, 19/11</div>
-  <h1>Paris clássica num dia</h1>
-  <p class="sub">Garches → Montmartre → Galeries Lafayette → Louvre (Mona Lisa) → Tulherias → Concórdia → Champs-Élysées → Arco → Trocadéro → subida na Torre Eiffel → Campo de Marte → Notre-Dame à noite.</p>
+  <h1>Paris num dia</h1>
+  <p class="sub" id="sub"></p>
 </header>
 
 <div class="status">
@@ -109,64 +122,64 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
     <span class="count ok" id="cnt">…</span>
   </div>
   <nav class="navs">
-    <a href="#agora">Agora</a><a href="#mapa">Mapa</a><a href="#roteiro">Roteiro</a>
+    <a href="#agora">Agora</a><a href="#roteiro">Roteiro</a><a href="#mapa">Mapa</a>
     <a href="#metro">Trem</a><a href="#frases">Frases</a><a href="#info">Infos</a>
   </nav>
 </div>
 
 <section id="agora" style="margin-top:14px">
   <div class="card next" id="nextCard"></div>
-  <div class="card" style="margin-top:10px;font-size:14px">
-    <b>Horário sugerido:</b> despertador às <b>8h</b>, café sem pressa, saída do Airbnb às <b>9h10</b> (dá ~1h até Montmartre). Dois horários marcados: <b>Louvre às 13h30</b> e <b>Torre às 17h45</b> (comprem os dois hoje). O passeio termina em Notre-Dame por volta de <b>20h50</b>; com jantar e a volta de trem, vocês chegam em casa lá pelas <b>22h50</b>.
-    <div class="startbox">Vão sair em outro horário? <label>Saída do Airbnb: <input type="time" id="startAt" value="09:10"></label> <span class="small">O site recalcula o dia inteiro.</span></div>
+  <div class="card" style="margin-top:10px">
+    <div class="row"><span class="small">Previsão de chegada em casa</span></div>
+    <div class="big" id="homeEta">--:--</div>
+    <div class="warns" id="warns" style="margin-top:6px"></div>
   </div>
-  <div class="card alert" style="margin-top:10px;font-size:14px">
-    <b style="color:var(--red)">Horários que mandam no dia:</b> Louvre fecha às <b>18h</b> (última entrada 17h) · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (vocês vão estar lá em cima no das <b>18h</b> e no das <b>19h</b>) · Notre-Dame aberta até <b>22h</b> às quintas.
+</section>
+
+<section id="roteiro">
+  <h2>Roteiro</h2>
+  <p class="small">O site recalcula tudo a cada mudança e salva neste celular.
+  <b>✓</b> marca que vocês <b>saíram</b> da parada agora; o campo <b>🕒 saímos às</b> corrige a hora.
+  <b>⏱</b> muda quanto tempo ficar. <b>↑ ↓</b> reorganizam e <b>✂️</b> corta ou recoloca uma parada.
+  Enquanto não marcarem a saída, a parada atual se estende até a hora de agora.</p>
+  <div class="btns" style="margin-bottom:10px">
+    <button class="btn sm" id="resetTimes">Limpar horários</button>
+    <button class="btn sm" id="resetAll">Voltar ao roteiro original</button>
   </div>
+  <div id="steps"></div>
 </section>
 
 <section id="mapa">
   <h2>Mapa</h2>
   <div id="map"></div>
-  <div class="btns">
-    <a class="btn primary" target="_blank" rel="noopener" id="routeAM">🗺️ Manhã a pé (Montmartre → Louvre)</a>
-    <a class="btn primary" target="_blank" rel="noopener" id="routePM">🗺️ Tarde a pé (Louvre → Campo de Marte)</a>
-  </div>
-  <p class="small">Toquem num pino para abrir o lugar. Vermelho: falta · azul: próxima parada · verde: feito.</p>
-</section>
-
-<section id="roteiro">
-  <h2>Roteiro passo a passo</h2>
-  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula as próximas: o horário riscado é o planejado, o colorido é o novo (vermelho atrasou, verde adiantou). Tocar de novo desmarca. Tudo fica salvo neste celular. <button class="btn" id="reset" style="padding:4px 9px;font-size:12px">Limpar marcações</button></p>
-  <div id="steps"></div>
+  <p class="small">Os números seguem a ordem atual do roteiro. Paradas cortadas não aparecem.</p>
 </section>
 
 <section id="metro">
   <h2>Trem e metrô</h2>
   <div class="grid2">
     <div class="card">
-      <span class="tag blue">manhã</span>
-      <h3 style="margin:6px 0 4px">Garches → Abbesses</h3>
-      <div class="small">~15 min a pé até a gare <b>Garches – Marnes-la-Coquette</b>. Trem <b>linha L</b> sentido <b>Paris Saint-Lazare</b> (~25 min, via La Défense). Em Saint-Lazare, <b>metrô 12</b> sentido Mairie d'Aubervilliers até <b>Abbesses</b>. Abbesses é a estação mais funda de Paris: usem o elevador.</div>
-      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=1+Passage+du+Clos%2C+92380+Garches&destination=Abbesses+metro+station%2C+Paris&travelmode=transit">🚆 Rota agora a partir do Airbnb</a></div>
+      <span class="tag blue">ida</span>
+      <h3 style="margin:6px 0 4px">Garches → Notre-Dame</h3>
+      <div class="small">~15 min a pé até a gare <b>Garches – Marnes-la-Coquette</b>. Trem <b>linha L</b> até <b>Paris Saint-Lazare</b> (~25 min, via La Défense). Em Saint-Lazare, <b>metrô 14</b> até <b>Châtelet</b> (2 paradas) e ~10 min a pé até a catedral.</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=1+Passage+du+Clos%2C+92380+Garches&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚆 Rota a partir do Airbnb</a></div>
     </div>
     <div class="card">
-      <span class="tag gold">à noite</span>
-      <h3 style="margin:6px 0 4px">Campo de Marte → Notre-Dame (RER C)</h3>
-      <div class="small">Estação <b>Champ de Mars – Tour Eiffel</b>, na beira do Sena. Peguem o RER C no sentido leste (direção Paris / Austerlitz) e desçam em <b>Saint-Michel – Notre-Dame</b>, sem baldeação (~15 min).</div>
-      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Champ+de+Mars+Tour+Eiffel+RER%2C+Paris&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚆 Rota no Maps</a></div>
+      <span class="tag gold">metrô 9</span>
+      <h3 style="margin:6px 0 4px">Champs → Lafayette → Trocadéro</h3>
+      <div class="small">A <b>linha 9</b> resolve os dois trechos: <b>Franklin D. Roosevelt → Chaussée d'Antin – La Fayette</b> (4 paradas) e depois <b>Chaussée d'Antin – La Fayette → Trocadéro</b>, direto (~20 min).</div>
     </div>
     <div class="card">
       <span class="tag green">volta</span>
-      <h3 style="margin:6px 0 4px">Notre-Dame → Garches</h3>
-      <div class="small"><b>RER A</b> em Châtelet – Les Halles (~10 min a pé da catedral), sentido oeste, até <b>La Défense</b> → <b>trem L</b> até Garches – Marnes-la-Coquette (~10 min). Plano B: metrô 14 de Châtelet até Saint-Lazare e trem L direto. Táxi/Uber: ~30 min.</div>
+      <h3 style="margin:6px 0 4px">Torre Eiffel → Garches</h3>
+      <div class="small"><b>Metrô 6</b> em Bir-Hakeim até Charles de Gaulle – Étoile → <b>RER A</b> até <b>La Défense</b> → <b>trem L</b> até Garches – Marnes-la-Coquette. Plano B: trem L direto de Saint-Lazare. Táxi/Uber: ~30 min.</div>
       <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=1+Passage+du+Clos%2C+92380+Garches&travelmode=transit">🏠 Voltar para casa agora</a>
       <button class="btn" data-copy="1 Passage du Clos, 92380 Garches">📋 Endereço</button></div>
     </div>
     <div class="card">
       <span class="tag red">bilhetes</span>
       <h3 style="margin:6px 0 4px">Como pagar</h3>
-      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em qualquer lugar da região (exceto aeroportos), por até 2h sem sair das catracas. Cada um usa <b>3 bilhetes</b> no dia: ida, RER C até Notre-Dame e volta. Comprem no app <b>Île-de-France Mobilités</b> ou na máquina da gare, e o funicular de Montmartre também aceita.</div>
+      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em toda a região (exceto aeroportos), por até 2h sem sair das catracas. No roteiro padrão cada um usa <b>4</b>: ida, Champs → Lafayette, Lafayette → Trocadéro e volta. Comprem no app <b>Île-de-France Mobilités</b> ou na máquina da gare.</div>
     </div>
   </div>
 </section>
@@ -180,76 +193,114 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   <h2>Informações úteis</h2>
   <div class="grid2">
     <div class="card">
-      <h3 style="margin:0 0 6px">🗼 Ingresso da Torre Eiffel</h3>
-      <div class="small">Comprem <b>hoje</b>, só no site oficial: "Sommet par ascenseur" (elevador até o topo), horário entre <b>17h45 e 18h</b>. O ingresso vale só para o dia e o horário escolhidos, e o topo tem pouca vaga. Se esgotar, peguem o 2º andar. A última subida ao topo é às 22h30. Lá em cima venta e faz frio: levem casaco e gorro.</div>
-      <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://ticket.toureiffel.paris">🎟️ Site oficial de ingressos</a></div>
-    </div>
-    <div class="card">
       <h3 style="margin:0 0 6px">🖼️ Ingresso do Louvre</h3>
-      <div class="small">Comprem <b>hoje</b> no site oficial, horário de <b>13h30</b>: sem reserva, a entrada não é garantida. Desde janeiro de 2026, quem não é do Espaço Econômico Europeu paga <b>€32</b>; quem tem documento da UE paga a tarifa normal (levem o documento). Às quintas o museu fecha às 18h, com última entrada às 17h.</div>
+      <div class="small">Comprem <b>hoje</b> no site oficial: sem reserva, a entrada não é garantida. Pelo roteiro atual, o horário a escolher é <b id="slotLouvre">--:--</b>. Às quintas o museu fecha às 18h, com última entrada às 17h. Desde janeiro de 2026, quem não é do Espaço Econômico Europeu paga <b>€32</b>; quem tem documento da UE paga a tarifa normal (levem o documento).</div>
       <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://www.louvre.fr/visiter/horaires-tarifs">🎟️ Site oficial do Louvre</a></div>
     </div>
     <div class="card">
+      <h3 style="margin:0 0 6px">🗼 Ingresso da Torre Eiffel</h3>
+      <div class="small">Comprem <b>hoje</b>, só no site oficial: elevador até o topo. Pelo roteiro atual, o horário a escolher é <b id="slotTorre">--:--</b>. O ingresso vale só para o dia e o horário escolhidos, e o topo tem pouca vaga; se esgotar, peguem o 2º andar. A última subida ao topo é às 22h30. Lá em cima venta e faz frio.</div>
+      <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://ticket.toureiffel.paris">🎟️ Site oficial da Torre</a></div>
+    </div>
+    <div class="card">
       <h3 style="margin:0 0 6px">⛪ Notre-Dame</h3>
-      <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). Às quintas fica aberta até as <b>22h</b>, e é por isso que ela ficou para o fim do dia.</div>
+      <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). De manhã a fila costuma ser menor. Às quintas fica aberta até as 22h.</div>
       <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://resa.notredamedeparis.fr">🎟️ Reserva grátis</a></div>
     </div>
     <div class="card">
-      <h3 style="margin:0 0 6px">❤️ Muro do Eu Te Amo</h3>
-      <div class="small">Desde março de 2026 o muro está <b>cercado para obras</b> de conservação. Dá para ver e fotografar por trás das barreiras, mas não encostar. Como fica no caminho entre o Sacré-Cœur e o Moulin Rouge, vale a parada rápida.</div>
+      <h3 style="margin:0 0 6px">🎄 Natal</h3>
+      <div class="small">A árvore gigante da <b>cúpula da Galeries Lafayette</b> e as vitrines já estão montadas (desde 12/11). As luzes da <b>Champs-Élysées</b> só acendem em <b>22/11</b>.</div>
     </div>
     <div class="card">
-      <h3 style="margin:0 0 6px">🎄 Natal</h3>
-      <div class="small">A árvore gigante da <b>cúpula da Galeries Lafayette</b> e as vitrines já estão montadas (desde 12/11). As luzes da <b>Champs-Élysées</b> só acendem em <b>22/11</b>, então amanhã a avenida ainda estará sem a decoração acesa.</div>
+      <h3 style="margin:0 0 6px">⛰️ Montmartre (cortado)</h3>
+      <div class="small">Sacré-Cœur, Muro do Eu Te Amo e Moulin Rouge estão no roteiro como <b>cortados</b>, logo depois da Lafayette. Para incluir, toquem em ✂️ Recolocar. O muro está cercado para obras desde março de 2026, e o square onde ele fica fecha às 17h30.</div>
     </div>
     <div class="card">
       <h3 style="margin:0 0 6px">🚨 Golpes e emergência</h3>
-      <div class="small">No Sacré-Cœur, recusem quem tenta amarrar <b>pulseira</b> no pulso. No Trocadéro e na Torre, ignorem quem pede <b>assinatura em abaixo-assinado</b>. Celular e carteira no bolso da frente no metrô. Emergência: <b>112</b>.</div>
+      <div class="small">Recusem quem tenta amarrar <b>pulseira</b> no pulso e quem pede <b>assinatura em abaixo-assinado</b> (comum no Trocadéro e na Torre). Celular e carteira no bolso da frente no metrô. Emergência: <b>112</b>.</div>
       <div class="btns"><button class="btn" data-copy="112">📋 112</button></div>
     </div>
   </div>
 </section>
 
-<footer>Horários levantados em 18/11/2026 (paris.fr, Louvre, Torre Eiffel, Notre-Dame, Galeries Lafayette, IDFM). Confiram no Google Maps no dia. Bonne journée! 🇫🇷</footer>
+<footer>Horários levantados em 18/11/2026 (Louvre, Torre Eiffel, Notre-Dame, Senado/Jardim de Luxemburgo, Galeries Lafayette, paris.fr, IDFM). Os tempos de deslocamento sem descrição são estimativas pela distância: confiram no botão do Maps. Bonne journée! 🇫🇷</footer>
 </div>
 <div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// ---------- dados ----------
-// t = horário planejado (HH:MM, Paris). w = deslocamento até a próxima parada.
-const STEPS = [
- {ph:"Manhã · de Garches a Montmartre", t:"09:10", n:"Saída do Airbnb → Abbesses", q:"Abbesses metro station, Paris", ll:[48.88437,2.33849], go:65, hotel:true,
-  d:"~15 min a pé até a gare Garches – Marnes-la-Coquette, trem da linha L até Paris Saint-Lazare (~25 min, passa mais ou menos a cada 15 min), e metrô linha 12 de Saint-Lazare até Abbesses (5 paradas). Um único bilhete Métro-Train-RER cobre tudo isso.", tip:"Abram o botão \"Como chegar\" antes de sair de casa: ele já mostra o próximo trem a partir do Airbnb.", w:"trem L + metrô 12, ~1h porta a porta"},
- {t:"10:15", n:"Muro do Eu Te Amo", a:"Le Mur des je t'aime, Square Jehan Rictus, Paris", ll:[48.88483,2.33831], city:true,
-  d:"Fica no Square Jehan Rictus, colado na saída do metrô Abbesses, que tem a entrada art nouveau, outra boa foto.", tip:"O muro está cercado para obras desde março de 2026: dá para ver e fotografar por trás das barreiras.", w:"10 min subindo (ou funicular, saindo da Place Suzanne-Valadon)"},
- {t:"10:40", n:"Basílica do Sagrado Coração", a:"Basilique du Sacré-Cœur de Montmartre, Paris", ll:[48.88671,2.34310], city:true,
-  d:"Entrada grátis e vista de Paris inteira do adro. Na saída, passem pela Place du Tertre, a praça dos pintores.", tip:"Recusem quem oferecer pulseira na escadaria.", w:"15 min descendo pela Rue Lepic"},
- {t:"11:40", n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], city:true,
-  d:"Fotos do moinho vermelho no Boulevard de Clichy. A Rue Lepic, que vocês acabaram de descer, é a do Café des 2 Moulins (o café da Amélie Poulain).", w:"25 min, quase tudo descida (Rue Blanche → Trinité → Chaussée d'Antin)"},
- {ph:"Almoço · Opéra", t:"12:15", n:"Galeries Lafayette + almoço", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], city:true,
-  d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Almoço no Lafayette Gourmet, no prédio ao lado, que tem opções vegetarianas.", tip:"Almoço sem demora: a entrada no Louvre está marcada para 13h30. A pista de patinação do terraço só abre em 24/11; se o terraço estiver fechado, a Glasswalk compensa.", w:"15 min passando pela Ópera e descendo a Avenue de l'Opéra"},
- {ph:"Tarde · Louvre e eixo histórico", t:"13:30", n:"Museu do Louvre · Mona Lisa", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], city:true,
-  d:"Entrada pela pirâmide no horário reservado. Roteiro rápido de ~2h: Mona Lisa (Salle des États, ala Denon, 1º andar), Vitória de Samotrácia na escadaria Daru, Vênus de Milo (ala Sully, térreo) e, se sobrar tempo, os aposentos de Napoleão III.", tip:"Reservem hoje o horário das 13h30 no site oficial. A Mona Lisa é pequena e tem fila própria dentro da sala: vão direto a ela primeiro.", w:"5 min pelo Arc du Carrousel"},
- {t:"15:35", n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], city:true,
-  d:"Atravessem o jardim inteiro no eixo central, do Louvre até a Concórdia (~1 km), passando pelos dois lagos redondos.", w:"20 min atravessando o jardim"},
- {t:"16:00", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
-  d:"Obelisco e fontes, com a Torre Eiffel ao fundo.", w:"começo da avenida"},
- {ph:"Entardecer", t:"16:10", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
-  d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~40 min"},
- {t:"16:50", n:"Arco do Triunfo · pôr do sol", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
-  d:"O sol se põe por volta de 17h05. Fotos do canteiro central da avenida; ir até embaixo do arco, pela passagem subterrânea, toma uns 15 min a mais.", tip:"Opcional: se estiverem atrasados para a Torre, pulem e desçam direto pela Avenue d'Iéna.", w:"15 min pela Avenue d'Iéna"},
- {ph:"Noite · Torre Eiffel", t:"17:20", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
-  d:"A vista clássica da Torre, já acesa no começo da noite, da esplanada do Palais de Chaillot. Fotos e sigam para a Torre.", w:"10 min pelos jardins e pela Pont d'Iéna"},
- {t:"17:45", n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
-  d:"Revista de segurança na entrada, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45 no total. Às 18h e às 19h vocês veem a Torre piscar lá de dentro.", tip:"Comprem o ingresso hoje, só no site oficial (ticket.toureiffel.paris): elevador até o topo, horário entre 17h45 e 18h. Se o topo estiver esgotado, peguem só até o 2º andar.", copy:"ticket.toureiffel.paris", w:"5 min"},
- {t:"19:35", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
-  d:"A Torre iluminada vista do gramado, para as últimas fotos.", go:25, w:"RER C de Champ de Mars – Tour Eiffel até Saint-Michel – Notre-Dame (~15 min)", metro:true},
- {ph:"Noite · Île de la Cité", t:"20:05", n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], city:true,
-  d:"Às quintas a catedral fica aberta até 22h (última entrada 21h30). À noite a fachada fica iluminada. Entrada grátis, visita de 45 min.", tip:"Reserva de horário opcional e grátis em resa.notredamedeparis.fr.", copy:"resa.notredamedeparis.fr", w:"5 min até o Quartier Latin"},
- {t:"20:50", n:"Jantar e volta a Garches", q:"Saint-Michel Notre-Dame, Paris", ll:[48.85340,2.34420], city:true, end:true,
-  d:"Jantar no Quartier Latin, do outro lado da ponte (crêperies e bistrôs; crepe de queijo ou de cogumelos serve à Natália). Volta: RER A de Châtelet – Les Halles até La Défense e trem L até Garches – Marnes-la-Coquette, uns 40 min mais a caminhada.", tip:"Cansados? Um Uber/táxi até Garches leva ~30 min sem trânsito. Confiram o preço no app."}
-];
+// ================== DADOS ==================
+const TRIP_DATE="2026-11-19";
+const HOME={n:"Airbnb (Garches)", a:"1 Passage du Clos, 92380 Garches", ll:[48.8455,2.1880]};
+// dur = minutos na parada · open = abre · last = último horário bom para CHEGAR (fecha) · slot = precisa de ingresso com horário
+const STOPS={
+ notredame:{n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], dur:45, open:"07:50", last:"21:30", lastTxt:"última entrada 21h30",
+  d:"Entrada grátis. Fachada, rosáceas e o tesouro da catedral. De manhã a fila costuma ser menor.", tip:"Reserva de horário opcional e grátis em resa.notredamedeparis.fr."},
+ luxembourg:{n:"Jardim de Luxemburgo", a:"Jardin du Luxembourg, Paris", ll:[48.84622,2.33715], dur:30, open:"08:00", last:"16:30", lastTxt:"fecha 16h45",
+  d:"Fonte Médicis, o palácio do Senado e o grande lago central. Entrada grátis."},
+ almoco:{n:"Almoço em Saint-Germain", a:"Rue de Buci, 75006 Paris", ll:[48.85390,2.33590], dur:50,
+  d:"Cafés e bistrôs entre a Rue de Buci e o Boulevard Saint-Germain, no caminho do Louvre. Perguntem pelo prato vegetariano para a Natália.", tip:"Querem comer dentro do Louvre? Cortem esta parada e aumentem o tempo do museu."},
+ louvre:{n:"Museu do Louvre · Mona Lisa", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], dur:150, open:"09:00", last:"17:00", lastTxt:"última entrada 17h, fecha 18h", slot:"Louvre",
+  d:"Entrada pela pirâmide no horário reservado. Mona Lisa (Salle des États, ala Denon, 1º andar), Vitória de Samotrácia na escadaria Daru, Vênus de Milo (ala Sully, térreo) e o que mais quiserem: ajustem o ⏱.", tip:"A Mona Lisa tem fila própria dentro da sala: vão direto a ela primeiro."},
+ tulherias:{n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], dur:15,
+  d:"Só passando: o eixo central do jardim, do Arc du Carrousel até os lagos redondos."},
+ concorde:{n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], dur:10,
+  d:"Obelisco e fontes, com a Torre Eiffel ao fundo."},
+ champs:{n:"Champs-Élysées", a:"George V, Avenue des Champs-Élysées, Paris", ll:[48.87205,2.30080], dur:35,
+  d:"A caminhada pela avenida, da Concórdia até a altura do metrô George V: primeiro os jardins, depois as lojas a partir do Rond-Point.", tip:"As luzes de Natal da avenida só acendem em 22/11."},
+ arco:{n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], dur:15,
+  d:"Fotos do canteiro central da avenida. Para chegar embaixo do arco, usem a passagem subterrânea; não atravessem a rotatória."},
+ lafayette:{n:"Galeries Lafayette", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], dur:50, open:"10:00", last:"20:00", lastTxt:"fecha 20h30",
+  d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Lanche no Lafayette Gourmet, no prédio ao lado."},
+ sacrecoeur:{n:"Basílica do Sagrado Coração", a:"Basilique du Sacré-Cœur de Montmartre, Paris", ll:[48.88671,2.34310], dur:45,
+  d:"Entrada grátis e vista de Paris inteira do adro. Funicular aceita o bilhete de metrô. Passem pela Place du Tertre.", tip:"Recusem quem oferecer pulseira na escadaria."},
+ jetaime:{n:"Muro do Eu Te Amo", a:"Le Mur des je t'aime, Square Jehan Rictus, Paris", ll:[48.88483,2.33831], dur:15, last:"17:15", lastTxt:"o square fecha 17h30",
+  d:"Square Jehan Rictus, na Place des Abbesses.", tip:"O muro está cercado para obras desde março de 2026: dá para ver por trás das barreiras."},
+ moulinrouge:{n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], dur:10,
+  d:"Fotos do moinho vermelho no Boulevard de Clichy."},
+ trocadero:{n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], dur:20,
+  d:"A vista clássica da Torre, da esplanada do Palais de Chaillot. A Torre pisca 5 min no começo de cada hora depois que escurece."},
+ torre:{n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], dur:100, last:"22:30", lastTxt:"última subida ao topo 22h30", slot:"Torre",
+  d:"Revista de segurança, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45. Se estiverem lá em cima na virada da hora, vejam a Torre piscar de dentro."},
+ campomarte:{n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], dur:15,
+  d:"A Torre iluminada vista do gramado, para as últimas fotos."},
+ birhakeim:{n:"Ponte de Bir-Hakeim", a:"Pont de Bir-Hakeim, Paris", ll:[48.85520,2.28740], dur:15,
+  d:"A ponte de dois andares com o metrô passando por cima e a Torre ao lado: uma das fotos mais bonitas da região. Fica ao lado da estação Bir-Hakeim, de onde sai o metrô 6 da volta."},
+ cruzeiro:{n:"Cruzeiro no Sena", a:"Bateaux Parisiens, Port de la Bourdonnais, Paris", ll:[48.85990,2.29280], dur:60,
+  d:"Passeio de ~1h de barco saindo do pé da Torre, passando por Notre-Dame e pelo Louvre iluminados.", tip:"Confiram os horários de saída e comprem no site da empresa antes de colocar no roteiro."},
+ jantar:{n:"Jantar perto da Torre", a:"Rue Cler, 75007 Paris", ll:[48.85600,2.30600], dur:60,
+  d:"Cafés, crêperies e bistrôs na Rue Cler e em volta da École Militaire. Crepe de queijo ou de cogumelos serve à Natália.", tip:"Cansados? Cortem o jantar e comam perto de casa, ou peguem um Uber (~30 min até Garches)."}
+};
+const DEFAULT_ORDER=["notredame","luxembourg","almoco","louvre","tulherias","concorde","champs","arco","lafayette","sacrecoeur","jetaime","moulinrouge","trocadero","torre","campomarte","birhakeim","cruzeiro","jantar"];
+const DEFAULT_CUT={arco:1,sacrecoeur:1,jetaime:1,moulinrouge:1,birhakeim:1,cruzeiro:1};
+const DEFAULT_START="08:45";
+// deslocamentos conhecidos (os demais são estimados pela distância)
+const W="walking", T="transit";
+const TRAVEL={
+ "home>notredame":[60,T,"a pé até a gare, trem L até Saint-Lazare, metrô 14 até Châtelet e 10 min a pé"],
+ "notredame>luxembourg":[18,W,"a pé por Saint-Michel e a Rue Soufflot"],
+ "luxembourg>almoco":[10,W,"a pé até Saint-Germain"],
+ "almoco>louvre":[15,W,"a pé pela Rue de Seine e a Pont des Arts"],
+ "luxembourg>louvre":[25,W,"a pé por Saint-Germain e a Pont des Arts"],
+ "louvre>tulherias":[5,W,"a pé pelo Arc du Carrousel"],
+ "tulherias>concorde":[12,W,"a pé pelo eixo central do jardim"],
+ "concorde>champs":[2,W,"a avenida começa aqui"],
+ "champs>arco":[10,W,"a pé, subindo a avenida"],
+ "champs>lafayette":[20,T,"metrô 9 de Franklin D. Roosevelt até Chaussée d'Antin – La Fayette (volte 5 min a pé até Franklin D. Roosevelt)"],
+ "arco>lafayette":[18,T,"RER A de Charles de Gaulle – Étoile até Auber (2 paradas) e 5 min a pé"],
+ "lafayette>trocadero":[25,T,"metrô 9 de Chaussée d'Antin – La Fayette até Trocadéro, direto"],
+ "sacrecoeur>jetaime":[12,W,"a pé, descendo até a Place des Abbesses"],
+ "jetaime>moulinrouge":[10,W,"a pé pela Rue des Abbesses e a Rue Lepic"],
+ "moulinrouge>trocadero":[30,T,"metrô 2 de Blanche até Charles de Gaulle – Étoile e metrô 6 até Trocadéro"],
+ "trocadero>torre":[10,W,"a pé pelos jardins e pela Pont d'Iéna"],
+ "torre>campomarte":[5,W,"a pé"],
+ "campomarte>birhakeim":[10,W,"a pé pela margem do Sena"],
+ "campomarte>jantar":[8,W,"a pé até a Rue Cler"],
+ "birhakeim>jantar":[15,W,"a pé"],
+ "torre>cruzeiro":[5,W,"a pé até o cais, ao pé da Torre"],
+ "jantar>home":[55,T,"a pé até Bir-Hakeim, metrô 6 até Étoile, RER A até La Défense e trem L até Garches"],
+ "birhakeim>home":[50,T,"metrô 6 até Étoile, RER A até La Défense e trem L até Garches"]
+};
 const PHRASES=[
  ["Bonjour ! / Merci beaucoup !","Bom dia! / Muito obrigado!"],
  ["Une table pour deux, s'il vous plaît.","Mesa para dois"],
@@ -262,181 +313,209 @@ const PHRASES=[
  ["Non, merci.","Não, obrigado (golpe da pulseira/abaixo-assinado)"],
  ["On m'a volé mon portefeuille.","Roubaram minha carteira"]
 ];
-const ROUTE_AM="https://www.google.com/maps/dir/?api=1&origin=Le+Mur+des+je+t%27aime%2C+Paris&destination=Pyramide+du+Louvre%2C+Paris&waypoints=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris%7CPlace+du+Tertre%2C+Paris%7CMoulin+Rouge%2C+Paris%7CGaleries+Lafayette+Haussmann%2C+Paris&travelmode=walking";
-const ROUTE_PM="https://www.google.com/maps/dir/?api=1&origin=Pyramide+du+Louvre%2C+Paris&destination=Champ+de+Mars%2C+Paris&waypoints=Jardin+des+Tuileries%2C+Paris%7CPlace+de+la+Concorde%2C+Paris%7CArc+de+Triomphe%2C+Paris%7CPlace+du+Trocad%C3%A9ro%2C+Paris%7CTour+Eiffel%2C+Paris&travelmode=walking";
 
-// ---------- util ----------
+// ================== ESTADO ==================
+const KEY="paris-1911-v2";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const enc=encodeURIComponent;
-const place=s=>"https://www.google.com/maps/search/?api=1&query="+enc(s.a||s.q);
-const go=(s,mode)=>"https://www.google.com/maps/dir/?api=1&destination="+enc(s.a||s.q)+"&travelmode="+mode;
-const HOME="1 Passage du Clos, 92380 Garches";
-const HOME_TO=s=>"https://www.google.com/maps/dir/?api=1&origin="+enc(HOME)+"&destination="+enc(s.a||s.q)+"&travelmode=transit";
-const KEY="paris-1911-done", SKEY="paris-1911-start";
-let done={}; try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
-let startAt="09:10"; try{startAt=localStorage.getItem(SKEY)||"09:10"}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done));localStorage.setItem(SKEY,startAt)}catch(e){}};
-function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1700)}
+const toMin=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
+const fmt=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+function fresh(){return {start:DEFAULT_START,order:DEFAULT_ORDER.slice(),cut:Object.assign({},DEFAULT_CUT),dur:{},done:{}}}
+let st=fresh();
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s&&Array.isArray(s.order)){st=Object.assign(fresh(),s);
+  DEFAULT_ORDER.forEach(id=>{if(!st.order.includes(id)){st.order.push(id);st.cut[id]=1}}); st.order=st.order.filter(id=>STOPS[id]);}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1800)}
 async function copy(txt){
   try{await navigator.clipboard.writeText(txt);toast("Copiado ✓")}
   catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
     try{document.execCommand("copy");toast("Copiado ✓")}catch(_){toast("Não deu para copiar")}ta.remove()}
 }
-// Dia do passeio (AAAA-MM-DD). Para mudar a data, altere só esta linha.
-const TRIP_DATE="2026-11-19";
 function parisNow(){
   const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
-  const g=t=>p.find(x=>x.type===t).value;
-  const h=+g("hour")%24, m=+g("minute");
+  const g=t=>p.find(x=>x.type===t).value; const h=+g("hour")%24, m=+g("minute");
   return {h,m,min:h*60+m,date:`${g("year")}-${g("month")}-${g("day")}`,str:String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")};
 }
-function daysToTrip(n){return Math.round((Date.parse(TRIP_DATE)-Date.parse(n.date))/864e5)}
-const toMin=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
-const fmt=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+const isToday=()=>parisNow().date===TRIP_DATE;
 
-// ---------- horários dinâmicos ----------
-// Ao marcar uma parada como feita, guardamos a hora (Paris). As próximas
-// paradas são recalculadas: hora em que terminou + deslocamento, mantendo
-// a duração planejada das etapas seguintes. A hora de saída do hotel
-// desloca o dia inteiro enquanto nada foi marcado com horário.
-const LUX=STEPS.findIndex(s=>s.lux);
-function travelMin(s){
-  if(typeof s.go==="number") return s.go;
-  const m=(s.w||"").match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*min/);
-  return m?+(m[2]||m[1]):0;
+// ================== CÁLCULO ==================
+const place=p=>"https://www.google.com/maps/search/?api=1&query="+enc(p.a);
+const dirs=(a,b,mode)=>"https://www.google.com/maps/dir/?api=1&origin="+enc(a.a)+"&destination="+enc(b.a)+"&travelmode="+mode;
+const goNow=(p,mode)=>"https://www.google.com/maps/dir/?api=1&destination="+enc(p.a)+"&travelmode="+mode;
+const P=id=>id==="home"?HOME:STOPS[id];
+function km(a,b){const R=6371,r=x=>x*Math.PI/180,dl=r(b[0]-a[0]),dn=r(b[1]-a[1]);
+  const h=Math.sin(dl/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+function travel(a,b){
+  const k=TRAVEL[a+">"+b]; if(k) return {m:k[0],mode:k[1],how:k[2],known:true};
+  const d=km(P(a).ll,P(b).ll);
+  if(a==="home"||b==="home") return {m:Math.round(20+d*3.2),mode:T,how:"trem + metrô (estimativa)"};
+  const rd=d*1.3;
+  if(rd<=2.6) return {m:Math.max(3,Math.round(rd/4.5*60)),mode:W,how:"a pé (estimativa)"};
+  return {m:Math.round(12+rd*2.5),mode:T,how:"metrô (estimativa)"};
 }
-function projections(){
-  const out=[]; let delta=toMin(startAt)-toMin(STEPS[0].t);
-  STEPS.forEach((s,i)=>{
-    out[i]=toMin(s.t)+delta;
-    if(typeof done[i]==="number" && STEPS[i+1]) delta=(done[i]+travelMin(s))-toMin(STEPS[i+1].t);
+const active=()=>st.order.filter(id=>!st.cut[id]);
+const durOf=id=>typeof st.dur[id]==="number"?st.dur[id]:STOPS[id].dur;
+function schedule(){
+  const now=parisNow(), today=now.date===TRIP_DATE, A=active(); const S={}; let t=toMin(st.start), prev="home";
+  const firstPending=A.find(id=>!st.done[id]);
+  A.forEach(id=>{
+    const s=STOPS[id], tr=travel(prev,id); let arr=t+tr.m, wait=0;
+    if(s.open&&arr<toMin(s.open)){wait=toMin(s.open)-arr;arr=toMin(s.open)}
+    let dep;
+    if(typeof st.done[id]==="number"){dep=st.done[id]; if(dep<arr) arr=Math.max(t,dep-durOf(id));}
+    else{dep=arr+durOf(id); if(id===firstPending&&today&&(st.done[prev]||prev==="home")&&now.min>dep&&now.min>=toMin(st.start)) dep=now.min;}
+    S[id]={arr,dep,tr,from:prev,wait}; t=dep; prev=id;
+  });
+  const back=travel(prev,"home");
+  return {S,A,home:t+back.m,back,last:prev,firstPending};
+}
+function warnings(R){
+  const out=[];
+  R.A.forEach(id=>{const s=STOPS[id],x=R.S[id]; if(!s.last||st.done[id]) return;
+    const L=toMin(s.last);
+    if(x.arr>L) out.push(`<span class="tag red">${esc(s.n)}: chegada ${fmt(x.arr)}, ${esc(s.lastTxt)}</span>`);
+    else if(x.arr>L-20) out.push(`<span class="tag gold">${esc(s.n)}: chegada ${fmt(x.arr)}, apertado (${esc(s.lastTxt)})</span>`);
   });
   return out;
 }
-function nextIndex(){return STEPS.findIndex((s,i)=>!done[i])}
-function timeCell(i,P){
-  const pl=toMin(STEPS[i].t), pr=P[i];
-  if(typeof done[i]==="number") return `<span class="time" style="color:var(--green)">✓ ${fmt(done[i])}</span>`;
-  if(done[i]) return `<span class="time" style="color:var(--green)">✓</span>`;
-  if(Math.abs(pr-pl)<3) return `<span class="time">${STEPS[i].t}</span>`;
-  return `<span class="time" style="color:var(--muted);text-decoration:line-through;font-weight:600">${STEPS[i].t}</span><span class="time" style="color:${pr>pl?"var(--red)":"var(--green)"}">${fmt(pr)}</span>`;
-}
-function luxInfo(P){
-  if(LUX<0||done[LUX]) return "";
-  const r=P[LUX];
-  if(r<=toMin("16:00")) return `<span class="tag green">Luxemburgo às ${fmt(r)} · fecha 16h45</span>`;
-  if(r<=toMin("16:20")) return `<span class="tag gold">Luxemburgo às ${fmt(r)} · visita curta, fecha 16h45</span>`;
-  return `<span class="tag red">Luxemburgo às ${fmt(r)} · já vai estar fechando: pulem ou só passem pelo portão</span>`;
-}
-function endInfo(P){
-  const e=STEPS.length-1; if(done[e]) return "";
-  return `<span class="tag blue">fim do passeio ${fmt(P[e])} · em casa ~${fmt(P[e]+120)}</span>`;
-}
-function renderSteps(){
-  const ni=nextIndex(), P=projections(); let html="";
-  STEPS.forEach((s,i)=>{
-    if(s.ph) html+=`<div class="phase">${esc(s.ph)}</div>`;
-    const cp=s.copy||s.a||s.q;
-    html+=`<div class="step ${done[i]?"done":""} ${i===ni?"isnext":""}" id="st${i}">
-      <button class="chk" data-i="${i}" aria-label="marcar">${done[i]?"✓":""}</button>
+
+// ================== RENDER ==================
+function slotOf(x){return fmt(Math.floor((x.arr+5)/15)*15)}
+function render(){
+  const R=schedule(), ni=R.firstPending;
+  $("#sub").textContent="Garches → "+R.A.map(id=>STOPS[id].n.replace(/ ·.*$/,"")).join(" → ")+" → casa";
+  // casa + avisos
+  $("#homeEta").textContent=fmt(R.home);
+  const ws=warnings(R);
+  $("#warns").innerHTML=(ws.length?ws.join(""):`<span class="tag green">todas as paradas dentro do horário</span>`)+
+    `<div class="small" style="margin-top:6px">Volta: ${esc(R.back.how)}, ~${R.back.m} min a partir de ${esc(STOPS[R.last]?STOPS[R.last].n:"casa")}.</div>`;
+  // ingressos
+  const sl=(k)=>{const id=R.A.find(i=>STOPS[i].slot===k);return id?slotOf(R.S[id]):"(cortado)"};
+  $("#slotLouvre").textContent=sl("Louvre"); $("#slotTorre").textContent=sl("Torre");
+  // passos
+  let h=`<div class="home"><div class="ico">🏠</div><div>
+      <div class="top"><span class="time">${esc(st.start)}</span><span class="name">Saída do Airbnb</span></div>
+      <div class="desc">1 Passage du Clos, Garches</div>
+      <div class="ctl"><label>🕒 saímos às <input type="time" class="tin" id="startIn" value="${esc(st.start)}"></label>
+      <button class="btn sm" id="leaveNow">Saímos agora</button></div></div></div>`;
+  let n=0;
+  st.order.forEach((id,idx)=>{
+    const s=STOPS[id];
+    if(st.cut[id]){
+      h+=`<div class="step cut"><div class="row" style="justify-content:space-between"><span><span class="name">${esc(s.n)}</span> <span class="tag gold">cortado</span></span>
+        <span class="row"><button class="btn sm ghost" data-act="up" data-id="${id}" aria-label="subir">↑</button><button class="btn sm ghost" data-act="down" data-id="${id}" aria-label="descer">↓</button>
+        <button class="btn sm" data-act="uncut" data-id="${id}">✂️ Recolocar</button></span></div></div>`;
+      return;
+    }
+    n++; const x=R.S[id], tr=x.tr, from=P(x.from), dn=st.done[id];
+    h+=`<div class="trav ${tr.mode===T?"tr":""}">↓ ${tr.mode===T?"🚇":"🚶"} ~${tr.m} min · ${esc(tr.how)} <a target="_blank" rel="noopener" href="${dirs(from,s,tr.mode)}">Maps</a></div>`;
+    const tm = dn ? `<span class="time" style="color:var(--green)">✓ saíram ${typeof dn==="number"?fmt(dn):""}</span>`
+                  : `<span class="time">${fmt(x.arr)}</span><span class="span">→ ${fmt(x.dep)}</span>`;
+    const w=(s.last&&!dn)?(x.arr>toMin(s.last)?`<span class="tag red">${esc(s.lastTxt)}</span>`:x.arr>toMin(s.last)-20?`<span class="tag gold">${esc(s.lastTxt)}</span>`:""):"";
+    h+=`<div class="step ${dn?"done":""} ${id===ni?"isnext":""}" id="st-${id}">
+      <button class="chk" data-act="done" data-id="${id}" aria-label="marcar saída">${dn?"✓":n}</button>
       <div>
-        <div class="top">${timeCell(i,P)}<span class="name">${esc(s.n)}</span>${s.opt?'<span class="tag gold">opcional</span>':""}${i===ni?'<span class="tag blue">próxima</span>':""}</div>
-        <div class="desc">${esc(s.d)}</div>
+        <div class="top">${tm}<span class="name">${esc(s.n)}</span>${id===ni?'<span class="tag blue">agora / próxima</span>':""}${w}</div>
+        <div class="desc">${esc(s.d)}${x.wait&&!dn?` <b>Abre às ${esc(s.open)}</b>: ${x.wait} min de espera.`:""}</div>
         ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
-        ${s.lux?`<div style="margin-top:6px">${luxInfo(P)}</div>`:""}
+        ${s.slot&&!dn?`<div class="tip">🎟️ Horário de ingresso a escolher: <b>${slotOf(x)}</b></div>`:""}
         <div class="btns">
-          <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
-          ${s.hotel?`<a class="btn blue" target="_blank" rel="noopener" href="${HOME_TO(s)}">🚆 Como chegar</a>`:`<a class="btn blue" target="_blank" rel="noopener" href="${go(s,"walking")}">🚶 Ir a pé daqui</a>`}
-          <button class="btn" data-copy="${esc(cp)}">📋 Copiar</button>
+          <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Maps</a>
+          <a class="btn blue" target="_blank" rel="noopener" href="${goNow(s,tr.mode)}">${tr.mode===T?"🚇":"🚶"} Ir daqui</a>
+        </div>
+        <div class="ctl">
+          <label>⏱ ficar <input type="number" class="nin" min="0" step="5" data-act="dur" data-id="${id}" value="${durOf(id)}"> min</label>
+          <label>🕒 saímos às <input type="time" class="tin" data-act="out" data-id="${id}" value="${typeof dn==="number"?fmt(dn):""}"></label>
+          <button class="btn sm ghost" data-act="up" data-id="${id}" aria-label="subir">↑</button>
+          <button class="btn sm ghost" data-act="down" data-id="${id}" aria-label="descer">↓</button>
+          <button class="btn sm ghost" data-act="cut" data-id="${id}">✂️ Cortar</button>
         </div>
       </div></div>`;
-    if(s.w&&STEPS[i+1]) html+=`<div class="walk ${s.metro||s.hotel?"metro":""}">↓ ${esc(s.w)}${s.metro||s.hotel?"":" a pé"}</div>`;
   });
-  $("#steps").innerHTML=html;
-  renderNext(); updatePins();
+  h+=`<div class="trav tr">↓ 🚆 ~${R.back.m} min · ${esc(R.back.how)} <a target="_blank" rel="noopener" href="${dirs(P(R.last),HOME,T)}">Maps</a></div>
+    <div class="home"><div class="ico">🏠</div><div><div class="top"><span class="time">${fmt(R.home)}</span><span class="name">Em casa</span></div><div class="desc">Previsão de chegada em Garches.</div></div></div>`;
+  $("#steps").innerHTML=h;
+  renderNext(R); drawMap(R); tick(R);
 }
-function markDone(i){
-  const n=parisNow();
-  done[i]=n.date===TRIP_DATE ? n.min : true;
-  for(let k=0;k<i;k++) if(!done[k]) done[k]=true; // marca as anteriores, sem horário
-  save(); renderSteps();
-  if(typeof done[i]==="number") toast(`Feito às ${fmt(done[i])} · horários atualizados`);
-}
-$("#steps").addEventListener("click",e=>{
-  const b=e.target.closest(".chk"); if(!b) return;
-  const i=+b.dataset.i;
-  if(done[i]){delete done[i];save();renderSteps();} else markDone(i);
-});
-$("#reset").onclick=()=>{done={};save();renderSteps();toast("Marcações limpas")};
-$("#startAt").value=startAt;
-$("#startAt").addEventListener("change",e=>{if(!e.target.value)return;startAt=e.target.value;save();renderSteps();toast(`Saída às ${startAt} · dia recalculado`)});
-
-function renderNext(){
-  const ni=nextIndex(), now=parisNow(), P=projections();
-  if(ni<0){$("#nextCard").innerHTML=`<div class="lbl">Tudo feito</div><div class="ttl">Bonne nuit! 🌙</div>`;return}
-  const s=STEPS[ni], diff=now.min-P[ni];
-  let pace="";
-  if(now.date===TRIP_DATE&&now.min>=toMin("08:00")&&now.min<=toMin("23:00")){
-    pace = diff>15?`<span class="tag red">${diff} min atrás do previsto</span>`:diff<-15?`<span class="tag green">adiantados</span>`:`<span class="tag green">no horário</span>`;
-  }
-  $("#nextCard").innerHTML=`<div class="lbl">Próxima parada · previsto ${fmt(P[ni])} ${pace}</div>
+function renderNext(R){
+  const id=R.firstPending, now=parisNow();
+  if(!id){$("#nextCard").innerHTML=`<div class="lbl">Tudo feito</div><div class="ttl">Hora de voltar para casa 🏠</div>
+    <div class="small">Chegada prevista às ${fmt(R.home)}.</div>
+    <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${goNow(HOME,T)}">🚆 Voltar para casa</a></div>`;return}
+  const s=STOPS[id], x=R.S[id];
+  let pace=""; if(now.date===TRIP_DATE&&now.min>=toMin(st.start)){
+    pace = now.min<x.arr?`<span class="tag blue">a caminho · chegada ~${fmt(x.arr)}</span>`:`<span class="tag green">aqui até ~${fmt(x.dep)}</span>`;}
+  $("#nextCard").innerHTML=`<div class="lbl">Agora / próxima · ${fmt(x.arr)} → ${fmt(x.dep)} ${pace}</div>
     <div class="ttl">${esc(s.n)}</div><div class="small">${esc(s.d)}</div>
-    <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${luxInfo(P)}${endInfo(P)}</div>
-    <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${s.hotel?HOME_TO(s):go(s,"walking")}">${s.hotel?"🚆 Como chegar":"🚶 Ir a pé"}</a>
-    <a class="btn" href="#st${ni}">↓ Ver no roteiro</a>
-    <button class="btn" data-done="${ni}">✓ Terminei aqui</button></div>`;
+    <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${goNow(s,x.tr.mode)}">${x.tr.mode===T?"🚇":"🚶"} Ir</a>
+    <a class="btn" href="#st-${id}">↓ Ver no roteiro</a>
+    <button class="btn" data-act="done" data-id="${id}">✓ Saímos daqui</button></div>`;
 }
-$("#nextCard").addEventListener("click",e=>{const b=e.target.closest("[data-done]");if(!b)return;markDone(+b.dataset.done)});
 
-// ---------- relógio / status ----------
-function tick(){
-  const n=parisNow(); $("#clk").textContent=n.str;
-  const c=$("#cnt"), dd=daysToTrip(n);
-  if(dd>0){c.className="count ok";c.textContent=dd===1?`Roteiro é amanhã · saída ${startAt}`:`Roteiro em ${dd} dias`;}
-  else if(dd<0){c.className="count ok";c.textContent="Dia concluído · à bientôt! 🇫🇷";}
-  else {
-    const lux=toMin("16:45")-n.min, sun=toMin("17:05")-n.min;
-    if(LUX>=0&&!done[LUX]&&lux>0){c.className=lux>45?"count ok":"count warn";c.textContent=`Luxemburgo fecha em ${Math.floor(lux/60)}h${String(lux%60).padStart(2,"0")}`;}
-    else if(sun>0&&sun<=90){c.className="count warn";c.textContent=`Pôr do sol em ${sun} min`;}
-    else if(n.min>=toMin("17:30")&&n.min<toMin("23:59")){const nx=(n.h+1)%24, m=60-n.m;c.className="count ok";c.textContent=n.m<5?"✨ A Torre está piscando agora!":`Próximo brilho da Torre: ${nx}h (em ${m} min)`;}
-    else {c.className="count ok";c.textContent="Bom passeio!";}
+// ================== AÇÕES ==================
+function move(id,dir){
+  // parada ativa pula as cortadas e troca de lugar com a próxima ativa; cortada anda uma posição
+  const o=st.order, i=o.indexOf(id); let j=i+dir;
+  if(!st.cut[id]) while(j>=0&&j<o.length&&st.cut[o[j]]) j+=dir;
+  if(j<0||j>=o.length) return;
+  o.splice(i,1); o.splice(j,0,id);
+}
+document.addEventListener("click",e=>{
+  const c=e.target.closest("[data-copy]"); if(c){copy(c.dataset.copy);return}
+  const b=e.target.closest("button[data-act]"); if(!b) return;
+  const id=b.dataset.id, act=b.dataset.act;
+  if(act==="up"||act==="down"){move(id,act==="up"?-1:1);save();render();toast("Ordem alterada · horários recalculados");return}
+  if(act==="cut"){st.cut[id]=1;delete st.done[id];save();render();toast(`${STOPS[id].n} cortado`);return}
+  if(act==="uncut"){delete st.cut[id];save();render();toast(`${STOPS[id].n} recolocado`);return}
+  if(act==="done"){
+    if(st.done[id]){delete st.done[id];save();render();toast("Desmarcado");return}
+    const n=parisNow(); st.done[id]=n.date===TRIP_DATE?n.min:true;
+    active().slice(0,active().indexOf(id)).forEach(k=>{if(!st.done[k]) st.done[k]=true});
+    save();render(); toast(typeof st.done[id]==="number"?`Saída às ${fmt(st.done[id])} · tudo recalculado`:"Marcado");
   }
-  renderNext();
-}
+});
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.id==="startIn"){if(!el.value)return;st.start=el.value;save();render();toast(`Saída de casa ${st.start} · recalculado`);return}
+  const act=el.dataset&&el.dataset.act, id=el.dataset&&el.dataset.id; if(!act) return;
+  if(act==="dur"){const v=parseInt(el.value,10); if(isNaN(v)||v<0) return; st.dur[id]=v; save(); render(); toast(`${STOPS[id].n}: ${v} min`);}
+  if(act==="out"){ if(!el.value){delete st.done[id];} else {st.done[id]=toMin(el.value); active().slice(0,active().indexOf(id)).forEach(k=>{if(!st.done[k]) st.done[k]=true});}
+    save(); render(); toast(el.value?`Saída às ${el.value} · recalculado`:"Horário apagado");}
+});
+document.addEventListener("click",e=>{ if(e.target.id==="leaveNow"){const n=parisNow();st.start=n.str;save();render();toast(`Saída de casa às ${n.str}`)} });
+$("#resetTimes").onclick=()=>{st.done={};save();render();toast("Horários limpos")};
+$("#resetAll").onclick=()=>{st=fresh();save();render();toast("Roteiro original restaurado")};
 
-// ---------- mapa ----------
-let map, markers=[];
-function initMap(){
+// ================== RELÓGIO ==================
+let lastR=null;
+function tick(R){
+  R=R||schedule(); lastR=R; const n=parisNow(); $("#clk").textContent=n.str;
+  const c=$("#cnt"), dd=Math.round((Date.parse(TRIP_DATE)-Date.parse(n.date))/864e5);
+  if(dd>0){c.className="count ok";c.textContent=dd===1?`Amanhã · saída ${st.start} · casa ~${fmt(R.home)}`:`Em ${dd} dias`;}
+  else if(dd<0){c.className="count ok";c.textContent="Dia concluído · à bientôt! 🇫🇷";}
+  else {const late=R.home>=toMin("23:30");c.className=late?"count warn":"count ok";c.textContent=`Em casa ~${fmt(R.home)}`;}
+}
+setInterval(()=>{ if(isToday()) render(); else tick(); },60000);
+
+// ================== MAPA ==================
+let map=null, layer=null;
+function drawMap(R){
   if(!$("#map")) return;
   if(!window.L){$("#map").innerHTML='<div style="padding:20px" class="small">Mapa indisponível sem internet. Usem os botões do Google Maps.</div>';return}
-  map=L.map("map",{scrollWheelZoom:false});
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
-  const pts=STEPS.filter(s=>s.city&&!s.end).map(s=>s.ll);
-  L.polyline(pts,{color:"#b8322a",weight:3,opacity:.7,dashArray:"6 6"}).addTo(map);
-  let k=0;
-  STEPS.forEach((s,i)=>{
-    if(!s.city||s.end) return;
-    const m=L.marker(s.ll,{icon:L.divIcon({className:"",html:`<div class="pin" data-pin="${i}">${++k}</div>`,iconSize:[26,26],iconAnchor:[13,13]})}).addTo(map);
-    m.bindPopup(`<b>${esc(s.t)} · ${esc(s.n)}</b><br>${esc(s.d)}<br><a target="_blank" rel="noopener" href="${place(s)}">📍 Abrir no Google Maps</a> · <a target="_blank" rel="noopener" href="${go(s,"walking")}">Ir</a>`);
-    markers.push({m,i});
-  });
-  map.fitBounds(pts,{padding:[20,20]}); updatePins();
+  if(!map){map=L.map("map",{scrollWheelZoom:false});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);}
+  if(layer) layer.remove(); layer=L.layerGroup().addTo(map);
+  const pts=R.A.map(id=>STOPS[id].ll); if(!pts.length) return;
+  L.polyline(pts,{color:"#b8322a",weight:3,opacity:.7,dashArray:"6 6"}).addTo(layer);
+  R.A.forEach((id,i)=>{const s=STOPS[id],x=R.S[id];
+    const cls=st.done[id]?"pin done":id===R.firstPending?"pin next":"pin";
+    L.marker(s.ll,{icon:L.divIcon({className:"",html:`<div class="${cls}">${i+1}</div>`,iconSize:[26,26],iconAnchor:[13,13]})}).addTo(layer)
+     .bindPopup(`<b>${fmt(x.arr)} · ${esc(s.n)}</b><br><a target="_blank" rel="noopener" href="${place(s)}">📍 Abrir no Google Maps</a>`);});
+  if(!map._fitted){map.fitBounds(pts,{padding:[20,20]});map._fitted=true}
 }
-function updatePins(){
-  const ni=nextIndex();
-  markers.forEach(({m,i})=>{const el=m.getElement()&&m.getElement().querySelector(".pin"); if(!el) return;
-    el.classList.toggle("done",!!done[i]); el.classList.toggle("next",i===ni);});
-}
-$("#routeAM").href=ROUTE_AM; $("#routePM").href=ROUTE_PM;
 
-// ---------- frases ----------
 $("#phrases").innerHTML=PHRASES.map(p=>`<div class="phr"><div><div class="es">${esc(p[0])}</div><div class="pt">${esc(p[1])}</div></div><button class="btn" data-copy="${esc(p[0])}">📋</button></div>`).join("");
-
-// ---------- copiar (delegado) ----------
-document.addEventListener("click",e=>{const b=e.target.closest("[data-copy]"); if(b) copy(b.dataset.copy)});
-
-renderSteps(); initMap(); tick(); setInterval(tick,30000);
+render();
 </script>
 </body>
 </html>
