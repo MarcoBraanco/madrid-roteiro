@@ -87,6 +87,7 @@ h3{margin:0 0 6px;font-size:16px}
 .step .desc{color:var(--muted);font-size:13.5px;margin-top:2px}
 .step .tip{font-size:13px;margin-top:6px;background:var(--gold-soft);border-radius:8px;padding:6px 9px}
 .qbox{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted);margin-right:4px}
+.qbox input.tin{width:auto}
 .qbox input{width:58px;font:700 15px Inter,sans-serif;padding:5px 6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .walk{font-size:12px;font-weight:600;color:var(--blue);margin:-2px 0 8px 44px}
 .cutrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
@@ -162,7 +163,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 
 <section id="roteiro">
   <h2>Roteiro passo a passo</h2>
-  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula todas as seguintes: o horário riscado é o anterior, o colorido é o novo (vermelho atrasou, verde adiantou). <b>▶ Fazer agora</b> traz a atração para a vez, e <b>↑ ↓</b> mudam a ordem. Em <b>⏱ fila agora</b> coloquem o tempo de fila que o app mostra. <b>✂️ Pular</b> tira a atração do roteiro. Tudo fica salvo neste celular. <button class="btn sm" id="resetOrder">↺ Ordem original</button> <button class="btn sm" id="reset">Limpar tudo</button></p>
+  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula todas as seguintes. Esqueceram de marcar na hora? Usem o campo <b>🕒 saímos às</b> para corrigir: o horário riscado é o anterior, o colorido é o novo (vermelho atrasou, verde adiantou). <b>▶ Fazer agora</b> traz a atração para a vez, e <b>↑ ↓</b> mudam a ordem. Em <b>⏱ fila agora</b> coloquem o tempo de fila que o app mostra. <b>✂️ Pular</b> tira a atração do roteiro. Tudo fica salvo neste celular. <button class="btn sm" id="resetOrder">↺ Ordem original</button> <button class="btn sm" id="reset">Limpar tudo</button></p>
   <div id="steps"></div>
 </section>
 
@@ -362,6 +363,7 @@ function render(){
     const nxt=P.order.slice(k+1).find(j=>!st.skip[j]);
     const pend=!o.done&&!o.skip;
     const qbox=QR[i]&&pend?`<label class="qbox">⏱ fila agora <input type="number" inputmode="numeric" min="0" max="240" step="5" data-wait="${i}" value="${queueOf(i)}"> min</label>`:"";
+    const outbox=o.done?`<label class="qbox">🕒 saímos às <input type="time" class="tin" data-out="${i}" value="${typeof st.done[i]==="number"?fmt(st.done[i]):""}"></label><span class="small">${typeof st.done[i]==="number"?"toque para corrigir":"coloquem a hora para recalcular"}</span>`:"";
     const mv=movable(i)&&pend?`<button class="btn sm" data-now="${i}">▶ Fazer agora</button><button class="btn sm" data-up="${i}" aria-label="subir">↑</button><button class="btn sm" data-down="${i}" aria-label="descer">↓</button>`:"";
     html+=`<div class="step ${o.done?"done":""} ${o.skip?"skip":""} ${i===ni?"isnext":""} ${s.must?"must":""}" id="st${i}">
       <button class="chk" data-i="${i}" aria-label="marcar como feito">${o.done?"✓":(s.pin||"")}</button>
@@ -370,7 +372,7 @@ function render(){
         ${tags.length?`<div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap">${tags.join("")}</div>`:""}
         <div class="desc">${s.area?`<b>${esc(s.area)}</b> · `:""}${esc(s.d)}${o.start!=null&&!s.show&&!s.finale?` <span style="white-space:nowrap">(~${durOf(i)} min)</span>`:""}</div>
         ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
-        ${qbox||mv?`<div class="btns" style="align-items:center">${qbox}${mv}</div>`:""}
+        ${qbox||mv||outbox?`<div class="btns" style="align-items:center">${outbox}${qbox}${mv}</div>`:""}
         <div class="btns">
           <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
           <a class="btn blue" target="_blank" rel="noopener" href="${walkTo(s)}">🚶 Ir a pé</a>
@@ -400,7 +402,8 @@ function renderNext(P,ni,cuts){
     <div class="ttl">${s.pin?s.pin+". ":""}${esc(s.n)}</div><div class="small">${s.area?`<b>${esc(s.area)}</b> · `:""}${esc(s.d)}</div>
     <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${walkTo(s)}">🚶 Ir a pé</a>
     <a class="btn" href="#st${ni}">↓ Ver no roteiro</a>
-    <button class="btn" data-done="${ni}">✓ Terminei aqui</button></div>`;
+    <button class="btn" data-done="${ni}">✓ Terminei aqui</button></div>
+    <div class="btns" style="align-items:center"><label class="qbox">Esqueceram de marcar? Saímos às <input type="time" class="tin" id="lateOut"></label><button class="btn sm" id="lateOk" data-late="${ni}">✓ Marcar</button></div>`;
   const a=$("#cutAlert");
   if(cuts.length){
     a.style.display="";
@@ -468,9 +471,11 @@ function toggleSkip(i){
 function setOrder(o){st.order=o;save();render()}
 function moveNow(i){const o=curOrder().filter(j=>j!==i);const at=o.findIndex(j=>!st.done[j]&&!st.skip[j]&&j!==0);o.splice(at<0?o.length-1:at,0,i);setOrder(o);toast("Movido para agora · horários recalculados");setTimeout(()=>{const el=$("#st"+i);el&&el.scrollIntoView({behavior:"smooth",block:"center"})},50)}
 function moveBy(i,d){const o=curOrder(),k=o.indexOf(i),j=k+d;if(j<1||j>o.length-2)return;[o[k],o[j]]=[o[j],o[k]];setOrder(o)}
-document.addEventListener("change",e=>{const w=e.target.closest("[data-wait]");if(!w)return;const i=+w.dataset.wait,v=parseInt(w.value,10);
+document.addEventListener("change",e=>{const f=e.target.closest("[data-out]");if(f){if(!f.value)return;const i=+f.dataset.out;st.done[i]=toMin(f.value);delete st.skip[i];save();render();toast(`Saída às ${f.value} · roteiro recalculado`);return}
+  const w=e.target.closest("[data-wait]");if(!w)return;const i=+w.dataset.wait,v=parseInt(w.value,10);
   if(isNaN(v)||v<0){w.value=queueOf(i);return} st.wait[i]=Math.min(v,240);save();render();toast(`Fila de ${v} min · roteiro recalculado`)});
 document.addEventListener("click",e=>{
+  const lt=e.target.closest("[data-late]"); if(lt){const v=$("#lateOut").value;if(!v){toast("Coloquem a hora em que saíram");return}const i=+lt.dataset.late;st.done[i]=toMin(v);delete st.skip[i];save();render();toast(`Feito às ${v} · roteiro recalculado`);return}
   const nw=e.target.closest("[data-now]"); if(nw){moveNow(+nw.dataset.now);return}
   const up=e.target.closest("[data-up]"); if(up){moveBy(+up.dataset.up,-1);return}
   const dn=e.target.closest("[data-down]"); if(dn){moveBy(+dn.dataset.down,1);return}
