@@ -53,7 +53,7 @@ h3{margin:0 0 6px;font-size:16px}
 .tag.red{background:var(--red-soft);color:var(--red)}.tag.green{background:var(--green-soft);color:var(--green)}
 .tag.gold{background:var(--gold-soft);color:var(--gold)}.tag.blue{background:var(--blue-soft);color:var(--blue)}
 .tag.gray{background:var(--line);color:var(--muted)}
-.cfg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.cfg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .cfg input{min-width:0;font-size:14px!important;padding:7px 4px!important}
 .cfg label{font-size:12px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 .cfg input{font:700 16px Inter,sans-serif;padding:7px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
@@ -100,7 +100,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 <header>
   <div class="kicker">Disneyland Paris · tarde e noite</div>
   <h1>Roteiro dos dois parques</h1>
-  <p class="sub">Disneyland Park à tarde, com o Rei Leão garantido, e Disney Adventure World à noite, quando as filas caem.</p>
+  <p class="sub">Disneyland Park à tarde com o Rei Leão, Disney Adventure World no meio, e volta ao Disneyland Park à noite para fechar com o show do castelo.</p>
 </header>
 
 <div class="status">
@@ -110,7 +110,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   </div>
   <nav class="navs">
     <a href="#agora">Agora</a><a href="#ajustes">Horários</a><a href="#mapa">Mapa</a>
-    <a href="#roteiro">Roteiro</a><a href="#cortes">Cortes</a><a href="#dicas">Dicas</a>
+    <a href="#roteiro">Roteiro</a><a href="#cortes">Cortes</a><a href="#show">Show final</a><a href="#dicas">Dicas</a>
   </nav>
 </div>
 
@@ -125,9 +125,10 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
     <div class="cfg">
       <label>Chegada<input type="time" id="cArrive"></label>
       <label>1º Rei Leão<input type="time" id="cShow"></label>
+      <label>Show final (castelo)<input type="time" id="cFinale"></label>
       <label>Parques fecham<input type="time" id="cClose"></label>
     </div>
-    <p class="small" style="margin:10px 0 0">Assim que entrarem, abram o app da Disneyland Paris e confiram o horário da <b>primeira sessão do Rei Leão</b> de hoje. Ajustem aqui e o roteiro inteiro se recalcula. As portas do teatro fecham 5 min antes do show.</p>
+    <p class="small" style="margin:10px 0 0">Assim que entrarem, abram o app da Disneyland Paris e confiram o horário da <b>primeira sessão do Rei Leão</b> e do <b>show final no castelo</b> (Disney Tales of Magic). Ajustem aqui e o roteiro inteiro se recalcula. As portas do teatro fecham 5 min antes do show.</p>
   </div>
 </section>
 
@@ -138,11 +139,11 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
       <rect class="park" x="10" y="10" width="360" height="280" rx="16"/>
       <text class="pk" x="190" y="32" text-anchor="middle">Disneyland Park</text>
       <rect class="zone" x="110" y="46" width="160" height="40" rx="6"/><text x="190" y="70" text-anchor="middle">Fantasyland</text>
-      <rect class="zone" x="165" y="96" width="50" height="26" rx="4" style="stroke-dasharray:0"/><text x="190" y="113" text-anchor="middle">castelo</text>
+      <rect class="zone" x="165" y="96" width="50" height="26" rx="4" style="stroke-dasharray:0"/>
       <rect class="zone" x="22" y="96" width="132" height="92" rx="6"/><text x="88" y="112" text-anchor="middle">Frontierland</text>
       <rect class="zone" x="22" y="196" width="132" height="82" rx="6"/><text x="88" y="268" text-anchor="middle">Adventureland</text>
       <rect class="zone" x="226" y="96" width="132" height="120" rx="6"/><text x="292" y="112" text-anchor="middle">Discoveryland</text>
-      <rect class="zone" x="165" y="132" width="50" height="146" rx="4"/><text x="190" y="150" text-anchor="middle">Main St</text>
+      <rect class="zone" x="165" y="132" width="50" height="146" rx="4"/><text x="190" y="162" text-anchor="middle">Main St</text>
       <text x="212" y="310">praça entre os parques</text>
       <rect class="park" x="10" y="322" width="360" height="258" rx="16"/>
       <text class="pk" x="24" y="344">Disney Adventure World</text>
@@ -165,7 +166,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 <section id="cortes">
   <h2>Ordem de corte</h2>
   <div class="card" id="cutList"></div>
-  <p class="small">Se atrasar, cortem de cima para baixo. O Rei Leão, o Big Thunder, a Hyperspace, a Avengers, a Torre do Terror e o Ratatouille ficam de fora da lista: são os imperdíveis.</p>
+  <p class="small">Se atrasar, cortem de cima para baixo. O Rei Leão, o show final, o Big Thunder, a Hyperspace, a Avengers, a Torre do Terror e o Ratatouille ficam de fora da lista: são os imperdíveis.</p>
 </section>
 
 <section id="dicas">
@@ -174,7 +175,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
     <div class="card"><h3>🦁 Rei Leão</h3><div class="small">Fica no <b>Frontierland Theater</b>, no Disneyland Park. Dura uns 30 min e está incluído no ingresso. As portas fecham <b>5 min antes</b>. Para não correr risco nenhum, existe o <b>Guaranteed Access</b> pago, que reserva o lugar.</div></div>
     <div class="card"><h3>📱 App oficial</h3><div class="small">Usem o app da Disneyland Paris para ver as filas em tempo real e o mapa exato. Se uma fila estiver bem maior que o previsto aqui, pulem para a próxima atração e voltem depois.</div></div>
     <div class="card"><h3>🐀 Single rider</h3><div class="small">No <b>Ratatouille</b>, usem a fila de single rider. Vocês vão em carrinhos separados, mas economizam muito tempo.</div></div>
-    <div class="card"><h3>⏰ Fechamento</h3><div class="small">Dá para entrar na fila até o horário de fechamento. Quem está na fila às 22h ainda vai no brinquedo. O show noturno costuma ser perto do fechamento: se quiserem ver, cortem um brinquedo do fim.</div></div>
+    <div class="card" id="show"><h3>🎆 Show final · Disney Tales of Magic</h3><div class="small">No castelo da Bela Adormecida, no Disneyland Park. Tem projeções no castelo e nas fachadas da Main Street, drones, lasers e fogos, e dura uns 20 min. Costuma começar no horário de fechamento: confiram no app e ajustem o campo "Show final". Cheguem 30 min antes e fiquem de frente para o castelo, na praça central ou no alto da Main Street. Na saída, o fluxo pela Main Street é grande: sem pressa.</div></div>
     <div class="card"><h3>💳 Premier Access</h3><div class="small">Fila expressa paga, por atração. Vale considerar se acumularem muito atraso e quiserem salvar um imperdível.</div></div>
     <div class="card"><h3>🐺 "Cabana do lobisomem"</h3><div class="small">Não achamos uma atração com esse nome. Se for a <b>Phantom Manor</b> (a casa mal-assombrada), ela fica em Frontierland, perto do Big Thunder. Se for a <b>Cabane des Robinson</b> (a casa na árvore), fica em Adventureland, perto do Piratas.</div></div>
   </div>
@@ -189,8 +190,8 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 // dur = minutos na atração (fila média + brinquedo); w = minutos a pé até a próxima.
 // cut = ordem de corte (1 = cortar primeiro). must = imperdível. pin = número no mapa.
 const STEPS = [
- {ph:"Disneyland Park", n:"Entrada e segurança", fixed:true, dur:15, w:5, q:"Disneyland Park Paris entrance",
-  d:"Passem pela revista e entrem pela Main Street. Abram o app e confiram a 1ª sessão do Rei Leão.",
+ {ph:"Disneyland Park · tarde", n:"Entrada e segurança", fixed:true, dur:15, w:5, q:"Disneyland Park Paris entrance",
+  d:"Passem pela revista e entrem pela Main Street. Abram o app e confiram a 1ª sessão do Rei Leão e o horário do show final.",
   nx:"Sigam pela Main Street e virem à esquerda, rumo a Adventureland."},
  {n:"Piratas do Caribe", pin:3, dur:35, w:3, cut:6, q:"Pirates of the Caribbean, Disneyland Paris", area:"Adventureland",
   d:"Passeio de barco clássico, com quedas leves. Fila costuma andar rápido.",
@@ -204,16 +205,10 @@ const STEPS = [
   nx:"O embarque do Riverboat fica na margem do rio, em Frontierland."},
  {n:"Riverboat", pin:6, dur:30, w:5, cut:1, q:"Thunder Mesa Riverboat Landing, Disneyland Paris", area:"Frontierland",
   d:"Passeio tranquilo de barco a vapor em volta do Big Thunder. Bom para descansar as pernas.",
-  nx:"Lanchem por Frontierland ou já no caminho para Discoveryland."},
- {n:"Lanche rápido", meal:true, dur:25, w:10, q:"restaurants Frontierland Disneyland Paris",
+  nx:"Lanchem em Frontierland antes de mudar de parque."},
+ {n:"Lanche rápido", meal:true, dur:20, w:20, q:"restaurants Frontierland Disneyland Paris",
   d:"Algo de balcão, sem restaurante de serviço à mesa.",
-  nx:"Atravessem o parque pela frente do castelo até Discoveryland, do outro lado (~10 min)."},
- {n:"Star Wars Hyperspace Mountain", pin:1, dur:45, w:3, must:true, q:"Star Wars Hyperspace Mountain, Disneyland Paris", area:"Discoveryland",
-  d:"A montanha-russa mais intensa do parque, com lançamento e loopings. Altura mínima 1,20 m.",
-  nx:"O Star Tours fica a poucos passos, também em Discoveryland."},
- {n:"Star Tours", pin:2, dur:30, w:15, cut:3, q:"Star Tours The Adventures Continue, Disneyland Paris", area:"Discoveryland",
-  d:"Simulador de Star Wars. Fila costuma ser curta.",
-  nx:"Desçam a Main Street, saiam do parque e atravessem a praça até o Disney Adventure World (~15 min com a revista)."},
+  nx:"Desçam a Main Street, saiam pelo portão, cruzem a praça e entrem no Disney Adventure World (~20 min com a revista)."},
  {ph:"Disney Adventure World", n:"Avengers Assemble: Flight Force", pin:7, dur:30, w:2, must:true, q:"Avengers Assemble Flight Force, Disney Adventure World", area:"Avengers Campus",
   d:"Montanha-russa coberta com lançamento, das mais rápidas do resort. A fila costuma ser curta.",
   nx:"O Spider-Man fica no mesmo Avengers Campus."},
@@ -221,7 +216,7 @@ const STEPS = [
   d:"Brinquedo interativo de \"lançar teias\" com os braços. Divertido, mas a fila é longa para o que entrega.",
   nx:"Sigam as placas para a Tower of Terror, que se vê de longe."},
  {n:"Torre do Terror", pin:9, dur:40, w:5, must:true, q:"The Twilight Zone Tower of Terror, Disney Adventure World", area:"Torre",
-  d:"Elevador em queda livre, com quedas que mudam a cada vez. À noite a fila costuma diminuir.",
+  d:"Elevador em queda livre, com quedas que mudam a cada vez.",
   nx:"Jantem no caminho para Worlds of Pixar."},
  {n:"Jantar rápido", meal:true, dur:25, w:5, q:"restaurants Disney Adventure World",
   d:"Balcão perto de Worlds of Pixar. O Bistrot Chez Rémy é com reserva e demorado, melhor evitar hoje.",
@@ -232,13 +227,24 @@ const STEPS = [
  {n:"RC Racer", pin:11, dur:35, w:3, cut:5, q:"RC Racer, Disney Adventure World", area:"Worlds of Pixar",
   d:"Carrinho que sobe e desce numa pista em U. Altura mínima 1,20 m. Rápido de fazer.",
   nx:"O Cars Road Trip fica perto, ainda em Worlds of Pixar."},
- {n:"Cars Road Trip", pin:12, dur:20, w:0, cut:2, q:"Cars Road Trip, Disney Adventure World", area:"Worlds of Pixar",
+ {n:"Cars Road Trip", pin:12, dur:20, w:15, cut:2, q:"Cars Road Trip, Disney Adventure World", area:"Worlds of Pixar",
   d:"Passeio de carrinho pela Rota 66 do filme Carros. Bem tranquilo, pensado para crianças.",
-  nx:"Fim! Se ainda der, vejam o Disney Cascade of Lights no lago."}
+  nx:"Voltem ao Disneyland Park: saiam pelo portão, cruzem a praça, subam a Main Street e virem à direita para Discoveryland (~15 min)."},
+ {ph:"Disneyland Park · noite", n:"Star Wars Hyperspace Mountain", pin:1, dur:45, w:3, must:true, q:"Star Wars Hyperspace Mountain, Disneyland Paris", area:"Discoveryland",
+  d:"A montanha-russa mais intensa do parque, com lançamento e loopings. Altura mínima 1,20 m.",
+  nx:"O Star Tours fica a poucos passos, também em Discoveryland."},
+ {n:"Star Tours", pin:2, dur:30, w:5, cut:3, q:"Star Tours The Adventures Continue, Disneyland Paris", area:"Discoveryland",
+  d:"Simulador de Star Wars. Fila costuma ser curta.",
+  nx:"Vão para a frente do castelo garantir lugar para o show."},
+ {n:"Disney Tales of Magic · show do castelo", pin:"★", finale:true, dur:25, w:0, must:true, q:"Sleeping Beauty Castle, Disneyland Paris", area:"Castelo",
+  d:"O show de encerramento: projeções no castelo e nas fachadas da Main Street, drones, lasers e fogos. O horário vem do campo \"Show final\". Cheguem 30 min antes para pegar um bom lugar.",
+  tip:"Encerramento garantido. Se atrasar, cortem atrações, nunca o show. Os melhores lugares ficam na praça em frente ao castelo, de frente para ele.",
+  nx:"Fim! Saída pela Main Street."}
 ];
 // posição dos números no mapa esquemático
-const PINXY={1:[262,150],2:[312,186],3:[110,240],4:[110,170],5:[52,140],6:[124,140],7:[72,412],8:[132,412],9:[278,412],10:[200,534],11:[256,534],12:[312,534]};
-const DEF={arrive:"12:30",show:"14:00",close:"22:00"};
+const PINXY={"★":[190,109],1:[262,140],2:[312,190],3:[110,240],4:[110,170],5:[52,140],6:[124,140],7:[72,412],8:[132,412],9:[278,412],10:[200,534],11:[256,534],12:[312,534]};
+const DEF={arrive:"12:30",show:"14:00",finale:"22:00",close:"22:00"};
+const SPOT_BEFORE_FINALE=30;
 const QUEUE_BEFORE_SHOW=30;
 const TRIP_DATE="2026-11-18";
 
@@ -269,7 +275,7 @@ function plan(cfg){
   const D=st.done,S=st.skip;
   const showMin=toMin(cfg.show), qStart=showMin-QUEUE_BEFORE_SHOW;
   const out=[],order=[],deferred=[];
-  let t=toMin(cfg.arrive);
+  let t=toMin(cfg.arrive),overF=0;
   const place1=(i,startAt)=>{const s=STEPS[i];
     if(S[i]){out[i]={skip:true};order.push(i);return}
     if(typeof D[i]==="number"){out[i]={done:true,end:D[i]};t=D[i]+s.w;order.push(i);return}
@@ -290,19 +296,27 @@ function plan(cfg){
       deferred.forEach(d=>{place1(d);out[d].deferred=true});
       return;
     }
+    if(s.finale){
+      if(S[i]||D[i]){place1(i);return}
+      const fin=toMin(cfg.finale), spot=fin-SPOT_BEFORE_FINALE;
+      overF=Math.max(0,t-spot);
+      order.forEach(j=>{const o=out[j];if(o.end!=null&&!o.done&&o.end+STEPS[j].w>spot&&!STEPS[j].meal)o.tooLate=true});
+      out[i]={start:Math.max(t,spot),end:fin+s.dur,late:t>spot,spot}; t=fin+s.dur; order.push(i); return;
+    }
     place1(i);
   });
-  // estouro do horário de fechamento: último início de brinquedo deve ser até fechar-5
-  const lim=toMin(cfg.close)-5;
-  let over=0; order.forEach(i=>{const o=out[i];if(o.start!=null&&!STEPS[i].meal&&o.start>lim){o.tooLate=true;over=Math.max(over,o.start-lim)}});
-  return {out,order,over,lim};
+  // estouro: tudo precisa caber antes de garantir lugar no show final
+  const spot=toMin(cfg.finale)-SPOT_BEFORE_FINALE;
+  return {out,order,over:overF,lim:spot};
 }
+// tempo devolvido ao cortar: a atração + parte da caminhada (a ida ao próximo lugar continua)
+const gain=s=>s.dur+Math.min(s.w,5);
 // sugestões de corte até caber
 function suggestCuts(P){
   if(P.over<=0) return [];
   const c=STEPS.map((s,i)=>({s,i})).filter(x=>x.s.cut&&!st.skip[x.i]&&!st.done[x.i]).sort((a,b)=>a.s.cut-b.s.cut);
   const res=[];let freed=0;
-  for(const x of c){if(freed>=P.over)break;res.push(x.i);freed+=x.s.dur+x.s.w}
+  for(const x of c){if(freed>=P.over)break;res.push(x.i);freed+=gain(x.s)}
   return res;
 }
 // horários "base" (sem marcações) para comparar
@@ -315,8 +329,8 @@ function timeCell(i,P,B){
   if(o.skip) return `<span class="time" style="color:var(--muted)">cortado</span>`;
   if(o.done) return `<span class="time" style="color:var(--green)">✓${o.end!=null?" "+fmt(o.end):""}</span>`;
   const s=STEPS[i];
-  const label=s.show?`fila ${fmt(o.start)} · show ${st.cfg.show}`:fmt(o.start);
-  if(!b||b.start==null||Math.abs(o.start-b.start)<3||s.show) return `<span class="time">${label}</span>`;
+  const label=s.show?`fila ${fmt(o.start)} · show ${st.cfg.show}`:s.finale?(o.late?`chegam ~${fmt(o.start)} · show ${st.cfg.finale}`:`lugar ${fmt(o.start)} · show ${st.cfg.finale}`):fmt(o.start);
+  if(!b||b.start==null||Math.abs(o.start-b.start)<3||s.show||s.finale) return `<span class="time">${label}</span>`;
   return `<span class="time" style="color:var(--muted);text-decoration:line-through;font-weight:600">${fmt(b.start)}</span><span class="time" style="color:${o.start>b.start?"var(--red)":"var(--green)"}">${label}</span>`;
 }
 function render(){
@@ -331,8 +345,8 @@ function render(){
     if(s.must) tags.push('<span class="tag gold">imperdível</span>');
     if(s.cut&&!o.skip) tags.push(`<span class="tag gray">corte nº ${s.cut}</span>`);
     if(o.deferred) tags.push('<span class="tag gold">depois do show</span>');
-    if(o.late) tags.push('<span class="tag red">corram para a fila!</span>');
-    if(o.tooLate) tags.push('<span class="tag red">não dá até fechar</span>');
+    if(o.late) tags.push(s.finale?'<span class="tag red">vão chegar em cima da hora</span>':'<span class="tag red">corram para a fila!</span>');
+    if(o.tooLate) tags.push('<span class="tag red">atrasa o show final</span>');
     if(cuts.includes(i)) tags.push('<span class="tag red">cortar?</span>');
     const nxt=P.order.slice(k+1).find(j=>!st.skip[j]);
     html+=`<div class="step ${o.done?"done":""} ${o.skip?"skip":""} ${i===ni?"isnext":""} ${s.must?"must":""}" id="st${i}">
@@ -345,7 +359,7 @@ function render(){
         <div class="btns">
           <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
           <a class="btn blue" target="_blank" rel="noopener" href="${walkTo(s)}">🚶 Ir a pé</a>
-          ${s.show||s.must&&!s.cut?"":`<button class="btn" data-skip="${i}">${o.skip?"↩️ Voltar ao roteiro":"✂️ Pular"}</button>`}
+          ${s.show||s.finale||s.must&&!s.cut?"":`<button class="btn" data-skip="${i}">${o.skip?"↩️ Voltar ao roteiro":"✂️ Pular"}</button>`}
         </div>
       </div></div>`;
     if(nxt!=null&&!o.skip) html+=`<div class="walk">↓ Depois: ${esc(STEPS[nxt].n)}${s.w?` · ~${s.w} min a pé`:""}<br><span style="font-weight:500;color:var(--muted)">${esc(s.nx)}</span></div>`;
@@ -362,7 +376,7 @@ function renderNext(P,ni,cuts){
     const diff=now.min-o.start;
     pace=diff>10?`<span class="tag red">${diff} min atrasados</span>`:diff<-10?`<span class="tag green">adiantados</span>`:`<span class="tag green">no horário</span>`;
   }
-  const when=s.show?`fila às ${fmt(o.start)} · show ${st.cfg.show}`:`previsto ${fmt(o.start)}`;
+  const when=s.show?`fila às ${fmt(o.start)} · show ${st.cfg.show}`:s.finale?`lugar às ${fmt(o.start)} · show ${st.cfg.finale}`:`previsto ${fmt(o.start)}`;
   el.innerHTML=`<div class="lbl">Agora · ${when} ${pace}</div>
     <div class="ttl">${s.pin?s.pin+". ":""}${esc(s.n)}</div><div class="small">${s.area?`<b>${esc(s.area)}</b> · `:""}${esc(s.d)}</div>
     <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${walkTo(s)}">🚶 Ir a pé</a>
@@ -371,7 +385,7 @@ function renderNext(P,ni,cuts){
   const a=$("#cutAlert");
   if(cuts.length){
     a.style.display="";
-    a.innerHTML=`<b style="color:var(--red)">Não cabe tudo até ${fmt(P.lim+5)}.</b> Faltam uns ${P.over} min. Sugestão: cortar ${cuts.map(i=>`<b>${esc(STEPS[i].n)}</b>`).join(" e ")}.
+    a.innerHTML=`<b style="color:var(--red)">Não cabe tudo antes do show final</b> (lugar garantido às ${fmt(P.lim)}). Faltam uns ${P.over} min. Sugestão: cortar ${cuts.map(i=>`<b>${esc(STEPS[i].n)}</b>`).join(" e ")}.
       <div class="btns">${cuts.map(i=>`<button class="btn sm" data-skip="${i}">✂️ Pular ${esc(STEPS[i].n)}</button>`).join("")}</div>`;
   } else if(P.out[ANCHOR]&&P.out[ANCHOR].late){
     a.style.display="";a.innerHTML=`<b style="color:var(--red)">Rei Leão em risco!</b> Pelo previsto vocês chegam depois do ideal. Larguem o resto e vão direto para o Frontierland Theater.`;
@@ -382,7 +396,7 @@ function renderCuts(P,cuts){
   $("#cutList").innerHTML=list.map(({s,i})=>{
     const o=P.out[i];
     const state=o.skip?'<span class="tag gray">cortado</span>':o.done?'<span class="tag green">feito</span>':cuts.includes(i)?'<span class="tag red">sugerido</span>':"";
-    return `<div class="cutrow"><div><b>${s.cut}. ${esc(s.n)}</b> ${state}<div class="small">libera ~${s.dur+s.w} min</div></div>
+    return `<div class="cutrow"><div><b>${s.cut}. ${esc(s.n)}</b> ${state}<div class="small">libera ~${gain(s)} min</div></div>
       ${o.done?"":`<button class="btn sm" data-skip="${i}">${o.skip?"↩️ Voltar":"✂️ Pular"}</button>`}</div>`;
   }).join("");
 }
@@ -399,7 +413,7 @@ function renderPins(P,ni){
 
 // Caminho pelos corredores do parque, não em linha reta:
 // W = oeste do Disneyland Park (Adventureland/Frontierland), E = Discoveryland, A = Adventure World.
-const ZONE=p=>[3,4,5,6].includes(p)?"W":[1,2].includes(p)?"E":"A";
+const ZONE=p=>p==="★"?"C":[3,4,5,6].includes(p)?"W":[1,2].includes(p)?"E":"A";
 const HUB=[190,128], MAIN=[190,232], GATE1=[190,290], GATE2=[190,322], DAWIN=[190,395];
 function routePoints(pins){
   const pts=[GATE1,MAIN];
@@ -408,7 +422,7 @@ function routePoints(pins){
     if(k>0){
       const a=pins[k-1],za=ZONE(a),zb=ZONE(p),[ax,ay]=PINXY[a];
       if(za!=="A"&&zb==="A") pts.push(MAIN,GATE1,GATE2,DAWIN);
-      else if(za==="A"&&zb!=="A") pts.push(DAWIN,GATE2,GATE1,MAIN);
+      else if(za==="A"&&zb!=="A"){if(ay>490)pts.push(ax<190?[96,494]:[300,494]);pts.push(DAWIN,GATE2,GATE1,MAIN)}
       else if(za!==zb) pts.push(HUB);
       else if(za==="A"&&ay<450&&xy[1]>490) pts.push(ax<190?[96,494]:[300,494]);
       else if(za==="A"&&ay>490&&xy[1]<450) pts.push(xy[0]<190?[96,494]:[300,494]);
@@ -427,7 +441,7 @@ function markDone(i){
   toast(typeof st.done[i]==="number"?`Feito às ${fmt(st.done[i])} · horários atualizados`:"Marcado ✓");
 }
 function toggleSkip(i){
-  if(st.skip[i]){delete st.skip[i];toast("Voltou ao roteiro")}else{st.skip[i]=true;delete st.done[i];toast(`Cortado · +${STEPS[i].dur+STEPS[i].w} min livres`)}
+  if(st.skip[i]){delete st.skip[i];toast("Voltou ao roteiro")}else{st.skip[i]=true;delete st.done[i];toast(`Cortado · +${gain(STEPS[i])} min livres`)}
   save();render();
 }
 document.addEventListener("click",e=>{
@@ -438,7 +452,7 @@ document.addEventListener("click",e=>{
 });
 $("#reset").onclick=()=>{if(!confirmReset())return;st={done:{},skip:{},cfg:{...st.cfg}};save();render();toast("Marcações limpas")};
 function confirmReset(){const b=$("#reset");if(b.dataset.arm){delete b.dataset.arm;b.textContent="Limpar tudo";return true}b.dataset.arm=1;b.textContent="Toque de novo para confirmar";setTimeout(()=>{delete b.dataset.arm;b.textContent="Limpar tudo"},3000);return false}
-[["cArrive","arrive"],["cShow","show"],["cClose","close"]].forEach(([id,k])=>{
+[["cArrive","arrive"],["cShow","show"],["cFinale","finale"],["cClose","close"]].forEach(([id,k])=>{
   const el=$("#"+id); el.value=st.cfg[k];
   el.addEventListener("change",()=>{if(!el.value)return;st.cfg[k]=el.value;save();render();toast("Roteiro recalculado")});
 });
@@ -455,9 +469,10 @@ function tick(){
     else if(left>15){c.className="count warn";c.textContent=`${left} min até a fila do Rei Leão`}
     else {const sl=toMin(st.cfg.show)-5-n.min;c.className="count bad";c.textContent=sl>0?`Rei Leão: portas fecham em ${sl} min!`:"Rei Leão: confiram a próxima sessão no app"}
   } else {
-    const left=toMin(st.cfg.close)-n.min;
-    if(left>60){c.className="count ok";c.textContent=`Parques fecham em ${Math.floor(left/60)}h${String(left%60).padStart(2,"0")}`}
-    else if(left>0){c.className="count warn";c.textContent=`Parques fecham em ${left} min · entrem na última fila!`}
+    const spot=toMin(st.cfg.finale)-SPOT_BEFORE_FINALE, left=spot-n.min, sh=toMin(st.cfg.finale)-n.min;
+    if(left>60){c.className="count ok";c.textContent=`${Math.floor(left/60)}h${String(left%60).padStart(2,"0")} até pegar lugar no show final (${fmt(spot)})`}
+    else if(left>0){c.className="count warn";c.textContent=`${left} min até ir pro castelo (show ${st.cfg.finale})`}
+    else if(sh>0){c.className="count bad";c.textContent=`Show do castelo em ${sh} min!`}
     else {c.className="count bad";c.textContent="Parques fechados · boa volta!"}
   }
 }
