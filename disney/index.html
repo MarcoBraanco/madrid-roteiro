@@ -132,6 +132,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
       <label>Show final (castelo)<input type="time" id="cFinale"></label>
       <label>Parques fecham<input type="time" id="cClose"></label>
     </div>
+    <p class="small" id="liveInfo" style="margin:10px 0 0">Buscando filas ao vivo…</p>
     <p class="small" style="margin:10px 0 0">Assim que entrarem, abram o app da Disneyland Paris e confiram o horário da <b>primeira sessão do Rei Leão</b> e do <b>show final no castelo</b> (Disney Tales of Magic). Ajustem aqui e o roteiro inteiro se recalcula. As portas do teatro fecham 5 min antes do show.</p>
   </div>
 </section>
@@ -163,7 +164,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 
 <section id="roteiro">
   <h2>Roteiro passo a passo</h2>
-  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula todas as seguintes. Esqueceram de marcar na hora? Usem o campo <b>🕒 saímos às</b> para corrigir: o horário riscado é o anterior, o colorido é o novo (vermelho atrasou, verde adiantou). <b>▶ Fazer agora</b> traz a atração para a vez, e <b>↑ ↓</b> mudam a ordem. Em <b>⏱ fila agora</b> coloquem o tempo de fila que o app mostra. <b>✂️ Pular</b> tira a atração do roteiro. Tudo fica salvo neste celular. <button class="btn sm" id="resetOrder">↺ Ordem original</button> <button class="btn sm" id="reset">Limpar tudo</button></p>
+  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula todas as seguintes. Esqueceram de marcar na hora? Usem o campo <b>🕒 saímos às</b> para corrigir: o horário riscado é o anterior, o colorido é o novo (vermelho atrasou, verde adiantou). <b>▶ Fazer agora</b> traz a atração para a vez, e <b>↑ ↓</b> mudam a ordem. A <b>⏱ fila</b> vem ao vivo da API (ThemeParks.wiki); se quiserem, editem o número. <b>✂️ Pular</b> tira a atração do roteiro. Tudo fica salvo neste celular. <button class="btn sm" id="resetOrder">↺ Ordem original</button> <button class="btn sm" id="reset">Limpar tudo</button></p>
   <div id="steps"></div>
 </section>
 
@@ -262,8 +263,8 @@ const toMin=t=>{const[a,b]=String(t).split(":").map(Number);return a*60+b};
 const fmt=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
 const ANCHOR=STEPS.findIndex(s=>s.show);
 const K="disney-dlp-v1";
-let st={done:{},skip:{},wait:{},order:null,cfg:{...DEF}};
-try{const r=JSON.parse(localStorage.getItem(K)||"null"); if(r) st={done:r.done||{},skip:r.skip||{},wait:r.wait||{},order:r.order||null,cfg:{...DEF,...(r.cfg||{})}}}catch(e){}
+let st={done:{},skip:{},wait:{},waitAt:{},order:null,cfg:{...DEF}};
+try{const r=JSON.parse(localStorage.getItem(K)||"null"); if(r) st={done:r.done||{},skip:r.skip||{},wait:r.wait||{},waitAt:r.waitAt||{},order:r.order||null,cfg:{...DEF,...(r.cfg||{})}}}catch(e){}
 // fila padrão e tempo de brinquedo [fila, brinquedo], por índice da parada
 const QR={1:[25,10],3:[45,5],4:[10,20],6:[25,5],7:[40,5],8:[35,5],10:[30,10],11:[32,3],12:[10,10],13:[40,5],14:[20,10]};
 // zona de cada parada: G entrada, W oeste do Disneyland Park, E Discoveryland, C castelo, A1/A2/A3 setores do Adventure World
@@ -275,7 +276,30 @@ function curOrder(){
   o=[...new Set(o)]; DEF_ORDER.forEach(i=>{if(!o.includes(i))o.push(i)});
   o=o.filter(i=>i!==0&&i!==FIN); return [0,...o,FIN]; // entrada sempre 1ª, show final sempre por último
 }
-const queueOf=i=>QR[i]?(st.wait[i]!=null?st.wait[i]:QR[i][0]):0;
+// ---------- filas ao vivo (ThemeParks.wiki, sem chave) ----------
+const API="https://api.themeparks.wiki/v1/entity/";
+const PARKS=["dae968d5-630d-4719-8b06-3d107e944401","ca888437-ebb4-4d50-aed2-d227f7096968"]; // Disneyland Park, Adventure World
+const LIVE_KEY={1:"pirates of the caribbean",3:"big thunder mountain",4:"riverboat",6:"flight force",7:"w.e.b. adventure",8:"tower of terror",10:"ratatouille",11:"rc racer",12:"cars road trip",13:"hyperspace mountain",14:"star tours"};
+const SHOW_KEY={2:"rhythms of the pride lands",15:"disney tales of magic"};
+let LIVE={},LIVE_AT=null,LIVE_ERR=false;
+const MANUAL_TTL=30; // edição manual vale 30 min; depois volta a valer a fila ao vivo
+function manualWait(i){const v=st.wait[i],at=st.waitAt[i];if(v==null||at==null)return null;return parisNow().min-at<=MANUAL_TTL&&parisNow().min>=at?v:null}
+function liveWait(i){const L=LIVE[i];return L&&L.status==="OPERATING"&&typeof L.wait==="number"?L.wait:null}
+const queueOf=i=>{if(!QR[i])return 0;const m=manualWait(i);if(m!=null)return m;const l=liveWait(i);return l!=null?l:QR[i][0]};
+const qSource=i=>manualWait(i)!=null?"manual":liveWait(i)!=null?"live":"est";
+const hm=iso=>new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Paris",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(iso));
+async function fetchLive(){
+  try{
+    const rs=await Promise.all(PARKS.map(id=>fetch(API+id+"/live",{cache:"no-store"}).then(r=>{if(!r.ok)throw 0;return r.json()})));
+    const all=rs.flatMap(r=>r.liveData||[]),nx={};
+    Object.entries(LIVE_KEY).forEach(([i,k])=>{const e=all.find(x=>x.entityType==="ATTRACTION"&&String(x.name).toLowerCase().includes(k));
+      if(e)nx[i]={status:e.status,wait:e.queue&&e.queue.STANDBY?e.queue.STANDBY.waitTime:null,single:e.queue&&e.queue.SINGLE_RIDER?e.queue.SINGLE_RIDER.waitTime:null}});
+    Object.entries(SHOW_KEY).forEach(([i,k])=>{const e=all.find(x=>{const n=String(x.name).toLowerCase();return x.entityType==="SHOW"&&(k==="disney tales of magic"?n.startsWith(k):n.includes(k))});
+      if(e)nx[i]={status:e.status,times:(e.showtimes||[]).map(s=>s.startTime).filter(Boolean).map(hm)}});
+    LIVE=nx;LIVE_AT=parisNow().str;LIVE_ERR=false;
+  }catch(e){LIVE_ERR=true}
+  render();
+}
 const durOf=i=>QR[i]?queueOf(i)+QR[i][1]:STEPS[i].dur;
 const inDAW=z=>z[0]==="A";
 function walk(a,b){
@@ -348,12 +372,13 @@ function render(){
   let html="",lastPark=null;
   const movable=i=>i!==0&&i!==FIN;
   P.order.forEach((i,k)=>{
-    const s=STEPS[i],o=P.out[i],park=inDAW(ZN[i])?"Disney Adventure World":"Disneyland Park";
+    const s=STEPS[i],o=P.out[i],park=inDAW(ZN[i])?"Disney Adventure World":"Disneyland Park",L=LIVE[i],pend=!o.done&&!o.skip;
     if(park!==lastPark){html+=`<div class="phase">${park}</div>`;lastPark=park}
     const tags=[];
     if(i===ni) tags.push('<span class="tag blue">próxima</span>');
     if(s.must) tags.push('<span class="tag gold">imperdível</span>');
     if(s.cut&&!o.skip) tags.push(`<span class="tag gray">corte nº ${s.cut}</span>`);
+    if(L&&L.status&&L.status!=="OPERATING"&&pend) tags.push(`<span class="tag red">${L.status==="DOWN"?"parada agora":L.status==="REFURBISHMENT"?"em reforma":"fechada agora"}</span>`);
     if(o.late) tags.push(s.finale?'<span class="tag red">vão chegar em cima da hora</span>':'<span class="tag red">corram para a fila!</span>');
     if(o.tight) tags.push('<span class="tag gold">fila em cima da hora</span>');
     if(o.miss) tags.push('<span class="tag red">perdem essa sessão</span>');
@@ -361,8 +386,11 @@ function render(){
     if(o.tooLate) tags.push('<span class="tag red">atrasa o show final</span>');
     if(cuts.includes(i)) tags.push('<span class="tag red">cortar?</span>');
     const nxt=P.order.slice(k+1).find(j=>!st.skip[j]);
-    const pend=!o.done&&!o.skip;
-    const qbox=QR[i]&&pend?`<label class="qbox">⏱ fila agora <input type="number" inputmode="numeric" min="0" max="240" step="5" data-wait="${i}" value="${queueOf(i)}"> min</label>`:"";
+    const src=QR[i]?qSource(i):null;
+    const srcChip=src==="live"?`<span class="tag green">ao vivo</span>`:src==="manual"?`<span class="tag gold">editado</span> <button class="btn sm" data-live="${i}">↺ ao vivo</button>`:`<span class="tag gray">estimativa</span>`;
+    const single=L&&typeof L.single==="number"&&L.status==="OPERATING"?`<span class="small">single rider: ${L.single} min</span>`:"";
+    const qbox=QR[i]&&pend?`<label class="qbox">⏱ fila <input type="number" inputmode="numeric" min="0" max="240" step="5" data-wait="${i}" value="${queueOf(i)}"> min</label>${srcChip}${single}`:"";
+    const shows=SHOW_KEY[i]&&pend&&LIVE[i]&&LIVE[i].times&&LIVE[i].times.length?`<div class="btns" style="align-items:center"><span class="small">Sessões hoje:</span>${LIVE[i].times.map(x=>`<button class="btn sm" data-settime="${s.finale?"finale":"show"}" data-v="${x}">${x}</button>`).join("")}</div>`:"";
     const outbox=o.done?`<label class="qbox">🕒 saímos às <input type="time" class="tin" data-out="${i}" value="${typeof st.done[i]==="number"?fmt(st.done[i]):""}"></label><span class="small">${typeof st.done[i]==="number"?"toque para corrigir":"coloquem a hora para recalcular"}</span>`:"";
     const mv=movable(i)&&pend?`<button class="btn sm" data-now="${i}">▶ Fazer agora</button><button class="btn sm" data-up="${i}" aria-label="subir">↑</button><button class="btn sm" data-down="${i}" aria-label="descer">↓</button>`:"";
     html+=`<div class="step ${o.done?"done":""} ${o.skip?"skip":""} ${i===ni?"isnext":""} ${s.must?"must":""}" id="st${i}">
@@ -372,7 +400,7 @@ function render(){
         ${tags.length?`<div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap">${tags.join("")}</div>`:""}
         <div class="desc">${s.area?`<b>${esc(s.area)}</b> · `:""}${esc(s.d)}${o.start!=null&&!s.show&&!s.finale?` <span style="white-space:nowrap">(~${durOf(i)} min)</span>`:""}</div>
         ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
-        ${qbox||mv||outbox?`<div class="btns" style="align-items:center">${outbox}${qbox}${mv}</div>`:""}
+        ${qbox||mv||outbox?`<div class="btns" style="align-items:center">${outbox}${qbox}${mv}</div>`:""}${shows}
         <div class="btns">
           <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
           <a class="btn blue" target="_blank" rel="noopener" href="${walkTo(s)}">🚶 Ir a pé</a>
@@ -386,6 +414,7 @@ function render(){
     }
   });
   $("#steps").innerHTML=html;
+  const li=$("#liveInfo"); if(li) li.innerHTML=LIVE_ERR?`⚠️ Não consegui buscar as filas ao vivo agora; usando estimativas. <button class="btn sm" id="liveRefresh">↻ tentar de novo</button>`:LIVE_AT?`🟢 Filas ao vivo atualizadas às <b>${LIVE_AT}</b> (atualiza a cada 5 min). Se editarem uma fila, vale por 30 min. <button class="btn sm" id="liveRefresh">↻ atualizar</button>`:"Buscando filas ao vivo…";
   renderNext(P,ni,cuts); renderCuts(P,cuts); renderPins(P,ni);
 }
 function renderNext(P,ni,cuts){
@@ -473,8 +502,11 @@ function moveNow(i){const o=curOrder().filter(j=>j!==i);const at=o.findIndex(j=>
 function moveBy(i,d){const o=curOrder(),k=o.indexOf(i),j=k+d;if(j<1||j>o.length-2)return;[o[k],o[j]]=[o[j],o[k]];setOrder(o)}
 document.addEventListener("change",e=>{const f=e.target.closest("[data-out]");if(f){if(!f.value)return;const i=+f.dataset.out;st.done[i]=toMin(f.value);delete st.skip[i];save();render();toast(`Saída às ${f.value} · roteiro recalculado`);return}
   const w=e.target.closest("[data-wait]");if(!w)return;const i=+w.dataset.wait,v=parseInt(w.value,10);
-  if(isNaN(v)||v<0){w.value=queueOf(i);return} st.wait[i]=Math.min(v,240);save();render();toast(`Fila de ${v} min · roteiro recalculado`)});
+  if(isNaN(v)||v<0){w.value=queueOf(i);return} st.wait[i]=Math.min(v,240);st.waitAt[i]=parisNow().min;save();render();toast(`Fila de ${v} min · roteiro recalculado`)});
 document.addEventListener("click",e=>{
+  const lv=e.target.closest("[data-live]"); if(lv){const i=+lv.dataset.live;delete st.wait[i];delete st.waitAt[i];save();render();toast("Voltou para a fila ao vivo");return}
+  const stt=e.target.closest("[data-settime]"); if(stt){const k=stt.dataset.settime;st.cfg[k]=stt.dataset.v;const el=$(k==="show"?"#cShow":"#cFinale");if(el)el.value=st.cfg[k];save();render();toast(`Horário ${stt.dataset.v} · roteiro recalculado`);return}
+  const rl=e.target.closest("#liveRefresh"); if(rl){toast("Atualizando filas…");fetchLive();return}
   const lt=e.target.closest("[data-late]"); if(lt){const v=$("#lateOut").value;if(!v){toast("Coloquem a hora em que saíram");return}const i=+lt.dataset.late;st.done[i]=toMin(v);delete st.skip[i];save();render();toast(`Feito às ${v} · roteiro recalculado`);return}
   const nw=e.target.closest("[data-now]"); if(nw){moveNow(+nw.dataset.now);return}
   const up=e.target.closest("[data-up]"); if(up){moveBy(+up.dataset.up,-1);return}
@@ -511,7 +543,7 @@ function tick(){
     else {c.className="count bad";c.textContent="Parques fechados · boa volta!"}
   }
 }
-render(); tick(); setInterval(()=>{tick();renderNext(plan(st.cfg),nextIdx(plan(st.cfg)),suggestCuts(plan(st.cfg)))},30000);
+render(); tick(); fetchLive(); setInterval(fetchLive,5*60000); setInterval(()=>{tick();renderNext(plan(st.cfg),nextIdx(plan(st.cfg)),suggestCuts(plan(st.cfg)))},30000);
 </script>
 </body>
 </html>
