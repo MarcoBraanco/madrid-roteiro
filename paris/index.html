@@ -99,8 +99,8 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 
 <header>
   <div class="kicker">Paris · quinta-feira, 19/11</div>
-  <h1>Paris clássica, de norte a oeste</h1>
-  <p class="sub">Garches → Montmartre → Galeries Lafayette → Notre-Dame → Luxemburgo → Louvre → Tulherias → Concórdia → Champs-Élysées → Arco → Trocadéro → Torre Eiffel → Campo de Marte.</p>
+  <h1>Paris clássica num dia</h1>
+  <p class="sub">Garches → Montmartre → Galeries Lafayette → Louvre (Mona Lisa) → Tulherias → Concórdia → Champs-Élysées → Arco → Trocadéro → subida na Torre Eiffel → Campo de Marte → Notre-Dame à noite.</p>
 </header>
 
 <div class="status">
@@ -117,11 +117,11 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 <section id="agora" style="margin-top:14px">
   <div class="card next" id="nextCard"></div>
   <div class="card" style="margin-top:10px;font-size:14px">
-    <b>Horário sugerido:</b> despertador às <b>8h</b>, café sem pressa, saída do Airbnb às <b>9h10</b> (dá ~1h até Montmartre). A subida na Torre é por volta das <b>18h35</b> (comprem o ingresso hoje). O passeio termina no Campo de Marte por volta de <b>20h35</b>; com jantar por perto e a volta de trem, vocês chegam em casa lá pelas <b>22h35</b>.
+    <b>Horário sugerido:</b> despertador às <b>8h</b>, café sem pressa, saída do Airbnb às <b>9h10</b> (dá ~1h até Montmartre). Dois horários marcados: <b>Louvre às 13h30</b> e <b>Torre às 17h45</b> (comprem os dois hoje). O passeio termina em Notre-Dame por volta de <b>20h50</b>; com jantar e a volta de trem, vocês chegam em casa lá pelas <b>22h50</b>.
     <div class="startbox">Vão sair em outro horário? <label>Saída do Airbnb: <input type="time" id="startAt" value="09:10"></label> <span class="small">O site recalcula o dia inteiro.</span></div>
   </div>
   <div class="card alert" style="margin-top:10px;font-size:14px">
-    <b style="color:var(--red)">Horários que mandam no dia:</b> Jardim de Luxemburgo fecha às <b>16h45</b> · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (vocês vão estar lá em cima no das <b>19h</b> e no das <b>20h</b>).
+    <b style="color:var(--red)">Horários que mandam no dia:</b> Louvre fecha às <b>18h</b> (última entrada 17h) · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (vocês vão estar lá em cima no das <b>18h</b> e no das <b>19h</b>) · Notre-Dame aberta até <b>22h</b> às quintas.
   </div>
 </section>
 
@@ -129,8 +129,8 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   <h2>Mapa</h2>
   <div id="map"></div>
   <div class="btns">
-    <a class="btn primary" target="_blank" rel="noopener" id="routeAM">🗺️ Manhã a pé (Montmartre → Lafayette)</a>
-    <a class="btn primary" target="_blank" rel="noopener" id="routePM">🗺️ Tarde a pé (Notre-Dame → Campo de Marte)</a>
+    <a class="btn primary" target="_blank" rel="noopener" id="routeAM">🗺️ Manhã a pé (Montmartre → Louvre)</a>
+    <a class="btn primary" target="_blank" rel="noopener" id="routePM">🗺️ Tarde a pé (Louvre → Campo de Marte)</a>
   </div>
   <p class="small">Toquem num pino para abrir o lugar. Vermelho: falta · azul: próxima parada · verde: feito.</p>
 </section>
@@ -151,22 +151,22 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
       <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=1+Passage+du+Clos%2C+92380+Garches&destination=Abbesses+metro+station%2C+Paris&travelmode=transit">🚆 Rota agora a partir do Airbnb</a></div>
     </div>
     <div class="card">
-      <span class="tag gold">único trecho longo</span>
-      <h3 style="margin:6px 0 4px">Lafayette → Notre-Dame (linha 7)</h3>
-      <div class="small">Embarquem em <b>Chaussée d'Antin – La Fayette</b>, sentido <b>Villejuif / Mairie d'Ivry</b>, e desçam em <b>Châtelet</b> (4 paradas). Dali são ~10 min a pé, atravessando a Pont Notre-Dame.</div>
-      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Galeries+Lafayette+Haussmann%2C+Paris&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚇 Rota no Maps</a></div>
+      <span class="tag gold">à noite</span>
+      <h3 style="margin:6px 0 4px">Campo de Marte → Notre-Dame (RER C)</h3>
+      <div class="small">Estação <b>Champ de Mars – Tour Eiffel</b>, na beira do Sena. Peguem o RER C no sentido leste (direção Paris / Austerlitz) e desçam em <b>Saint-Michel – Notre-Dame</b>, sem baldeação (~15 min).</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Champ+de+Mars+Tour+Eiffel+RER%2C+Paris&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚆 Rota no Maps</a></div>
     </div>
     <div class="card">
       <span class="tag green">volta</span>
-      <h3 style="margin:6px 0 4px">Torre Eiffel → Garches</h3>
-      <div class="small"><b>Metrô 6</b> em Bir-Hakeim sentido Charles de Gaulle – Étoile → <b>RER A</b> até <b>La Défense</b> → <b>trem L</b> até Garches – Marnes-la-Coquette (~10 min). Plano B: trem L direto de Saint-Lazare. Táxi/Uber: ~25–30 min, por volta de €30.</div>
+      <h3 style="margin:6px 0 4px">Notre-Dame → Garches</h3>
+      <div class="small"><b>RER A</b> em Châtelet – Les Halles (~10 min a pé da catedral), sentido oeste, até <b>La Défense</b> → <b>trem L</b> até Garches – Marnes-la-Coquette (~10 min). Plano B: metrô 14 de Châtelet até Saint-Lazare e trem L direto. Táxi/Uber: ~30 min.</div>
       <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=1+Passage+du+Clos%2C+92380+Garches&travelmode=transit">🏠 Voltar para casa agora</a>
       <button class="btn" data-copy="1 Passage du Clos, 92380 Garches">📋 Endereço</button></div>
     </div>
     <div class="card">
       <span class="tag red">bilhetes</span>
       <h3 style="margin:6px 0 4px">Como pagar</h3>
-      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em qualquer lugar da região (exceto aeroportos), por até 2h sem sair das catracas. Cada um usa <b>3 bilhetes</b> no dia: ida, Lafayette → Châtelet e volta. Comprem no app <b>Île-de-France Mobilités</b> ou na máquina da gare, e o funicular de Montmartre também aceita.</div>
+      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em qualquer lugar da região (exceto aeroportos), por até 2h sem sair das catracas. Cada um usa <b>3 bilhetes</b> no dia: ida, RER C até Notre-Dame e volta. Comprem no app <b>Île-de-France Mobilités</b> ou na máquina da gare, e o funicular de Montmartre também aceita.</div>
     </div>
   </div>
 </section>
@@ -181,12 +181,17 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   <div class="grid2">
     <div class="card">
       <h3 style="margin:0 0 6px">🗼 Ingresso da Torre Eiffel</h3>
-      <div class="small">Comprem <b>hoje</b>, só no site oficial: "Sommet par ascenseur" (elevador até o topo), horário entre <b>18h30 e 19h</b>. O ingresso vale só para o dia e o horário escolhidos, e o topo tem pouca vaga. Se esgotar, peguem o 2º andar. A última subida ao topo é às 22h30. Lá em cima venta e faz frio: levem casaco e gorro.</div>
+      <div class="small">Comprem <b>hoje</b>, só no site oficial: "Sommet par ascenseur" (elevador até o topo), horário entre <b>17h45 e 18h</b>. O ingresso vale só para o dia e o horário escolhidos, e o topo tem pouca vaga. Se esgotar, peguem o 2º andar. A última subida ao topo é às 22h30. Lá em cima venta e faz frio: levem casaco e gorro.</div>
       <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://ticket.toureiffel.paris">🎟️ Site oficial de ingressos</a></div>
     </div>
     <div class="card">
+      <h3 style="margin:0 0 6px">🖼️ Ingresso do Louvre</h3>
+      <div class="small">Comprem <b>hoje</b> no site oficial, horário de <b>13h30</b>: sem reserva, a entrada não é garantida. Desde janeiro de 2026, quem não é do Espaço Econômico Europeu paga <b>€32</b>; quem tem documento da UE paga a tarifa normal (levem o documento). Às quintas o museu fecha às 18h, com última entrada às 17h.</div>
+      <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://www.louvre.fr/visiter/horaires-tarifs">🎟️ Site oficial do Louvre</a></div>
+    </div>
+    <div class="card">
       <h3 style="margin:0 0 6px">⛪ Notre-Dame</h3>
-      <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). Em novembro a fila sem reserva costuma ser curta. Às quintas fica aberta até as <b>22h</b>, então dá para trocar de lugar no roteiro se precisarem.</div>
+      <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). Às quintas fica aberta até as <b>22h</b>, e é por isso que ela ficou para o fim do dia.</div>
       <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://resa.notredamedeparis.fr">🎟️ Reserva grátis</a></div>
     </div>
     <div class="card">
@@ -205,7 +210,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   </div>
 </section>
 
-<footer>Horários levantados em 18/11/2026 (paris.fr, Senado/Jardim de Luxemburgo, Notre-Dame, Galeries Lafayette). Confiram no Google Maps no dia. Bonne journée! 🇫🇷</footer>
+<footer>Horários levantados em 18/11/2026 (paris.fr, Louvre, Torre Eiffel, Notre-Dame, Galeries Lafayette, IDFM). Confiram no Google Maps no dia. Bonne journée! 🇫🇷</footer>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -223,29 +228,27 @@ const STEPS = [
  {t:"11:40", n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], city:true,
   d:"Fotos do moinho vermelho no Boulevard de Clichy. A Rue Lepic, que vocês acabaram de descer, é a do Café des 2 Moulins (o café da Amélie Poulain).", w:"25 min, quase tudo descida (Rue Blanche → Trinité → Chaussée d'Antin)"},
  {ph:"Almoço · Opéra", t:"12:15", n:"Galeries Lafayette + almoço", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], city:true,
-  d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Almoço no Lafayette Gourmet, no prédio ao lado, que tem opções vegetarianas.", tip:"A pista de patinação do terraço só abre em 24/11. Se o terraço estiver fechado para a montagem, a Glasswalk da cúpula compensa.", go:25, w:"metrô linha 7 até Châtelet + 10 min a pé", metro:true},
- {ph:"Tarde · margem esquerda e Louvre", t:"13:50", n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], city:true,
-  d:"Entrada grátis, visita de 45 min a 1h. Reserva de horário opcional (e grátis) em resa.notredamedeparis.fr. O audioguia do app oficial também é grátis.", tip:"Na quinta ela fica aberta até 22h: se a fila estiver grande, sigam e voltem à noite.", copy:"resa.notredamedeparis.fr", w:"17 min pelo Quartier Latin (Saint-Michel → Rue Soufflot)"},
- {t:"15:10", n:"Jardim de Luxemburgo", a:"Jardin du Luxembourg, Paris", ll:[48.84622,2.33715], city:true, lux:true,
-  d:"Fonte Médicis, o palácio do Senado e o grande lago central. Entrada grátis.", tip:"Fecha às 16h45 nesta época, com apito dos guardas uns 15 min antes.", w:"25 min por Saint-Germain e pela Pont des Arts"},
- {t:"16:10", n:"Louvre (pirâmide por fora)", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], city:true,
-  d:"Fotos da pirâmide e do pátio Napoléon. Em seguida, passem pelo Arc du Carrousel em direção às Tulherias.", w:"5 min"},
- {t:"16:35", n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], city:true,
+  d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Almoço no Lafayette Gourmet, no prédio ao lado, que tem opções vegetarianas.", tip:"Almoço sem demora: a entrada no Louvre está marcada para 13h30. A pista de patinação do terraço só abre em 24/11; se o terraço estiver fechado, a Glasswalk compensa.", w:"15 min passando pela Ópera e descendo a Avenue de l'Opéra"},
+ {ph:"Tarde · Louvre e eixo histórico", t:"13:30", n:"Museu do Louvre · Mona Lisa", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], city:true,
+  d:"Entrada pela pirâmide no horário reservado. Roteiro rápido de ~2h: Mona Lisa (Salle des États, ala Denon, 1º andar), Vitória de Samotrácia na escadaria Daru, Vênus de Milo (ala Sully, térreo) e, se sobrar tempo, os aposentos de Napoleão III.", tip:"Reservem hoje o horário das 13h30 no site oficial. A Mona Lisa é pequena e tem fila própria dentro da sala: vão direto a ela primeiro.", w:"5 min pelo Arc du Carrousel"},
+ {t:"15:35", n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], city:true,
   d:"Atravessem o jardim inteiro no eixo central, do Louvre até a Concórdia (~1 km), passando pelos dois lagos redondos.", w:"20 min atravessando o jardim"},
- {ph:"Entardecer · eixo histórico", t:"17:00", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
-  d:"Obelisco e fontes, com a Torre Eiffel ao fundo. É a hora do pôr do sol (~17h05).", w:"começo da avenida"},
- {t:"17:10", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
-  d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point. Hoje sem pausa longa: a subida na Torre está marcada.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~40 min"},
- {t:"17:50", n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
-  d:"Fotos do arco iluminado, tiradas do canteiro central da avenida. Ir até embaixo dele, pela passagem subterrânea, toma uns 15 min a mais.", tip:"Opcional: se estiverem atrasados para o horário da Torre, pulem e desçam direto pela Avenue d'Iéna.", w:"15 min pela Avenue d'Iéna"},
- {ph:"Noite · Torre Eiffel", t:"18:15", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
-  d:"A vista clássica da Torre iluminada, da esplanada do Palais de Chaillot. Fotos rápidas e sigam para a Torre.", w:"10 min pelos jardins e pela Pont d'Iéna"},
- {t:"18:35", n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
-  d:"Revista de segurança na entrada, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45 no total. Às 19h e às 20h vocês veem a Torre piscar lá de dentro.", tip:"Comprem o ingresso hoje à noite, só no site oficial (ticket.toureiffel.paris): elevador até o topo, horário entre 18h30 e 19h. Se o topo estiver esgotado, peguem só até o 2º andar.", copy:"ticket.toureiffel.paris", w:"5 min"},
- {t:"20:20", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
-  d:"A Torre iluminada vista do gramado, para as últimas fotos. Fim do passeio.", w:"5–10 min até a região do jantar"},
- {t:"20:35", n:"Jantar e volta a Garches", q:"Bir-Hakeim, Paris", ll:[48.85391,2.28925], city:true, end:true,
-  d:"Jantar perto da Torre (cafés e crêperies na região da École Militaire e da Rue Cler; crepe de queijo ou de cogumelos serve à Natália). Volta: metrô 6 de Bir-Hakeim até Charles de Gaulle – Étoile, RER A até La Défense e trem L até Garches – Marnes-la-Coquette. Uns 50 min até a gare, mais a caminhada.", tip:"Cansados? Um Uber/táxi da Torre até Garches leva ~25–30 min sem trânsito e custa por volta de €30. Confiram no app."}
+ {t:"16:00", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
+  d:"Obelisco e fontes, com a Torre Eiffel ao fundo.", w:"começo da avenida"},
+ {ph:"Entardecer", t:"16:10", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
+  d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~40 min"},
+ {t:"16:50", n:"Arco do Triunfo · pôr do sol", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
+  d:"O sol se põe por volta de 17h05. Fotos do canteiro central da avenida; ir até embaixo do arco, pela passagem subterrânea, toma uns 15 min a mais.", tip:"Opcional: se estiverem atrasados para a Torre, pulem e desçam direto pela Avenue d'Iéna.", w:"15 min pela Avenue d'Iéna"},
+ {ph:"Noite · Torre Eiffel", t:"17:20", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
+  d:"A vista clássica da Torre, já acesa no começo da noite, da esplanada do Palais de Chaillot. Fotos e sigam para a Torre.", w:"10 min pelos jardins e pela Pont d'Iéna"},
+ {t:"17:45", n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
+  d:"Revista de segurança na entrada, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45 no total. Às 18h e às 19h vocês veem a Torre piscar lá de dentro.", tip:"Comprem o ingresso hoje, só no site oficial (ticket.toureiffel.paris): elevador até o topo, horário entre 17h45 e 18h. Se o topo estiver esgotado, peguem só até o 2º andar.", copy:"ticket.toureiffel.paris", w:"5 min"},
+ {t:"19:35", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
+  d:"A Torre iluminada vista do gramado, para as últimas fotos.", go:25, w:"RER C de Champ de Mars – Tour Eiffel até Saint-Michel – Notre-Dame (~15 min)", metro:true},
+ {ph:"Noite · Île de la Cité", t:"20:05", n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], city:true,
+  d:"Às quintas a catedral fica aberta até 22h (última entrada 21h30). À noite a fachada fica iluminada. Entrada grátis, visita de 45 min.", tip:"Reserva de horário opcional e grátis em resa.notredamedeparis.fr.", copy:"resa.notredamedeparis.fr", w:"5 min até o Quartier Latin"},
+ {t:"20:50", n:"Jantar e volta a Garches", q:"Saint-Michel Notre-Dame, Paris", ll:[48.85340,2.34420], city:true, end:true,
+  d:"Jantar no Quartier Latin, do outro lado da ponte (crêperies e bistrôs; crepe de queijo ou de cogumelos serve à Natália). Volta: RER A de Châtelet – Les Halles até La Défense e trem L até Garches – Marnes-la-Coquette, uns 40 min mais a caminhada.", tip:"Cansados? Um Uber/táxi até Garches leva ~30 min sem trânsito. Confiram o preço no app."}
 ];
 const PHRASES=[
  ["Bonjour ! / Merci beaucoup !","Bom dia! / Muito obrigado!"],
@@ -259,8 +262,8 @@ const PHRASES=[
  ["Non, merci.","Não, obrigado (golpe da pulseira/abaixo-assinado)"],
  ["On m'a volé mon portefeuille.","Roubaram minha carteira"]
 ];
-const ROUTE_AM="https://www.google.com/maps/dir/?api=1&origin=Le+Mur+des+je+t%27aime%2C+Paris&destination=Galeries+Lafayette+Haussmann%2C+Paris&waypoints=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris%7CPlace+du+Tertre%2C+Paris%7CMoulin+Rouge%2C+Paris&travelmode=walking";
-const ROUTE_PM="https://www.google.com/maps/dir/?api=1&origin=Cath%C3%A9drale+Notre-Dame+de+Paris&destination=Champ+de+Mars%2C+Paris&waypoints=Jardin+du+Luxembourg%2C+Paris%7CPyramide+du+Louvre%2C+Paris%7CJardin+des+Tuileries%2C+Paris%7CPlace+de+la+Concorde%2C+Paris%7CArc+de+Triomphe%2C+Paris%7CPlace+du+Trocad%C3%A9ro%2C+Paris%7CTour+Eiffel%2C+Paris&travelmode=walking";
+const ROUTE_AM="https://www.google.com/maps/dir/?api=1&origin=Le+Mur+des+je+t%27aime%2C+Paris&destination=Pyramide+du+Louvre%2C+Paris&waypoints=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris%7CPlace+du+Tertre%2C+Paris%7CMoulin+Rouge%2C+Paris%7CGaleries+Lafayette+Haussmann%2C+Paris&travelmode=walking";
+const ROUTE_PM="https://www.google.com/maps/dir/?api=1&origin=Pyramide+du+Louvre%2C+Paris&destination=Champ+de+Mars%2C+Paris&waypoints=Jardin+des+Tuileries%2C+Paris%7CPlace+de+la+Concorde%2C+Paris%7CArc+de+Triomphe%2C+Paris%7CPlace+du+Trocad%C3%A9ro%2C+Paris%7CTour+Eiffel%2C+Paris&travelmode=walking";
 
 // ---------- util ----------
 const $=s=>document.querySelector(s);
