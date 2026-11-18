@@ -78,13 +78,16 @@ h3{margin:0 0 6px;font-size:16px}
 .step.skip .name{text-decoration:line-through}
 .step.isnext{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-soft)}
 .step.must{border-left:4px solid var(--gold)}
-.chk{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;font-weight:800;color:#fff;padding:0}
+.chk{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;font-weight:800;color:var(--muted);padding:0}
+.step.done .chk{color:#fff}
 .step.done .chk{background:var(--green);border-color:var(--green)}
 .step .top{display:flex;gap:6px 8px;align-items:baseline;flex-wrap:wrap}
 .step .time{font-weight:700;font-variant-numeric:tabular-nums;color:var(--blue)}
 .step .name{font-weight:700;font-size:15.5px}
 .step .desc{color:var(--muted);font-size:13.5px;margin-top:2px}
 .step .tip{font-size:13px;margin-top:6px;background:var(--gold-soft);border-radius:8px;padding:6px 9px}
+.qbox{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted);margin-right:4px}
+.qbox input{width:58px;font:700 15px Inter,sans-serif;padding:5px 6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .walk{font-size:12px;font-weight:600;color:var(--blue);margin:-2px 0 8px 44px}
 .cutrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
 .cutrow:first-child{border-top:0}
@@ -159,7 +162,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 
 <section id="roteiro">
   <h2>Roteiro passo a passo</h2>
-  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula todas as seguintes: o horário riscado é o anterior, o colorido é o novo (vermelho atrasou, verde adiantou). <b>✂️ Pular</b> tira a atração do roteiro e devolve o tempo. Tudo fica salvo neste celular. <button class="btn sm" id="reset">Limpar tudo</button></p>
+  <p class="small">Toquem no círculo quando <b>terminarem</b> uma parada. O site anota a hora e recalcula todas as seguintes: o horário riscado é o anterior, o colorido é o novo (vermelho atrasou, verde adiantou). <b>▶ Fazer agora</b> traz a atração para a vez, e <b>↑ ↓</b> mudam a ordem. Em <b>⏱ fila agora</b> coloquem o tempo de fila que o app mostra. <b>✂️ Pular</b> tira a atração do roteiro. Tudo fica salvo neste celular. <button class="btn sm" id="resetOrder">↺ Ordem original</button> <button class="btn sm" id="reset">Limpar tudo</button></p>
   <div id="steps"></div>
 </section>
 
@@ -258,8 +261,31 @@ const toMin=t=>{const[a,b]=String(t).split(":").map(Number);return a*60+b};
 const fmt=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
 const ANCHOR=STEPS.findIndex(s=>s.show);
 const K="disney-dlp-v1";
-let st={done:{},skip:{},cfg:{...DEF}};
-try{const r=JSON.parse(localStorage.getItem(K)||"null"); if(r) st={done:r.done||{},skip:r.skip||{},cfg:{...DEF,...(r.cfg||{})}}}catch(e){}
+let st={done:{},skip:{},wait:{},order:null,cfg:{...DEF}};
+try{const r=JSON.parse(localStorage.getItem(K)||"null"); if(r) st={done:r.done||{},skip:r.skip||{},wait:r.wait||{},order:r.order||null,cfg:{...DEF,...(r.cfg||{})}}}catch(e){}
+// fila padrão e tempo de brinquedo [fila, brinquedo], por índice da parada
+const QR={1:[25,10],3:[45,5],4:[10,20],6:[25,5],7:[40,5],8:[35,5],10:[30,10],11:[32,3],12:[10,10],13:[40,5],14:[20,10]};
+// zona de cada parada: G entrada, W oeste do Disneyland Park, E Discoveryland, C castelo, A1/A2/A3 setores do Adventure World
+const ZN=["G","W","W","W","W","W","A1","A1","A2","A3","A3","A3","A3","E","E","C"];
+const FIN=STEPS.findIndex(s=>s.finale);
+const DEF_ORDER=STEPS.map((_,i)=>i);
+function curOrder(){
+  let o=Array.isArray(st.order)?st.order.filter(i=>i>=0&&i<STEPS.length):[];
+  o=[...new Set(o)]; DEF_ORDER.forEach(i=>{if(!o.includes(i))o.push(i)});
+  o=o.filter(i=>i!==0&&i!==FIN); return [0,...o,FIN]; // entrada sempre 1ª, show final sempre por último
+}
+const queueOf=i=>QR[i]?(st.wait[i]!=null?st.wait[i]:QR[i][0]):0;
+const durOf=i=>QR[i]?queueOf(i)+QR[i][1]:STEPS[i].dur;
+const inDAW=z=>z[0]==="A";
+function walk(a,b){
+  if(a==null||b==null) return 0;
+  const za=ZN[a],zb=ZN[b];
+  if(inDAW(za)!==inDAW(zb)) return 18;          // trocar de parque
+  if(za===zb) return 4;
+  if(inDAW(za)) return 6;
+  if(za==="G"||zb==="G"||za==="C"||zb==="C") return 7;
+  return 10;                                     // atravessar o Disneyland Park
+}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}};
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1800)}
 function parisNow(){
@@ -269,58 +295,41 @@ function parisNow(){
 }
 
 // ---------- cálculo do roteiro ----------
-// Retorna, para cada parada, início/fim previstos e a ordem de exibição.
-// Paradas antes do Rei Leão que não cabem antes da fila do show vão para logo depois dele.
+// Segue a ordem atual (que vocês podem mudar). Rei Leão e show final têm horário fixo:
+// se chegarem antes, esperam; se chegarem depois, o site avisa.
 function plan(cfg){
-  const D=st.done,S=st.skip;
+  const D=st.done,S=st.skip,order=curOrder(),out=[];
   const showMin=toMin(cfg.show), qStart=showMin-QUEUE_BEFORE_SHOW;
-  const out=[],order=[],deferred=[];
-  let t=toMin(cfg.arrive),overF=0;
-  const place1=(i,startAt)=>{const s=STEPS[i];
-    if(S[i]){out[i]={skip:true};order.push(i);return}
-    if(typeof D[i]==="number"){out[i]={done:true,end:D[i]};t=D[i]+s.w;order.push(i);return}
-    if(D[i]){out[i]={done:true};order.push(i);return}
-    const start=startAt!=null?startAt:t; out[i]={start,end:start+s.dur}; t=out[i].end+s.w; order.push(i);
-  };
-  STEPS.forEach((s,i)=>{
-    if(i<ANCHOR){
-      const pending=!S[i]&&!D[i]&&!s.fixed;
-      if(pending&&(D[ANCHOR]||t+s.dur+s.w>qStart)){deferred.push(i);return}
-      place1(i); return;
-    }
-    if(i===ANCHOR){
-      if(S[i]){out[i]={skip:true};order.push(i)}
-      else if(typeof D[i]==="number"){out[i]={done:true,end:D[i]};t=D[i]+s.w;order.push(i)}
-      else if(D[i]){out[i]={done:true};order.push(i);t=Math.max(t,showMin+s.dur+s.w)}
-      else{const late=t>qStart;out[i]={start:Math.max(t,qStart),end:showMin+s.dur,late,qStart};t=showMin+s.dur+s.w;order.push(i)}
-      deferred.forEach(d=>{place1(d);out[d].deferred=true});
-      return;
-    }
-    if(s.finale){
-      if(S[i]||D[i]){place1(i);return}
-      const fin=toMin(cfg.finale), spot=fin-SPOT_BEFORE_FINALE;
-      overF=Math.max(0,t-spot);
-      order.forEach(j=>{const o=out[j];if(o.end!=null&&!o.done&&o.end+STEPS[j].w>spot&&!STEPS[j].meal)o.tooLate=true});
-      out[i]={start:Math.max(t,spot),end:fin+s.dur,late:t>spot,spot}; t=fin+s.dur; order.push(i); return;
-    }
-    place1(i);
+  const fin=toMin(cfg.finale), spot=fin-SPOT_BEFORE_FINALE;
+  let t=toMin(cfg.arrive), prev=null, overF=0;
+  order.forEach(i=>{
+    const s=STEPS[i];
+    if(S[i]){out[i]={skip:true};return}
+    if(typeof D[i]==="number"){out[i]={done:true,end:D[i]};t=D[i];prev=i;return}
+    if(D[i]){out[i]={done:true};prev=i;return}
+    const arr=t+walk(prev,i);
+    if(s.show){const miss=arr>showMin-5;out[i]={start:Math.max(arr,qStart),end:miss?arr:showMin+s.dur,tight:arr>qStart&&arr<=showMin-10,late:arr>showMin-10&&!miss,miss,qStart};t=out[i].end}
+    else if(s.finale){overF=Math.max(0,arr-spot);out[i]={start:Math.max(arr,spot),end:fin+s.dur,late:arr>spot,spot};t=out[i].end}
+    else{out[i]={start:arr,end:arr+durOf(i)};t=out[i].end}
+    prev=i;
   });
-  // estouro: tudo precisa caber antes de garantir lugar no show final
-  const spot=toMin(cfg.finale)-SPOT_BEFORE_FINALE;
+  if(overF>0) order.forEach(j=>{const o=out[j];if(j!==FIN&&o.end!=null&&!o.done&&o.end>spot-5&&!STEPS[j].meal)o.tooLate=true});
+  const L=out[ANCHOR];
+  if(L&&(L.late||L.miss)) order.slice(0,order.indexOf(ANCHOR)).forEach(j=>{const o=out[j];if(o.start!=null&&!o.done)o.hurtsLion=true});
   return {out,order,over:overF,lim:spot};
 }
 // tempo devolvido ao cortar: a atração + parte da caminhada (a ida ao próximo lugar continua)
-const gain=s=>s.dur+Math.min(s.w,5);
+const gain=i=>durOf(i)+3;
 // sugestões de corte até caber
 function suggestCuts(P){
   if(P.over<=0) return [];
   const c=STEPS.map((s,i)=>({s,i})).filter(x=>x.s.cut&&!st.skip[x.i]&&!st.done[x.i]).sort((a,b)=>a.s.cut-b.s.cut);
   const res=[];let freed=0;
-  for(const x of c){if(freed>=P.over)break;res.push(x.i);freed+=gain(x.s)}
+  for(const x of c){if(freed>=P.over)break;res.push(x.i);freed+=gain(x.i)}
   return res;
 }
 // horários "base" (sem marcações) para comparar
-function basePlan(){const sv=st;st={done:{},skip:{},cfg:sv.cfg};const b=plan(sv.cfg);st=sv;return b}
+function basePlan(){const sv=st;st={...sv,done:{},skip:{}};const b=plan(sv.cfg);st=sv;return b}
 
 // ---------- render ----------
 function nextIdx(P){return P.order.find(i=>!st.done[i]&&!st.skip[i])}
@@ -329,40 +338,50 @@ function timeCell(i,P,B){
   if(o.skip) return `<span class="time" style="color:var(--muted)">cortado</span>`;
   if(o.done) return `<span class="time" style="color:var(--green)">✓${o.end!=null?" "+fmt(o.end):""}</span>`;
   const s=STEPS[i];
-  const label=s.show?`fila ${fmt(o.start)} · show ${st.cfg.show}`:s.finale?(o.late?`chegam ~${fmt(o.start)} · show ${st.cfg.finale}`:`lugar ${fmt(o.start)} · show ${st.cfg.finale}`):fmt(o.start);
+  const label=s.show?(o.miss?`chegam ~${fmt(o.start)} · show ${st.cfg.show}`:`fila ${fmt(o.start)} · show ${st.cfg.show}`):s.finale?(o.late?`chegam ~${fmt(o.start)} · show ${st.cfg.finale}`:`lugar ${fmt(o.start)} · show ${st.cfg.finale}`):fmt(o.start);
   if(!b||b.start==null||Math.abs(o.start-b.start)<3||s.show||s.finale) return `<span class="time">${label}</span>`;
   return `<span class="time" style="color:var(--muted);text-decoration:line-through;font-weight:600">${fmt(b.start)}</span><span class="time" style="color:${o.start>b.start?"var(--red)":"var(--green)"}">${label}</span>`;
 }
 function render(){
   const P=plan(st.cfg),B=basePlan(),ni=nextIdx(P),cuts=suggestCuts(P);
-  let html="",lastPh=null;
+  let html="",lastPark=null;
+  const movable=i=>i!==0&&i!==FIN;
   P.order.forEach((i,k)=>{
-    const s=STEPS[i],o=P.out[i];
-    const ph=s.ph||(k===0?"Disneyland Park":null);
-    if(s.ph&&s.ph!==lastPh){html+=`<div class="phase">${esc(s.ph)}</div>`;lastPh=s.ph}
+    const s=STEPS[i],o=P.out[i],park=inDAW(ZN[i])?"Disney Adventure World":"Disneyland Park";
+    if(park!==lastPark){html+=`<div class="phase">${park}</div>`;lastPark=park}
     const tags=[];
     if(i===ni) tags.push('<span class="tag blue">próxima</span>');
     if(s.must) tags.push('<span class="tag gold">imperdível</span>');
     if(s.cut&&!o.skip) tags.push(`<span class="tag gray">corte nº ${s.cut}</span>`);
-    if(o.deferred) tags.push('<span class="tag gold">depois do show</span>');
     if(o.late) tags.push(s.finale?'<span class="tag red">vão chegar em cima da hora</span>':'<span class="tag red">corram para a fila!</span>');
+    if(o.tight) tags.push('<span class="tag gold">fila em cima da hora</span>');
+    if(o.miss) tags.push('<span class="tag red">perdem essa sessão</span>');
+    if(o.hurtsLion) tags.push('<span class="tag red">atrasa o Rei Leão</span>');
     if(o.tooLate) tags.push('<span class="tag red">atrasa o show final</span>');
     if(cuts.includes(i)) tags.push('<span class="tag red">cortar?</span>');
     const nxt=P.order.slice(k+1).find(j=>!st.skip[j]);
+    const pend=!o.done&&!o.skip;
+    const qbox=QR[i]&&pend?`<label class="qbox">⏱ fila agora <input type="number" inputmode="numeric" min="0" max="240" step="5" data-wait="${i}" value="${queueOf(i)}"> min</label>`:"";
+    const mv=movable(i)&&pend?`<button class="btn sm" data-now="${i}">▶ Fazer agora</button><button class="btn sm" data-up="${i}" aria-label="subir">↑</button><button class="btn sm" data-down="${i}" aria-label="descer">↓</button>`:"";
     html+=`<div class="step ${o.done?"done":""} ${o.skip?"skip":""} ${i===ni?"isnext":""} ${s.must?"must":""}" id="st${i}">
       <button class="chk" data-i="${i}" aria-label="marcar como feito">${o.done?"✓":(s.pin||"")}</button>
       <div>
         <div class="top">${timeCell(i,P,B)}<span class="name">${esc(s.n)}</span></div>
         ${tags.length?`<div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap">${tags.join("")}</div>`:""}
-        <div class="desc">${s.area?`<b>${esc(s.area)}</b> · `:""}${esc(s.d)}${o.start!=null&&!s.show?` <span style="white-space:nowrap">(~${s.dur} min)</span>`:""}</div>
+        <div class="desc">${s.area?`<b>${esc(s.area)}</b> · `:""}${esc(s.d)}${o.start!=null&&!s.show&&!s.finale?` <span style="white-space:nowrap">(~${durOf(i)} min)</span>`:""}</div>
         ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
+        ${qbox||mv?`<div class="btns" style="align-items:center">${qbox}${mv}</div>`:""}
         <div class="btns">
           <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
           <a class="btn blue" target="_blank" rel="noopener" href="${walkTo(s)}">🚶 Ir a pé</a>
-          ${s.show||s.finale||s.must&&!s.cut?"":`<button class="btn" data-skip="${i}">${o.skip?"↩️ Voltar ao roteiro":"✂️ Pular"}</button>`}
+          ${s.show||s.finale||s.fixed||s.must&&!s.cut?"":`<button class="btn" data-skip="${i}">${o.skip?"↩️ Voltar ao roteiro":"✂️ Pular"}</button>`}
         </div>
       </div></div>`;
-    if(nxt!=null&&!o.skip) html+=`<div class="walk">↓ Depois: ${esc(STEPS[nxt].n)}${s.w?` · ~${s.w} min a pé`:""}<br><span style="font-weight:500;color:var(--muted)">${esc(s.nx)}</span></div>`;
+    if(nxt!=null&&!o.skip){
+      const w=walk(i,nxt), cross=inDAW(ZN[i])!==inDAW(ZN[nxt]);
+      const hint=STEPS[i+1]&&nxt===i+1?s.nx:cross?"Saiam pelo portão, cruzem a praça e entrem no outro parque.":STEPS[nxt].area?`Sigam as placas para ${STEPS[nxt].area}.`:"";
+      html+=`<div class="walk">↓ Depois: ${esc(STEPS[nxt].n)} · ~${w} min a pé${hint?`<br><span style="font-weight:500;color:var(--muted)">${esc(hint)}</span>`:""}</div>`;
+    }
   });
   $("#steps").innerHTML=html;
   renderNext(P,ni,cuts); renderCuts(P,cuts); renderPins(P,ni);
@@ -387,6 +406,8 @@ function renderNext(P,ni,cuts){
     a.style.display="";
     a.innerHTML=`<b style="color:var(--red)">Não cabe tudo antes do show final</b> (lugar garantido às ${fmt(P.lim)}). Faltam uns ${P.over} min. Sugestão: cortar ${cuts.map(i=>`<b>${esc(STEPS[i].n)}</b>`).join(" e ")}.
       <div class="btns">${cuts.map(i=>`<button class="btn sm" data-skip="${i}">✂️ Pular ${esc(STEPS[i].n)}</button>`).join("")}</div>`;
+  } else if(P.out[ANCHOR]&&P.out[ANCHOR].miss){
+    a.style.display="";a.innerHTML=`<b style="color:var(--red)">Nessa ordem vocês perdem o Rei Leão das ${st.cfg.show}.</b> Subam o Rei Leão na lista (▶ Fazer agora) ou vejam a próxima sessão no app e mudem o horário em "1º Rei Leão".`;
   } else if(P.out[ANCHOR]&&P.out[ANCHOR].late){
     a.style.display="";a.innerHTML=`<b style="color:var(--red)">Rei Leão em risco!</b> Pelo previsto vocês chegam depois do ideal. Larguem o resto e vão direto para o Frontierland Theater.`;
   } else a.style.display="none";
@@ -396,7 +417,7 @@ function renderCuts(P,cuts){
   $("#cutList").innerHTML=list.map(({s,i})=>{
     const o=P.out[i];
     const state=o.skip?'<span class="tag gray">cortado</span>':o.done?'<span class="tag green">feito</span>':cuts.includes(i)?'<span class="tag red">sugerido</span>':"";
-    return `<div class="cutrow"><div><b>${s.cut}. ${esc(s.n)}</b> ${state}<div class="small">libera ~${gain(s)} min</div></div>
+    return `<div class="cutrow"><div><b>${s.cut}. ${esc(s.n)}</b> ${state}<div class="small">libera ~${gain(i)} min</div></div>
       ${o.done?"":`<button class="btn sm" data-skip="${i}">${o.skip?"↩️ Voltar":"✂️ Pular"}</button>`}</div>`;
   }).join("");
 }
@@ -441,16 +462,25 @@ function markDone(i){
   toast(typeof st.done[i]==="number"?`Feito às ${fmt(st.done[i])} · horários atualizados`:"Marcado ✓");
 }
 function toggleSkip(i){
-  if(st.skip[i]){delete st.skip[i];toast("Voltou ao roteiro")}else{st.skip[i]=true;delete st.done[i];toast(`Cortado · +${gain(STEPS[i])} min livres`)}
+  if(st.skip[i]){delete st.skip[i];toast("Voltou ao roteiro")}else{st.skip[i]=true;delete st.done[i];toast(`Cortado · +${gain(i)} min livres`)}
   save();render();
 }
+function setOrder(o){st.order=o;save();render()}
+function moveNow(i){const o=curOrder().filter(j=>j!==i);const at=o.findIndex(j=>!st.done[j]&&!st.skip[j]&&j!==0);o.splice(at<0?o.length-1:at,0,i);setOrder(o);toast("Movido para agora · horários recalculados");setTimeout(()=>{const el=$("#st"+i);el&&el.scrollIntoView({behavior:"smooth",block:"center"})},50)}
+function moveBy(i,d){const o=curOrder(),k=o.indexOf(i),j=k+d;if(j<1||j>o.length-2)return;[o[k],o[j]]=[o[j],o[k]];setOrder(o)}
+document.addEventListener("change",e=>{const w=e.target.closest("[data-wait]");if(!w)return;const i=+w.dataset.wait,v=parseInt(w.value,10);
+  if(isNaN(v)||v<0){w.value=queueOf(i);return} st.wait[i]=Math.min(v,240);save();render();toast(`Fila de ${v} min · roteiro recalculado`)});
 document.addEventListener("click",e=>{
+  const nw=e.target.closest("[data-now]"); if(nw){moveNow(+nw.dataset.now);return}
+  const up=e.target.closest("[data-up]"); if(up){moveBy(+up.dataset.up,-1);return}
+  const dn=e.target.closest("[data-down]"); if(dn){moveBy(+dn.dataset.down,1);return}
   const c=e.target.closest(".chk"); if(c){const i=+c.dataset.i; if(st.done[i]){delete st.done[i];save();render()}else markDone(i); return}
   const d=e.target.closest("[data-done]"); if(d){markDone(+d.dataset.done);return}
   const k=e.target.closest("[data-skip]"); if(k){toggleSkip(+k.dataset.skip);return}
   const p=e.target.closest("[data-go]"); if(p){const el=$("#st"+p.dataset.go); el&&el.scrollIntoView({behavior:"smooth",block:"center"});return}
 });
-$("#reset").onclick=()=>{if(!confirmReset())return;st={done:{},skip:{},cfg:{...st.cfg}};save();render();toast("Marcações limpas")};
+$("#reset").onclick=()=>{if(!confirmReset())return;st={done:{},skip:{},wait:{},order:null,cfg:{...st.cfg}};save();render();toast("Tudo limpo")};
+$("#resetOrder").onclick=()=>{st.order=null;save();render();toast("Ordem original restaurada")};
 function confirmReset(){const b=$("#reset");if(b.dataset.arm){delete b.dataset.arm;b.textContent="Limpar tudo";return true}b.dataset.arm=1;b.textContent="Toque de novo para confirmar";setTimeout(()=>{delete b.dataset.arm;b.textContent="Limpar tudo"},3000);return false}
 [["cArrive","arrive"],["cShow","show"],["cFinale","finale"],["cClose","close"]].forEach(([id,k])=>{
   const el=$("#"+id); el.value=st.cfg[k];
