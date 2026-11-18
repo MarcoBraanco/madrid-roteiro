@@ -69,6 +69,7 @@ h3{margin:0 0 6px;font-size:16px}
 #mapsvg .pin.skip circle{fill:var(--gray)}
 #mapsvg .pin.next circle{fill:var(--blue);stroke-width:3}
 #mapsvg .pin{cursor:pointer}
+#mapsvg .gate rect{fill:var(--muted)}
 #mapsvg .route{fill:none;stroke:var(--blue);stroke-width:1.5;stroke-dasharray:5 5;opacity:.55}
 /* passos */
 .phase{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
@@ -139,12 +140,12 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
       <rect class="zone" x="110" y="46" width="160" height="40" rx="6"/><text x="190" y="70" text-anchor="middle">Fantasyland</text>
       <rect class="zone" x="165" y="96" width="50" height="26" rx="4" style="stroke-dasharray:0"/><text x="190" y="113" text-anchor="middle">castelo</text>
       <rect class="zone" x="22" y="96" width="132" height="92" rx="6"/><text x="88" y="112" text-anchor="middle">Frontierland</text>
-      <rect class="zone" x="22" y="196" width="132" height="82" rx="6"/><text x="88" y="212" text-anchor="middle">Adventureland</text>
+      <rect class="zone" x="22" y="196" width="132" height="82" rx="6"/><text x="88" y="268" text-anchor="middle">Adventureland</text>
       <rect class="zone" x="226" y="96" width="132" height="120" rx="6"/><text x="292" y="112" text-anchor="middle">Discoveryland</text>
-      <rect class="zone" x="165" y="132" width="50" height="146" rx="4"/><text x="190" y="264" text-anchor="middle">Main St</text>
-      <text x="190" y="308" text-anchor="middle">↕ praça das entradas · ~5 min a pé</text>
+      <rect class="zone" x="165" y="132" width="50" height="146" rx="4"/><text x="190" y="150" text-anchor="middle">Main St</text>
+      <text x="212" y="310">praça entre os parques</text>
       <rect class="park" x="10" y="322" width="360" height="258" rx="16"/>
-      <text class="pk" x="190" y="344" text-anchor="middle">Disney Adventure World</text>
+      <text class="pk" x="24" y="344">Disney Adventure World</text>
       <rect class="zone" x="22" y="358" width="160" height="80" rx="6"/><text x="102" y="374" text-anchor="middle">Avengers Campus</text>
       <rect class="zone" x="198" y="358" width="160" height="80" rx="6"/><text x="278" y="374" text-anchor="middle">Área da Torre</text>
       <rect class="zone" x="110" y="450" width="160" height="38" rx="6"/><text x="190" y="473" text-anchor="middle">World of Frozen</text>
@@ -236,7 +237,7 @@ const STEPS = [
   nx:"Fim! Se ainda der, vejam o Disney Cascade of Lights no lago."}
 ];
 // posição dos números no mapa esquemático
-const PINXY={1:[262,150],2:[312,186],3:[88,244],4:[88,166],5:[52,140],6:[124,140],7:[72,412],8:[132,412],9:[278,412],10:[200,534],11:[256,534],12:[312,534]};
+const PINXY={1:[262,150],2:[312,186],3:[110,240],4:[110,170],5:[52,140],6:[124,140],7:[72,412],8:[132,412],9:[278,412],10:[200,534],11:[256,534],12:[312,534]};
 const DEF={arrive:"12:30",show:"14:00",close:"22:00"};
 const QUEUE_BEFORE_SHOW=30;
 const TRIP_DATE="2026-11-18";
@@ -387,12 +388,35 @@ function renderCuts(P,cuts){
 }
 function renderPins(P,ni){
   // linha da rota pelos pinos na ordem atual
-  const seq=P.order.filter(i=>STEPS[i].pin&&!P.out[i].skip).map(i=>PINXY[STEPS[i].pin]);
-  let g=`<polyline class="route" points="${seq.map(p=>p.join(",")).join(" ")}"/>`;
+  const pins=P.order.filter(i=>STEPS[i].pin&&!P.out[i].skip).map(i=>STEPS[i].pin);
+  let g=`<polyline class="route" points="${routePoints(pins).map(p=>p.join(",")).join(" ")}"/>`;
+  g+=`<g class="gate"><rect x="176" y="284" width="28" height="12" rx="3"/><rect x="176" y="316" width="28" height="12" rx="3"/></g>`;
   P.order.forEach(i=>{const s=STEPS[i];if(!s.pin)return;const[x,y]=PINXY[s.pin],o=P.out[i];
     const cls=o.skip?"skip":o.done?"done":i===ni?"next":"";
     g+=`<g class="pin ${cls}" data-go="${i}"><circle cx="${x}" cy="${y}" r="12"/><text x="${x}" y="${y+4}" text-anchor="middle">${s.pin}</text></g>`;});
   $("#pins").innerHTML=g;
+}
+
+// Caminho pelos corredores do parque, não em linha reta:
+// W = oeste do Disneyland Park (Adventureland/Frontierland), E = Discoveryland, A = Adventure World.
+const ZONE=p=>[3,4,5,6].includes(p)?"W":[1,2].includes(p)?"E":"A";
+const HUB=[190,128], MAIN=[190,232], GATE1=[190,290], GATE2=[190,322], DAWIN=[190,395];
+function routePoints(pins){
+  const pts=[GATE1,MAIN];
+  pins.forEach((p,k)=>{
+    const xy=PINXY[p];
+    if(k>0){
+      const a=pins[k-1],za=ZONE(a),zb=ZONE(p),[ax,ay]=PINXY[a];
+      if(za!=="A"&&zb==="A") pts.push(MAIN,GATE1,GATE2,DAWIN);
+      else if(za==="A"&&zb!=="A") pts.push(DAWIN,GATE2,GATE1,MAIN);
+      else if(za!==zb) pts.push(HUB);
+      else if(za==="A"&&ay<450&&xy[1]>490) pts.push(ax<190?[96,494]:[300,494]);
+      else if(za==="A"&&ay>490&&xy[1]<450) pts.push(xy[0]<190?[96,494]:[300,494]);
+    } else if(ZONE(p)==="E") pts.push(HUB);
+    else if(ZONE(p)==="A") pts.push(GATE1,GATE2,DAWIN);
+    pts.push(xy);
+  });
+  return pts;
 }
 
 // ---------- ações ----------
