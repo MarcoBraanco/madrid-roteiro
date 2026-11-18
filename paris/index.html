@@ -100,7 +100,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 <header>
   <div class="kicker">Paris · quinta-feira, 19/11</div>
   <h1>Paris clássica, de norte a oeste</h1>
-  <p class="sub">Montmartre → Galeries Lafayette → Notre-Dame → Luxemburgo → Louvre → Tulherias → Concórdia → Champs-Élysées → Arco → Trocadéro → Torre Eiffel → Campo de Marte.</p>
+  <p class="sub">Garches → Montmartre → Galeries Lafayette → Notre-Dame → Luxemburgo → Louvre → Tulherias → Concórdia → Champs-Élysées → Arco → Trocadéro → Torre Eiffel → Campo de Marte.</p>
 </header>
 
 <div class="status">
@@ -110,15 +110,15 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   </div>
   <nav class="navs">
     <a href="#agora">Agora</a><a href="#mapa">Mapa</a><a href="#roteiro">Roteiro</a>
-    <a href="#metro">Metrô</a><a href="#frases">Frases</a><a href="#info">Infos</a>
+    <a href="#metro">Trem</a><a href="#frases">Frases</a><a href="#info">Infos</a>
   </nav>
 </div>
 
 <section id="agora" style="margin-top:14px">
   <div class="card next" id="nextCard"></div>
   <div class="card" style="margin-top:10px;font-size:14px">
-    <b>Horário sugerido:</b> despertador às <b>8h15</b>, café sem pressa, saída do hotel às <b>9h30</b>. O passeio termina no Campo de Marte por volta de <b>19h50</b>, com jantar por perto e hotel lá pelas 21h30.
-    <div class="startbox">Vão sair em outro horário? <label>Saída do hotel: <input type="time" id="startAt" value="09:30"></label> <span class="small">O site recalcula o dia inteiro.</span></div>
+    <b>Horário sugerido:</b> despertador às <b>8h</b>, café sem pressa, saída do Airbnb às <b>9h10</b> (dá ~1h até Montmartre). O passeio termina no Campo de Marte por volta de <b>19h50</b>; com jantar por perto e a volta de trem, vocês chegam em casa lá pelas <b>22h</b>.
+    <div class="startbox">Vão sair em outro horário? <label>Saída do Airbnb: <input type="time" id="startAt" value="09:10"></label> <span class="small">O site recalcula o dia inteiro.</span></div>
   </div>
   <div class="card alert" style="margin-top:10px;font-size:14px">
     <b style="color:var(--red)">Horários que mandam no dia:</b> Jardim de Luxemburgo fecha às <b>16h45</b> · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (o roteiro mira o das <b>19h</b> no Trocadéro).
@@ -142,13 +142,13 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 </section>
 
 <section id="metro">
-  <h2>Metrô</h2>
+  <h2>Trem e metrô</h2>
   <div class="grid2">
     <div class="card">
       <span class="tag blue">manhã</span>
-      <h3 style="margin:6px 0 4px">Hotel → Anvers (linha 2)</h3>
-      <div class="small">A estação <b>Anvers</b> é a da escadaria do Sacré-Cœur. O <b>funicular</b> até a basílica aceita o mesmo bilhete do metrô e poupa ~200 degraus.</div>
-      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=Anvers+metro+station%2C+Paris&travelmode=transit">🚇 Como chegar em Anvers</a></div>
+      <h3 style="margin:6px 0 4px">Garches → Abbesses</h3>
+      <div class="small">~15 min a pé até a gare <b>Garches – Marnes-la-Coquette</b>. Trem <b>linha L</b> sentido <b>Paris Saint-Lazare</b> (~25 min, via La Défense). Em Saint-Lazare, <b>metrô 12</b> sentido Mairie d'Aubervilliers até <b>Abbesses</b>. Abbesses é a estação mais funda de Paris: usem o elevador.</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=1+Passage+du+Clos%2C+92380+Garches&destination=Abbesses+metro+station%2C+Paris&travelmode=transit">🚆 Rota agora a partir do Airbnb</a></div>
     </div>
     <div class="card">
       <span class="tag gold">único trecho longo</span>
@@ -158,14 +158,15 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
     </div>
     <div class="card">
       <span class="tag green">volta</span>
-      <h3 style="margin:6px 0 4px">Campo de Marte → hotel</h3>
-      <div class="small">Estações mais perto: <b>École Militaire</b> (linha 8), <b>Bir-Hakeim</b> (linha 6) ou <b>Champ de Mars – Tour Eiffel</b> (RER C).</div>
-      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=%C3%89cole+Militaire+metro+Paris">📍 École Militaire</a></div>
+      <h3 style="margin:6px 0 4px">Torre Eiffel → Garches</h3>
+      <div class="small"><b>Metrô 6</b> em Bir-Hakeim sentido Charles de Gaulle – Étoile → <b>RER A</b> até <b>La Défense</b> → <b>trem L</b> até Garches – Marnes-la-Coquette (~10 min). Plano B: trem L direto de Saint-Lazare. Táxi/Uber: ~25–30 min, por volta de €30.</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=1+Passage+du+Clos%2C+92380+Garches&travelmode=transit">🏠 Voltar para casa agora</a>
+      <button class="btn" data-copy="1 Passage du Clos, 92380 Garches">📋 Endereço</button></div>
     </div>
     <div class="card">
       <span class="tag red">bilhetes</span>
       <h3 style="margin:6px 0 4px">Como pagar</h3>
-      <div class="small">Comprem bilhetes nas máquinas das estações ou no app oficial da RATP (Bonjour RATP). O dia tem só uns 3 a 4 trechos de metrô (ida, Lafayette → Châtelet, volta), então bilhete avulso costuma compensar mais que passe diário. Confiram o preço na máquina.</div>
+      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em qualquer lugar da região (exceto aeroportos), por até 2h sem sair das catracas. Cada um usa <b>3 bilhetes</b> no dia: ida, Lafayette → Châtelet e volta. Comprem no app <b>Île-de-France Mobilités</b> ou na máquina da gare, e o funicular de Montmartre também aceita.</div>
     </div>
   </div>
 </section>
@@ -208,38 +209,38 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 // ---------- dados ----------
 // t = horário planejado (HH:MM, Paris). w = deslocamento até a próxima parada.
 const STEPS = [
- {ph:"Manhã · Montmartre", t:"09:30", n:"Saída do hotel → metrô até Anvers", q:"Anvers metro station, Paris", ll:[48.88292,2.34414], go:30, hotel:true,
-  d:"Linha 2 até Anvers. Da saída do metrô, subam a Rue de Steinkerque até a escadaria.", w:"metrô ~30 min"},
- {t:"10:00", n:"Basílica do Sagrado Coração", a:"Basilique du Sacré-Cœur de Montmartre, Paris", ll:[48.88671,2.34310], city:true,
-  d:"Subam de funicular (bilhete de metrô) ou pela escadaria. Entrada grátis. Vista de Paris inteira do adro. Na saída, deem a volta pela Place du Tertre, a praça dos pintores.", tip:"Recusem quem oferecer pulseira na escadaria.", w:"12 min descendo até a Place des Abbesses"},
- {t:"11:00", n:"Muro do Eu Te Amo", a:"Le Mur des je t'aime, Square Jehan Rictus, Paris", ll:[48.88483,2.33831], city:true,
-  d:"Square Jehan Rictus, na Place des Abbesses. Do lado fica a entrada art nouveau do metrô Abbesses, outra boa foto.", tip:"O muro está cercado para obras desde março de 2026: dá para ver e fotografar por trás das barreiras.", w:"10 min pela Rue des Abbesses e Rue Lepic"},
- {t:"11:25", n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], city:true,
+ {ph:"Manhã · de Garches a Montmartre", t:"09:10", n:"Saída do Airbnb → Abbesses", q:"Abbesses metro station, Paris", ll:[48.88437,2.33849], go:65, hotel:true,
+  d:"~15 min a pé até a gare Garches – Marnes-la-Coquette, trem da linha L até Paris Saint-Lazare (~25 min, passa mais ou menos a cada 15 min), e metrô linha 12 de Saint-Lazare até Abbesses (5 paradas). Um único bilhete Métro-Train-RER cobre tudo isso.", tip:"Abram o botão \"Como chegar\" antes de sair de casa: ele já mostra o próximo trem a partir do Airbnb.", w:"trem L + metrô 12, ~1h porta a porta"},
+ {t:"10:15", n:"Muro do Eu Te Amo", a:"Le Mur des je t'aime, Square Jehan Rictus, Paris", ll:[48.88483,2.33831], city:true,
+  d:"Fica no Square Jehan Rictus, colado na saída do metrô Abbesses, que tem a entrada art nouveau, outra boa foto.", tip:"O muro está cercado para obras desde março de 2026: dá para ver e fotografar por trás das barreiras.", w:"10 min subindo (ou funicular, saindo da Place Suzanne-Valadon)"},
+ {t:"10:40", n:"Basílica do Sagrado Coração", a:"Basilique du Sacré-Cœur de Montmartre, Paris", ll:[48.88671,2.34310], city:true,
+  d:"Entrada grátis e vista de Paris inteira do adro. Na saída, passem pela Place du Tertre, a praça dos pintores.", tip:"Recusem quem oferecer pulseira na escadaria.", w:"15 min descendo pela Rue Lepic"},
+ {t:"11:40", n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], city:true,
   d:"Fotos do moinho vermelho no Boulevard de Clichy. A Rue Lepic, que vocês acabaram de descer, é a do Café des 2 Moulins (o café da Amélie Poulain).", w:"25 min, quase tudo descida (Rue Blanche → Trinité → Chaussée d'Antin)"},
- {ph:"Almoço · Opéra", t:"12:05", n:"Galeries Lafayette + almoço", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], city:true,
+ {ph:"Almoço · Opéra", t:"12:15", n:"Galeries Lafayette + almoço", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], city:true,
   d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Almoço no Lafayette Gourmet, no prédio ao lado, que tem opções vegetarianas.", tip:"A pista de patinação do terraço só abre em 24/11. Se o terraço estiver fechado para a montagem, a Glasswalk da cúpula compensa.", go:25, w:"metrô linha 7 até Châtelet + 10 min a pé", metro:true},
- {ph:"Tarde · margem esquerda e Louvre", t:"13:45", n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], city:true,
+ {ph:"Tarde · margem esquerda e Louvre", t:"13:50", n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], city:true,
   d:"Entrada grátis, visita de 45 min a 1h. Reserva de horário opcional (e grátis) em resa.notredamedeparis.fr. O audioguia do app oficial também é grátis.", tip:"Na quinta ela fica aberta até 22h: se a fila estiver grande, sigam e voltem à noite.", copy:"resa.notredamedeparis.fr", w:"17 min pelo Quartier Latin (Saint-Michel → Rue Soufflot)"},
- {t:"15:05", n:"Jardim de Luxemburgo", a:"Jardin du Luxembourg, Paris", ll:[48.84622,2.33715], city:true, lux:true,
+ {t:"15:10", n:"Jardim de Luxemburgo", a:"Jardin du Luxembourg, Paris", ll:[48.84622,2.33715], city:true, lux:true,
   d:"Fonte Médicis, o palácio do Senado e o grande lago central. Entrada grátis.", tip:"Fecha às 16h45 nesta época, com apito dos guardas uns 15 min antes.", w:"25 min por Saint-Germain e pela Pont des Arts"},
- {t:"16:05", n:"Louvre (pirâmide por fora)", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], city:true,
+ {t:"16:10", n:"Louvre (pirâmide por fora)", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], city:true,
   d:"Fotos da pirâmide e do pátio Napoléon. Em seguida, passem pelo Arc du Carrousel em direção às Tulherias.", w:"5 min"},
- {t:"16:30", n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], city:true,
+ {t:"16:35", n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], city:true,
   d:"Atravessem o jardim inteiro no eixo central, do Louvre até a Concórdia (~1 km), passando pelos dois lagos redondos.", w:"20 min atravessando o jardim"},
- {ph:"Entardecer · eixo histórico", t:"16:55", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
+ {ph:"Entardecer · eixo histórico", t:"17:00", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
   d:"Obelisco e fontes, com a Torre Eiffel ao fundo. É a hora do pôr do sol (~17h05).", w:"começo da avenida"},
- {t:"17:05", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
+ {t:"17:10", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
   d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point. Bom momento para um café quente no caminho.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~45 min com pausa"},
- {t:"17:50", n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
+ {t:"17:55", n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
   d:"Fotos do arco já iluminado. Para chegar embaixo dele, usem a passagem subterrânea no começo da Champs-Élysées. Não atravessem a rotatória.", tip:"Opcional: se estiverem cansados, fotografem do canteiro central da avenida e sigam.", w:"15 min pela Avenue Kléber"},
- {ph:"Noite · Torre Eiffel", t:"18:20", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
+ {ph:"Noite · Torre Eiffel", t:"18:25", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
   d:"A vista clássica da Torre, da esplanada do Palais de Chaillot. Esperem o brilho das 19h aqui.", tip:"Até as 19h dá para se esquentar num café da própria praça e voltar à esplanada às 18h55.", w:"10 min pelos jardins e pela Pont d'Iéna"},
  {t:"19:10", n:"Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
   d:"Embaixo da Torre, entre os pilares. Subir não está no plano.", w:"5 min"},
  {t:"19:30", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
   d:"A Torre iluminada vista do gramado. Fim do passeio.", w:"5–10 min até a École Militaire"},
- {t:"19:50", n:"Jantar e volta ao hotel", q:"École Militaire, Paris", ll:[48.85490,2.30635], city:true, end:true,
-  d:"Jantar perto da École Militaire ou da Rue Cler (cafés e crêperies; crepe de queijo ou de cogumelos serve à Natália). Depois, metrô linha 8 (École Militaire) ou 6 (Bir-Hakeim).", tip:"Preferem jantar perto do hotel? Peguem o metrô direto daqui."}
+ {t:"19:50", n:"Jantar e volta a Garches", q:"Bir-Hakeim, Paris", ll:[48.85391,2.28925], city:true, end:true,
+  d:"Jantar perto da Torre (cafés e crêperies na região da École Militaire e da Rue Cler; crepe de queijo ou de cogumelos serve à Natália). Volta: metrô 6 de Bir-Hakeim até Charles de Gaulle – Étoile, RER A até La Défense e trem L até Garches – Marnes-la-Coquette. Uns 50 min até a gare, mais a caminhada.", tip:"Cansados? Um Uber/táxi da Torre até Garches leva ~25–30 min sem trânsito e custa por volta de €30. Confiram no app."}
 ];
 const PHRASES=[
  ["Bonjour ! / Merci beaucoup !","Bom dia! / Muito obrigado!"],
@@ -253,7 +254,7 @@ const PHRASES=[
  ["Non, merci.","Não, obrigado (golpe da pulseira/abaixo-assinado)"],
  ["On m'a volé mon portefeuille.","Roubaram minha carteira"]
 ];
-const ROUTE_AM="https://www.google.com/maps/dir/?api=1&origin=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris&destination=Galeries+Lafayette+Haussmann%2C+Paris&waypoints=Place+du+Tertre%2C+Paris%7CLe+Mur+des+je+t%27aime%2C+Paris%7CMoulin+Rouge%2C+Paris&travelmode=walking";
+const ROUTE_AM="https://www.google.com/maps/dir/?api=1&origin=Le+Mur+des+je+t%27aime%2C+Paris&destination=Galeries+Lafayette+Haussmann%2C+Paris&waypoints=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris%7CPlace+du+Tertre%2C+Paris%7CMoulin+Rouge%2C+Paris&travelmode=walking";
 const ROUTE_PM="https://www.google.com/maps/dir/?api=1&origin=Cath%C3%A9drale+Notre-Dame+de+Paris&destination=Champ+de+Mars%2C+Paris&waypoints=Jardin+du+Luxembourg%2C+Paris%7CPyramide+du+Louvre%2C+Paris%7CJardin+des+Tuileries%2C+Paris%7CPlace+de+la+Concorde%2C+Paris%7CArc+de+Triomphe%2C+Paris%7CPlace+du+Trocad%C3%A9ro%2C+Paris%7CTour+Eiffel%2C+Paris&travelmode=walking";
 
 // ---------- util ----------
@@ -262,9 +263,11 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const enc=encodeURIComponent;
 const place=s=>"https://www.google.com/maps/search/?api=1&query="+enc(s.a||s.q);
 const go=(s,mode)=>"https://www.google.com/maps/dir/?api=1&destination="+enc(s.a||s.q)+"&travelmode="+mode;
+const HOME="1 Passage du Clos, 92380 Garches";
+const HOME_TO=s=>"https://www.google.com/maps/dir/?api=1&origin="+enc(HOME)+"&destination="+enc(s.a||s.q)+"&travelmode=transit";
 const KEY="paris-1911-done", SKEY="paris-1911-start";
 let done={}; try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
-let startAt="09:30"; try{startAt=localStorage.getItem(SKEY)||"09:30"}catch(e){}
+let startAt="09:10"; try{startAt=localStorage.getItem(SKEY)||"09:10"}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done));localStorage.setItem(SKEY,startAt)}catch(e){}};
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1700)}
 async function copy(txt){
@@ -320,7 +323,7 @@ function luxInfo(P){
 }
 function endInfo(P){
   const e=STEPS.length-1; if(done[e]) return "";
-  return `<span class="tag blue">fim previsto ${fmt(P[e])}</span>`;
+  return `<span class="tag blue">fim do passeio ${fmt(P[e])} · em casa ~${fmt(P[e]+120)}</span>`;
 }
 function renderSteps(){
   const ni=nextIndex(), P=projections(); let html="";
@@ -336,7 +339,7 @@ function renderSteps(){
         ${s.lux?`<div style="margin-top:6px">${luxInfo(P)}</div>`:""}
         <div class="btns">
           <a class="btn" target="_blank" rel="noopener" href="${place(s)}">📍 Ver no Maps</a>
-          ${s.hotel?`<a class="btn blue" target="_blank" rel="noopener" href="${go(s,"transit")}">🚇 Como chegar</a>`:`<a class="btn blue" target="_blank" rel="noopener" href="${go(s,"walking")}">🚶 Ir a pé daqui</a>`}
+          ${s.hotel?`<a class="btn blue" target="_blank" rel="noopener" href="${HOME_TO(s)}">🚆 Como chegar</a>`:`<a class="btn blue" target="_blank" rel="noopener" href="${go(s,"walking")}">🚶 Ir a pé daqui</a>`}
           <button class="btn" data-copy="${esc(cp)}">📋 Copiar</button>
         </div>
       </div></div>`;
@@ -372,7 +375,7 @@ function renderNext(){
   $("#nextCard").innerHTML=`<div class="lbl">Próxima parada · previsto ${fmt(P[ni])} ${pace}</div>
     <div class="ttl">${esc(s.n)}</div><div class="small">${esc(s.d)}</div>
     <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${luxInfo(P)}${endInfo(P)}</div>
-    <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${go(s,s.hotel?"transit":"walking")}">${s.hotel?"🚇 Como chegar":"🚶 Ir a pé"}</a>
+    <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="${s.hotel?HOME_TO(s):go(s,"walking")}">${s.hotel?"🚆 Como chegar":"🚶 Ir a pé"}</a>
     <a class="btn" href="#st${ni}">↓ Ver no roteiro</a>
     <button class="btn" data-done="${ni}">✓ Terminei aqui</button></div>`;
 }
