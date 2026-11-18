@@ -117,11 +117,11 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
 <section id="agora" style="margin-top:14px">
   <div class="card next" id="nextCard"></div>
   <div class="card" style="margin-top:10px;font-size:14px">
-    <b>Horário sugerido:</b> despertador às <b>8h</b>, café sem pressa, saída do Airbnb às <b>9h10</b> (dá ~1h até Montmartre). O passeio termina no Campo de Marte por volta de <b>19h50</b>; com jantar por perto e a volta de trem, vocês chegam em casa lá pelas <b>22h</b>.
+    <b>Horário sugerido:</b> despertador às <b>8h</b>, café sem pressa, saída do Airbnb às <b>9h10</b> (dá ~1h até Montmartre). A subida na Torre é por volta das <b>18h35</b> (comprem o ingresso hoje). O passeio termina no Campo de Marte por volta de <b>20h35</b>; com jantar por perto e a volta de trem, vocês chegam em casa lá pelas <b>22h35</b>.
     <div class="startbox">Vão sair em outro horário? <label>Saída do Airbnb: <input type="time" id="startAt" value="09:10"></label> <span class="small">O site recalcula o dia inteiro.</span></div>
   </div>
   <div class="card alert" style="margin-top:10px;font-size:14px">
-    <b style="color:var(--red)">Horários que mandam no dia:</b> Jardim de Luxemburgo fecha às <b>16h45</b> · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (o roteiro mira o das <b>19h</b> no Trocadéro).
+    <b style="color:var(--red)">Horários que mandam no dia:</b> Jardim de Luxemburgo fecha às <b>16h45</b> · pôr do sol por volta de <b>17h05</b> · a Torre Eiffel <b>pisca 5 min no começo de cada hora</b> depois que escurece (vocês vão estar lá em cima no das <b>19h</b> e no das <b>20h</b>).
   </div>
 </section>
 
@@ -180,6 +180,11 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:v
   <h2>Informações úteis</h2>
   <div class="grid2">
     <div class="card">
+      <h3 style="margin:0 0 6px">🗼 Ingresso da Torre Eiffel</h3>
+      <div class="small">Comprem <b>hoje</b>, só no site oficial: "Sommet par ascenseur" (elevador até o topo), horário entre <b>18h30 e 19h</b>. O ingresso vale só para o dia e o horário escolhidos, e o topo tem pouca vaga. Se esgotar, peguem o 2º andar. A última subida ao topo é às 22h30. Lá em cima venta e faz frio: levem casaco e gorro.</div>
+      <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://ticket.toureiffel.paris">🎟️ Site oficial de ingressos</a></div>
+    </div>
+    <div class="card">
       <h3 style="margin:0 0 6px">⛪ Notre-Dame</h3>
       <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). Em novembro a fila sem reserva costuma ser curta. Às quintas fica aberta até as <b>22h</b>, então dá para trocar de lugar no roteiro se precisarem.</div>
       <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://resa.notredamedeparis.fr">🎟️ Reserva grátis</a></div>
@@ -230,16 +235,16 @@ const STEPS = [
  {ph:"Entardecer · eixo histórico", t:"17:00", n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], city:true,
   d:"Obelisco e fontes, com a Torre Eiffel ao fundo. É a hora do pôr do sol (~17h05).", w:"começo da avenida"},
  {t:"17:10", n:"Champs-Élysées até o Arco", a:"Avenue des Champs-Élysées, Paris", ll:[48.86917,2.30796], city:true,
-  d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point. Bom momento para um café quente no caminho.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~45 min com pausa"},
- {t:"17:55", n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
-  d:"Fotos do arco já iluminado. Para chegar embaixo dele, usem a passagem subterrânea no começo da Champs-Élysées. Não atravessem a rotatória.", tip:"Opcional: se estiverem cansados, fotografem do canteiro central da avenida e sigam.", w:"15 min pela Avenue Kléber"},
- {ph:"Noite · Torre Eiffel", t:"18:25", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
-  d:"A vista clássica da Torre, da esplanada do Palais de Chaillot. Esperem o brilho das 19h aqui.", tip:"Até as 19h dá para se esquentar num café da própria praça e voltar à esplanada às 18h55.", w:"10 min pelos jardins e pela Pont d'Iéna"},
- {t:"19:10", n:"Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
-  d:"Embaixo da Torre, entre os pilares. Subir não está no plano.", w:"5 min"},
- {t:"19:30", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
-  d:"A Torre iluminada vista do gramado. Fim do passeio.", w:"5–10 min até a École Militaire"},
- {t:"19:50", n:"Jantar e volta a Garches", q:"Bir-Hakeim, Paris", ll:[48.85391,2.28925], city:true, end:true,
+  d:"2 km subindo a avenida. O primeiro trecho é de jardins, e as lojas começam no Rond-Point. Hoje sem pausa longa: a subida na Torre está marcada.", tip:"As luzes de Natal da avenida só acendem em 22/11.", w:"~40 min"},
+ {t:"17:50", n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], city:true, opt:true,
+  d:"Fotos do arco iluminado, tiradas do canteiro central da avenida. Ir até embaixo dele, pela passagem subterrânea, toma uns 15 min a mais.", tip:"Opcional: se estiverem atrasados para o horário da Torre, pulem e desçam direto pela Avenue d'Iéna.", w:"15 min pela Avenue d'Iéna"},
+ {ph:"Noite · Torre Eiffel", t:"18:15", n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], city:true,
+  d:"A vista clássica da Torre iluminada, da esplanada do Palais de Chaillot. Fotos rápidas e sigam para a Torre.", w:"10 min pelos jardins e pela Pont d'Iéna"},
+ {t:"18:35", n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], city:true,
+  d:"Revista de segurança na entrada, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45 no total. Às 19h e às 20h vocês veem a Torre piscar lá de dentro.", tip:"Comprem o ingresso hoje à noite, só no site oficial (ticket.toureiffel.paris): elevador até o topo, horário entre 18h30 e 19h. Se o topo estiver esgotado, peguem só até o 2º andar.", copy:"ticket.toureiffel.paris", w:"5 min"},
+ {t:"20:20", n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], city:true,
+  d:"A Torre iluminada vista do gramado, para as últimas fotos. Fim do passeio.", w:"5–10 min até a região do jantar"},
+ {t:"20:35", n:"Jantar e volta a Garches", q:"Bir-Hakeim, Paris", ll:[48.85391,2.28925], city:true, end:true,
   d:"Jantar perto da Torre (cafés e crêperies na região da École Militaire e da Rue Cler; crepe de queijo ou de cogumelos serve à Natália). Volta: metrô 6 de Bir-Hakeim até Charles de Gaulle – Étoile, RER A até La Défense e trem L até Garches – Marnes-la-Coquette. Uns 50 min até a gare, mais a caminhada.", tip:"Cansados? Um Uber/táxi da Torre até Garches leva ~25–30 min sem trânsito e custa por volta de €30. Confiram no app."}
 ];
 const PHRASES=[
