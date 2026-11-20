@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#b8322a">
-<title>Paris · Roteiro de quinta (19/11)</title>
+<title>Paris · Roteiro de sexta (20/11)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -111,8 +111,8 @@ input.nin{width:64px}
 <div class="wrap">
 
 <header>
-  <div class="kicker">Paris · quinta-feira, 19/11</div>
-  <h1>Paris num dia</h1>
+  <div class="kicker">Paris · sexta-feira, 20/11</div>
+  <h1>Paris, segundo dia</h1>
   <p class="sub" id="sub"></p>
 </header>
 
@@ -160,26 +160,33 @@ input.nin{width:64px}
   <div class="grid2">
     <div class="card">
       <span class="tag blue">ida</span>
-      <h3 style="margin:6px 0 4px">Garches → Notre-Dame</h3>
-      <div class="small">~15 min a pé até a gare <b>Garches – Marnes-la-Coquette</b>. Trem <b>linha L</b> até <b>Paris Saint-Lazare</b> (~25 min, via La Défense). Em Saint-Lazare, <b>metrô 14</b> até <b>Châtelet</b> (2 paradas) e ~10 min a pé até a catedral.</div>
-      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=1+Passage+du+Clos%2C+92380+Garches&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚆 Rota a partir do Airbnb</a></div>
+      <h3 style="margin:6px 0 4px">Garches → Torre Eiffel</h3>
+      <div class="small">A pé até a gare <b>Garches – Marnes-la-Coquette</b> e <b>trem L</b>. O Maps escolhe a melhor combinação até a Torre (metrô 6 até Bir-Hakeim, ou RER C até Champ de Mars – Tour Eiffel).</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=1+Passage+du+Clos%2C+92380+Garches&destination=Tour+Eiffel%2C+Paris&travelmode=transit">🚆 Rota a partir do Airbnb</a></div>
     </div>
     <div class="card">
-      <span class="tag gold">metrô 9</span>
-      <h3 style="margin:6px 0 4px">Champs → Lafayette → Trocadéro</h3>
-      <div class="small">A <b>linha 9</b> resolve os dois trechos: <b>Franklin D. Roosevelt → Chaussée d'Antin – La Fayette</b> (4 paradas) e depois <b>Chaussée d'Antin – La Fayette → Trocadéro</b>, direto (~20 min).</div>
+      <span class="tag gold">RER C</span>
+      <h3 style="margin:6px 0 4px">Torre → Notre-Dame</h3>
+      <div class="small">Estação <b>Champ de Mars – Tour Eiffel</b>, na beira do Sena. RER C no sentido leste (direção Paris / Austerlitz) até <b>Saint-Michel – Notre-Dame</b>, sem baldeação (~15 min).</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Tour+Eiffel%2C+Paris&destination=Cath%C3%A9drale+Notre-Dame+de+Paris&travelmode=transit">🚆 Rota no Maps</a></div>
+    </div>
+    <div class="card">
+      <span class="tag gold">RER B</span>
+      <h3 style="margin:6px 0 4px">Luxemburgo → Montmartre</h3>
+      <div class="small">RER B na estação <b>Luxembourg</b> (na esquina do jardim), sentido norte, até <b>Gare du Nord</b> (3 paradas). Dali, metrô 4 até Barbès e linha 2 até <b>Anvers</b>, a estação da escadaria do Sacré-Cœur.</div>
+      <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Jardin+du+Luxembourg%2C+Paris&destination=Basilique+du+Sacr%C3%A9-C%C5%93ur%2C+Paris&travelmode=transit">🚆 Rota no Maps</a></div>
     </div>
     <div class="card">
       <span class="tag green">volta</span>
-      <h3 style="margin:6px 0 4px">Torre Eiffel → Garches</h3>
-      <div class="small"><b>Metrô 6</b> em Bir-Hakeim até Charles de Gaulle – Étoile → <b>RER A</b> até <b>La Défense</b> → <b>trem L</b> até Garches – Marnes-la-Coquette. Plano B: trem L direto de Saint-Lazare. Táxi/Uber: ~30 min.</div>
+      <h3 style="margin:6px 0 4px">Lafayette → Garches</h3>
+      <div class="small">5 min a pé até a <b>gare Saint-Lazare</b> e <b>trem L</b> direto até Garches – Marnes-la-Coquette (~25 min). Táxi/Uber: ~30 min.</div>
       <div class="btns"><a class="btn blue" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=1+Passage+du+Clos%2C+92380+Garches&travelmode=transit">🏠 Voltar para casa agora</a>
       <button class="btn" data-copy="1 Passage du Clos, 92380 Garches">📋 Endereço</button></div>
     </div>
     <div class="card">
       <span class="tag red">bilhetes</span>
       <h3 style="margin:6px 0 4px">Como pagar</h3>
-      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em toda a região (exceto aeroportos), por até 2h sem sair das catracas. No roteiro padrão cada um usa <b>4</b>: ida, Champs → Lafayette, Lafayette → Trocadéro e volta. Comprem no app <b>Île-de-France Mobilités</b> ou na máquina da gare.</div>
+      <div class="small">O <b>ticket Métro-Train-RER</b> custa <b>€2,55</b> e vale para trem, RER e metrô juntos, em toda a região (exceto aeroportos), por até 2h sem sair das catracas. No roteiro de hoje cada um usa <b>4</b>: ida, RER C até Notre-Dame, Luxemburgo → Montmartre e volta.</div>
     </div>
   </div>
 </section>
@@ -193,113 +200,99 @@ input.nin{width:64px}
   <h2>Informações úteis</h2>
   <div class="grid2">
     <div class="card">
-      <h3 style="margin:0 0 6px">🖼️ Ingresso do Louvre</h3>
-      <div class="small">Comprem <b>hoje</b> no site oficial: sem reserva, a entrada não é garantida. Pelo roteiro atual, o horário a escolher é <b id="slotLouvre">--:--</b>. Às quintas o museu fecha às 18h, com última entrada às 17h. Desde janeiro de 2026, quem não é do Espaço Econômico Europeu paga <b>€32</b>; quem tem documento da UE paga a tarifa normal (levem o documento).</div>
-      <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://www.louvre.fr/visiter/horaires-tarifs">🎟️ Site oficial do Louvre</a></div>
-    </div>
-    <div class="card">
-      <h3 style="margin:0 0 6px">🗼 Ingresso da Torre Eiffel</h3>
-      <div class="small">Comprem <b>hoje</b>, só no site oficial: elevador até o topo. Pelo roteiro atual, o horário a escolher é <b id="slotTorre">--:--</b>. O ingresso vale só para o dia e o horário escolhidos, e o topo tem pouca vaga; se esgotar, peguem o 2º andar. A última subida ao topo é às 22h30. Lá em cima venta e faz frio.</div>
-      <div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://ticket.toureiffel.paris">🎟️ Site oficial da Torre</a></div>
+      <h3 style="margin:0 0 6px">🗼 Torre Eiffel às 10h</h3>
+      <div class="small">Estejam na entrada uns 10 min antes, por causa da revista de segurança. A última subida ao topo é às 22h30, então dá para remarcar no próprio dia se precisarem. Lá em cima venta e faz frio.</div>
     </div>
     <div class="card">
       <h3 style="margin:0 0 6px">⛪ Notre-Dame</h3>
-      <div class="small">Entrada <b>grátis</b>. Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b> (os horários abrem 2 a 3 dias antes). De manhã a fila costuma ser menor. Às quintas fica aberta até as 22h.</div>
+      <div class="small">Entrada <b>grátis</b>. Às <b>sextas fecha às 19h</b> (só às quintas vai até 22h). Dá para reservar horário grátis em <b>resa.notredamedeparis.fr</b>.</div>
       <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://resa.notredamedeparis.fr">🎟️ Reserva grátis</a></div>
     </div>
     <div class="card">
-      <h3 style="margin:0 0 6px">🎄 Natal</h3>
-      <div class="small">A árvore gigante da <b>cúpula da Galeries Lafayette</b> e as vitrines já estão montadas (desde 12/11). As luzes da <b>Champs-Élysées</b> só acendem em <b>22/11</b>.</div>
+      <h3 style="margin:0 0 6px">❤️ Muro do Eu Te Amo</h3>
+      <div class="small">O <b>square fecha às 17h30</b>, por isso Montmartre vem antes da Lafayette. O muro está cercado para obras desde março de 2026: dá para ver e fotografar por trás das barreiras.</div>
     </div>
     <div class="card">
-      <h3 style="margin:0 0 6px">⛰️ Montmartre (cortado)</h3>
-      <div class="small">Sacré-Cœur, Muro do Eu Te Amo e Moulin Rouge estão no roteiro como <b>cortados</b>, logo depois da Lafayette. Para incluir, toquem em ✂️ Recolocar. O muro está cercado para obras desde março de 2026, e o square onde ele fica fecha às 17h30.</div>
+      <h3 style="margin:0 0 6px">🎄 Natal</h3>
+      <div class="small">A árvore gigante da <b>cúpula da Galeries Lafayette</b> e as vitrines estão montadas desde 12/11. No fim da tarde, já está tudo aceso.</div>
     </div>
     <div class="card">
       <h3 style="margin:0 0 6px">🚨 Golpes e emergência</h3>
-      <div class="small">Recusem quem tenta amarrar <b>pulseira</b> no pulso e quem pede <b>assinatura em abaixo-assinado</b> (comum no Trocadéro e na Torre). Celular e carteira no bolso da frente no metrô. Emergência: <b>112</b>.</div>
+      <div class="small">Recusem quem tenta amarrar <b>pulseira</b> no pulso (comum na escadaria do Sacré-Cœur) e quem pede <b>assinatura em abaixo-assinado</b>. Celular e carteira no bolso da frente no metrô. Emergência: <b>112</b>.</div>
       <div class="btns"><button class="btn" data-copy="112">📋 112</button></div>
     </div>
   </div>
 </section>
 
-<footer>Horários levantados em 18/11/2026 (Louvre, Torre Eiffel, Notre-Dame, Senado/Jardim de Luxemburgo, Galeries Lafayette, paris.fr, IDFM). Os tempos de deslocamento sem descrição são estimativas pela distância: confiram no botão do Maps. Bonne journée! 🇫🇷</footer>
+<footer>Horários levantados em 18 e 20/11/2026 (Torre Eiffel, Notre-Dame, Senado/Jardim de Luxemburgo, Galeries Lafayette, paris.fr, IDFM). Os tempos de deslocamento sem descrição são estimativas pela distância: confiram no botão do Maps. Bonne journée! 🇫🇷</footer>
 </div>
 <div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ================== DADOS ==================
-const TRIP_DATE="2026-11-19";
+const TRIP_DATE="2026-11-20";
 const HOME={n:"Airbnb (Garches)", a:"1 Passage du Clos, 92380 Garches", ll:[48.8455,2.1880]};
 // dur = minutos na parada · open = abre · last = último horário bom para CHEGAR (fecha) · slot = precisa de ingresso com horário
 const STOPS={
- notredame:{n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], dur:45, open:"07:50", last:"21:30", lastTxt:"última entrada 21h30",
-  d:"Entrada grátis. Fachada, rosáceas e o tesouro da catedral. De manhã a fila costuma ser menor.", tip:"Reserva de horário opcional e grátis em resa.notredamedeparis.fr."},
+ cafe:{n:"Café da manhã perto da Torre", a:"Avenue de Suffren, 75007 Paris", ll:[48.85590,2.29620], dur:45,
+  d:"Café da manhã num dos cafés em volta do Campo de Marte e da Avenue de Suffren. Croissant, pain au chocolat e café crème.", tip:"Saiam do café uns 10 min antes das 10h: tem revista de segurança na entrada da Torre."},
+ torre:{n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], dur:100, open:"10:00", openTxt:"subida marcada às 10h",
+  d:"Revista de segurança, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45. De manhã a vista costuma estar mais limpa."},
+ trocadero:{n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], dur:20,
+  d:"A vista clássica da Torre, da esplanada do Palais de Chaillot."},
+ campomarte:{n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], dur:15,
+  d:"A Torre vista do gramado."},
+ birhakeim:{n:"Ponte de Bir-Hakeim", a:"Pont de Bir-Hakeim, Paris", ll:[48.85520,2.28740], dur:15,
+  d:"A ponte de dois andares com o metrô passando por cima e a Torre ao lado: uma das fotos mais bonitas da região."},
+ cruzeiro:{n:"Cruzeiro no Sena", a:"Bateaux Parisiens, Port de la Bourdonnais, Paris", ll:[48.85990,2.29280], dur:60,
+  d:"Passeio de ~1h de barco saindo do pé da Torre, passando por Notre-Dame e pelo Louvre.", tip:"Confiram os horários de saída e comprem no site da empresa antes de colocar no roteiro."},
+ notredame:{n:"Catedral de Notre-Dame", a:"Cathédrale Notre-Dame de Paris, Paris", ll:[48.85296,2.34990], dur:45, open:"07:45", last:"18:30", lastTxt:"às sextas fecha 19h",
+  d:"Entrada grátis. Fachada, rosáceas e o tesouro da catedral.", tip:"Reserva de horário opcional e grátis em resa.notredamedeparis.fr."},
+ almoco:{n:"Almoço no Quartier Latin", a:"Place Saint-Michel, 75005 Paris", ll:[48.85320,2.34400], dur:50,
+  d:"Do outro lado da ponte de Notre-Dame: crêperies, cafés e bistrôs entre Saint-Michel e a Rue de la Harpe, no caminho do Luxemburgo. Perguntem pelo prato vegetariano para a Natália."},
  luxembourg:{n:"Jardim de Luxemburgo", a:"Jardin du Luxembourg, Paris", ll:[48.84622,2.33715], dur:30, open:"08:00", last:"16:30", lastTxt:"fecha 16h45",
   d:"Fonte Médicis, o palácio do Senado e o grande lago central. Entrada grátis."},
- almoco:{n:"Almoço em Saint-Germain", a:"Rue de Buci, 75006 Paris", ll:[48.85390,2.33590], dur:50,
-  d:"Cafés e bistrôs entre a Rue de Buci e o Boulevard Saint-Germain, no caminho do Louvre. Perguntem pelo prato vegetariano para a Natália.", tip:"Querem comer dentro do Louvre? Cortem esta parada e aumentem o tempo do museu."},
- louvre:{n:"Museu do Louvre · Mona Lisa", a:"Pyramide du Louvre, Paris", ll:[48.86106,2.33576], dur:150, open:"09:00", last:"17:00", lastTxt:"última entrada 17h, fecha 18h", slot:"Louvre",
-  d:"Entrada pela pirâmide no horário reservado. Mona Lisa (Salle des États, ala Denon, 1º andar), Vitória de Samotrácia na escadaria Daru, Vênus de Milo (ala Sully, térreo) e o que mais quiserem: ajustem o ⏱.", tip:"A Mona Lisa tem fila própria dentro da sala: vão direto a ela primeiro."},
- tulherias:{n:"Jardim das Tulherias", a:"Jardin des Tuileries, Paris", ll:[48.86350,2.32745], dur:15,
-  d:"Só passando: o eixo central do jardim, do Arc du Carrousel até os lagos redondos."},
- concorde:{n:"Praça da Concórdia", a:"Place de la Concorde, Paris", ll:[48.86560,2.32122], dur:10,
-  d:"Obelisco e fontes, com a Torre Eiffel ao fundo."},
- champs:{n:"Champs-Élysées", a:"George V, Avenue des Champs-Élysées, Paris", ll:[48.87205,2.30080], dur:35,
-  d:"A caminhada pela avenida, da Concórdia até a altura do metrô George V: primeiro os jardins, depois as lojas a partir do Rond-Point.", tip:"As luzes de Natal da avenida só acendem em 22/11."},
- arco:{n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], dur:15,
-  d:"Fotos do canteiro central da avenida. Para chegar embaixo do arco, usem a passagem subterrânea; não atravessem a rotatória."},
- lafayette:{n:"Galeries Lafayette", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], dur:50, open:"10:00", last:"20:00", lastTxt:"fecha 20h30",
-  d:"Árvore de Natal gigante sob a cúpula, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. Lanche no Lafayette Gourmet, no prédio ao lado."},
  sacrecoeur:{n:"Basílica do Sagrado Coração", a:"Basilique du Sacré-Cœur de Montmartre, Paris", ll:[48.88671,2.34310], dur:45,
-  d:"Entrada grátis e vista de Paris inteira do adro. Funicular aceita o bilhete de metrô. Passem pela Place du Tertre.", tip:"Recusem quem oferecer pulseira na escadaria."},
+  d:"Entrada grátis e vista de Paris inteira do adro. O funicular aceita o bilhete de metrô. Na saída, passem pela Place du Tertre, a praça dos pintores.", tip:"Recusem quem oferecer pulseira na escadaria."},
  jetaime:{n:"Muro do Eu Te Amo", a:"Le Mur des je t'aime, Square Jehan Rictus, Paris", ll:[48.88483,2.33831], dur:15, last:"17:15", lastTxt:"o square fecha 17h30",
-  d:"Square Jehan Rictus, na Place des Abbesses.", tip:"O muro está cercado para obras desde março de 2026: dá para ver por trás das barreiras."},
+  d:"Square Jehan Rictus, na Place des Abbesses, ao lado da entrada art nouveau do metrô Abbesses.", tip:"O muro está cercado para obras desde março de 2026: dá para ver por trás das barreiras."},
  moulinrouge:{n:"Moulin Rouge", a:"Moulin Rouge, 82 Boulevard de Clichy, Paris", ll:[48.88410,2.33224], dur:10,
-  d:"Fotos do moinho vermelho no Boulevard de Clichy."},
- trocadero:{n:"Praça do Trocadéro", a:"Place du Trocadéro et du 11 Novembre, Paris", ll:[48.86196,2.28890], dur:20,
-  d:"A vista clássica da Torre, da esplanada do Palais de Chaillot. A Torre pisca 5 min no começo de cada hora depois que escurece."},
- torre:{n:"Subida na Torre Eiffel", a:"Tour Eiffel, Paris", ll:[48.85826,2.29450], dur:100, last:"22:30", lastTxt:"última subida ao topo 22h30", slot:"Torre",
-  d:"Revista de segurança, elevador até o 2º andar e outro até o topo. Contem 1h30 a 1h45. Se estiverem lá em cima na virada da hora, vejam a Torre piscar de dentro."},
- campomarte:{n:"Campo de Marte", a:"Champ de Mars, Paris", ll:[48.85563,2.29855], dur:15,
-  d:"A Torre iluminada vista do gramado, para as últimas fotos."},
- birhakeim:{n:"Ponte de Bir-Hakeim", a:"Pont de Bir-Hakeim, Paris", ll:[48.85520,2.28740], dur:15,
-  d:"A ponte de dois andares com o metrô passando por cima e a Torre ao lado: uma das fotos mais bonitas da região. Fica ao lado da estação Bir-Hakeim, de onde sai o metrô 6 da volta."},
- cruzeiro:{n:"Cruzeiro no Sena", a:"Bateaux Parisiens, Port de la Bourdonnais, Paris", ll:[48.85990,2.29280], dur:60,
-  d:"Passeio de ~1h de barco saindo do pé da Torre, passando por Notre-Dame e pelo Louvre iluminados.", tip:"Confiram os horários de saída e comprem no site da empresa antes de colocar no roteiro."},
- jantar:{n:"Jantar perto da Torre", a:"Rue Cler, 75007 Paris", ll:[48.85600,2.30600], dur:60,
-  d:"Cafés, crêperies e bistrôs na Rue Cler e em volta da École Militaire. Crepe de queijo ou de cogumelos serve à Natália.", tip:"Cansados? Cortem o jantar e comam perto de casa, ou peguem um Uber (~30 min até Garches)."}
+  d:"Fotos do moinho vermelho no Boulevard de Clichy. A Rue Lepic, no caminho, é a do Café des 2 Moulins (o café da Amélie Poulain)."},
+ arco:{n:"Arco do Triunfo", a:"Arc de Triomphe, Place Charles de Gaulle, Paris", ll:[48.87378,2.29504], dur:15,
+  d:"Para chegar embaixo do arco, usem a passagem subterrânea; não atravessem a rotatória."},
+ lafayette:{n:"Galeries Lafayette", a:"Galeries Lafayette Haussmann, 40 Boulevard Haussmann, Paris", ll:[48.87334,2.33232], dur:60, open:"10:00", last:"20:00", lastTxt:"fecha 20h30",
+  d:"Árvore de Natal gigante sob a cúpula, vitrines de Natal, passarela de vidro (Glasswalk) e terraço grátis no 8º andar, com vista para a Ópera e a Torre. No fim da tarde, já com tudo aceso."},
+ jantar:{n:"Jantar perto da Ópera", a:"Opéra Garnier, Paris", ll:[48.87197,2.33160], dur:60,
+  d:"Restaurantes em volta da Ópera e da Rue Saint-Lazare, perto do trem de volta. O Lafayette Gourmet, ao lado da loja, também tem opções.", tip:"Se preferirem jantar perto de casa, deixem esta parada cortada."}
 };
-const DEFAULT_ORDER=["notredame","luxembourg","almoco","louvre","tulherias","concorde","champs","arco","lafayette","sacrecoeur","jetaime","moulinrouge","trocadero","torre","campomarte","birhakeim","cruzeiro","jantar"];
-const DEFAULT_CUT={arco:1,sacrecoeur:1,jetaime:1,moulinrouge:1,birhakeim:1,cruzeiro:1};
-const DEFAULT_START="08:45";
-// deslocamentos conhecidos (os demais são estimados pela distância)
+const DEFAULT_ORDER=["cafe","torre","trocadero","campomarte","birhakeim","cruzeiro","notredame","almoco","luxembourg","sacrecoeur","jetaime","moulinrouge","arco","lafayette","jantar"];
+const DEFAULT_CUT={trocadero:1,campomarte:1,birhakeim:1,cruzeiro:1,arco:1,jantar:1};
+const DEFAULT_START="08:15";
 const W="walking", T="transit";
 const TRAVEL={
- "home>notredame":[60,T,"a pé até a gare, trem L até Saint-Lazare, metrô 14 até Châtelet e 10 min a pé"],
+ "home>cafe":[45,T,"a pé até a gare, trem L e metrô (o Maps escolhe a melhor combinação)"],
+ "cafe>torre":[5,W,"a pé até a entrada da Torre"],
+ "torre>notredame":[25,T,"RER C de Champ de Mars – Tour Eiffel até Saint-Michel – Notre-Dame, direto (~15 min)"],
+ "torre>trocadero":[10,W,"a pé pela Pont d'Iéna"],
+ "torre>campomarte":[5,W,"a pé"],
+ "torre>birhakeim":[10,W,"a pé pela margem do Sena"],
+ "torre>cruzeiro":[5,W,"a pé até o cais, ao pé da Torre"],
+ "trocadero>notredame":[30,T,"metrô 9 + 1, ou o Maps decide"],
+ "campomarte>notredame":[25,T,"RER C de Champ de Mars – Tour Eiffel até Saint-Michel – Notre-Dame"],
+ "cruzeiro>notredame":[25,T,"RER C de Champ de Mars – Tour Eiffel até Saint-Michel – Notre-Dame"],
+ "notredame>almoco":[5,W,"a pé, atravessando a ponte para Saint-Michel"],
+ "almoco>luxembourg":[12,W,"a pé pelo Boulevard Saint-Michel"],
  "notredame>luxembourg":[18,W,"a pé por Saint-Michel e a Rue Soufflot"],
- "luxembourg>almoco":[10,W,"a pé até Saint-Germain"],
- "almoco>louvre":[15,W,"a pé pela Rue de Seine e a Pont des Arts"],
- "luxembourg>louvre":[25,W,"a pé por Saint-Germain e a Pont des Arts"],
- "louvre>tulherias":[5,W,"a pé pelo Arc du Carrousel"],
- "tulherias>concorde":[12,W,"a pé pelo eixo central do jardim"],
- "concorde>champs":[2,W,"a avenida começa aqui"],
- "champs>arco":[10,W,"a pé, subindo a avenida"],
- "champs>lafayette":[20,T,"metrô 9 de Franklin D. Roosevelt até Chaussée d'Antin – La Fayette (volte 5 min a pé até Franklin D. Roosevelt)"],
- "arco>lafayette":[18,T,"RER A de Charles de Gaulle – Étoile até Auber (2 paradas) e 5 min a pé"],
- "lafayette>trocadero":[25,T,"metrô 9 de Chaussée d'Antin – La Fayette até Trocadéro, direto"],
+ "luxembourg>sacrecoeur":[35,T,"RER B de Luxembourg até Gare du Nord (3 paradas), depois metrô 4 até Barbès e 2 até Anvers, e funicular ou escadaria"],
  "sacrecoeur>jetaime":[12,W,"a pé, descendo até a Place des Abbesses"],
  "jetaime>moulinrouge":[10,W,"a pé pela Rue des Abbesses e a Rue Lepic"],
- "moulinrouge>trocadero":[30,T,"metrô 2 de Blanche até Charles de Gaulle – Étoile e metrô 6 até Trocadéro"],
- "trocadero>torre":[10,W,"a pé pelos jardins e pela Pont d'Iéna"],
- "torre>campomarte":[5,W,"a pé"],
- "campomarte>birhakeim":[10,W,"a pé pela margem do Sena"],
- "campomarte>jantar":[8,W,"a pé até a Rue Cler"],
- "birhakeim>jantar":[15,W,"a pé"],
- "torre>cruzeiro":[5,W,"a pé até o cais, ao pé da Torre"],
- "jantar>home":[55,T,"a pé até Bir-Hakeim, metrô 6 até Étoile, RER A até La Défense e trem L até Garches"],
- "birhakeim>home":[50,T,"metrô 6 até Étoile, RER A até La Défense e trem L até Garches"]
+ "moulinrouge>lafayette":[25,W,"a pé, quase tudo descida (Rue Blanche → Trinité → Chaussée d'Antin)"],
+ "moulinrouge>arco":[20,T,"metrô 2 de Blanche até Charles de Gaulle – Étoile, direto"],
+ "arco>lafayette":[18,T,"RER A de Charles de Gaulle – Étoile até Auber (2 paradas) e 5 min a pé"],
+ "lafayette>jantar":[5,W,"a pé"],
+ "lafayette>home":[45,T,"5 min a pé até a gare Saint-Lazare e trem L direto até Garches – Marnes-la-Coquette"],
+ "jantar>home":[45,T,"a pé até a gare Saint-Lazare e trem L direto até Garches – Marnes-la-Coquette"]
 };
 const PHRASES=[
  ["Bonjour ! / Merci beaucoup !","Bom dia! / Muito obrigado!"],
@@ -315,7 +308,7 @@ const PHRASES=[
 ];
 
 // ================== ESTADO ==================
-const KEY="paris-1911-v2";
+const KEY="paris-2011-v3";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const enc=encodeURIComponent;
@@ -391,8 +384,6 @@ function render(){
   $("#warns").innerHTML=(ws.length?ws.join(""):`<span class="tag green">todas as paradas dentro do horário</span>`)+
     `<div class="small" style="margin-top:6px">Volta: ${esc(R.back.how)}, ~${R.back.m} min a partir de ${esc(STOPS[R.last]?STOPS[R.last].n:"casa")}.</div>`;
   // ingressos
-  const sl=(k)=>{const id=R.A.find(i=>STOPS[i].slot===k);return id?slotOf(R.S[id]):"(cortado)"};
-  $("#slotLouvre").textContent=sl("Louvre"); $("#slotTorre").textContent=sl("Torre");
   // passos
   let h=`<div class="home"><div class="ico">🏠</div><div>
       <div class="top"><span class="time">${esc(st.start)}</span><span class="name">Saída do Airbnb</span></div>
@@ -417,7 +408,7 @@ function render(){
       <button class="chk" data-act="done" data-id="${id}" aria-label="marcar saída">${dn?"✓":n}</button>
       <div>
         <div class="top">${tm}<span class="name">${esc(s.n)}</span>${id===ni?'<span class="tag blue">agora / próxima</span>':""}${w}</div>
-        <div class="desc">${esc(s.d)}${x.wait&&!dn?` <b>Abre às ${esc(s.open)}</b>: ${x.wait} min de espera.`:""}</div>
+        <div class="desc">${esc(s.d)}${s.openTxt&&!dn?` <b>${esc(s.openTxt[0].toUpperCase()+s.openTxt.slice(1))}.</b>`:x.wait&&!dn?` <b>Abre às ${esc(s.open)}</b>: ${x.wait} min de espera.`:""}</div>
         ${s.tip?`<div class="tip">💡 ${esc(s.tip)}</div>`:""}
         ${s.slot&&!dn?`<div class="tip">🎟️ Horário de ingresso a escolher: <b>${slotOf(x)}</b></div>`:""}
         <div class="btns">
